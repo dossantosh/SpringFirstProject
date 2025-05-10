@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "type": "java",
+            "name": "SpringFirstProject",
+            "request": "launch",
+            "mainClass": "com.example.springfirstproject.SpringFirstProject",
+            "projectName": "proyectonico"
+        },
         {
             "type": "java",
             "name": "Current File",
@@ -13,10 +19,10 @@
         },
         {
             "type": "java",
-            "name": "proyectonicoApplication",
+            "name": "SpringFirstProject",
             "request": "launch",
-            "mainClass": "com.example.proyectonico.proyectonicoApplication",
-            "projectName": "proyectonico"
+            "mainClass": "com.example.springfirstproject.SpringFirstProject",
+            "projectName": "SpringFirstProject"
         }
     ]
 }

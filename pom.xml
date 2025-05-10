@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>proyectonico</artifactId>
+	<artifactId>springfirstapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>proyectonico</name>
-	<description>proyectonico project for Spring Boot</description>
+	<name>SpringFirstProject</name>
+	<description>First web project using spring.</description>
 	<url/>
 	<licenses>
 		<license/>
