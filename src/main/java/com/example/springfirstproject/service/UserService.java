@@ -44,7 +44,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User saveUser(User user, Set<Long> idRole, Set<Long> idModule, Set<Long> idSubmodule) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
+        if (!user.getPassword().startsWith("{bcrypt}")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
 
         Set<Roles> roles = new HashSet<>();
         Set<Modules> modulos = new HashSet<>();
@@ -57,7 +60,7 @@ public class UserService {
         for (Long rol : idRole) {
             Optional<Roles> role = roleRepository.findById(rol);
 
-            if(role.isPresent()){
+            if (role.isPresent()) {
                 Roles existingRole = role.get();
                 roles.add(existingRole);
                 rolesId.add(rol);
@@ -66,7 +69,7 @@ public class UserService {
         for (Long modulo : idModule) {
             Optional<Modules> module = moduleRepository.findById(modulo);
 
-            if(module.isPresent()){
+            if (module.isPresent()) {
                 Modules existingModule = module.get();
                 modulos.add(existingModule);
                 modulosId.add(modulo);
@@ -75,7 +78,7 @@ public class UserService {
         for (Long submodulo : idSubmodule) {
             Optional<Submodules> submodule = submoduleRepository.findById(submodulo);
 
-            if(submodule.isPresent()){
+            if (submodule.isPresent()) {
                 Submodules existingSubmodule = submodule.get();
                 submodulos.add(existingSubmodule);
                 submodulosId.add(submodulo);
@@ -86,7 +89,7 @@ public class UserService {
         user.setModules(modulos);
         user.setSubmodules(submodulos);
 
-        if(roles.isEmpty() || modulos.isEmpty() || submodulos.isEmpty()){
+        if (roles.isEmpty() || modulos.isEmpty() || submodulos.isEmpty()) {
             return null;
         }
 

@@ -17,8 +17,12 @@ import lombok.Data;
 @Controller
 @RequiereModulo({1L})
 public class UsuariosController {
-    @Autowired
+    
     private final UserService userService;
+
+    public UsuariosController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/usuarios")
     public String showUsuarios(Model model) {

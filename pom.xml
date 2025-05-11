@@ -12,7 +12,7 @@
 	<artifactId>springfirstapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SpringFirstProject</name>
-	<description>First web project using spring.</description>
+	<description>First web project using spring using thymeleaf and postgresql.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -67,10 +67,10 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

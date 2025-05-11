@@ -59,6 +59,20 @@ public class GlobalExceptionHandler {
     // 404 Maneja rutas de controladores no existentes (ej: /ruta-falsa)
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handleController404(NoHandlerFoundException ex, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        auth.getName();
+        model.addAttribute("username", auth.getName());
+        model.addAttribute("roles", auth.getAuthorities());
+
+        model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+
+        Set<Long> lista = new HashSet<>();
+        lista.add(1L);
+        model.addAttribute("modulosNecesarios", lista);
+
+        model.addAttribute("message", ex.getMessage());
+
         model.addAttribute("error", "Página no encontrada: " + ex.getRequestURL());
         return "error/404";
     }
@@ -66,7 +80,20 @@ public class GlobalExceptionHandler {
     // 500 - Error interno del servidor (ej: NullPointerException)
     @ExceptionHandler(Exception.class)
     public String handle500(Exception ex, Model model) {
-        model.addAttribute("error", "Error interno del servidor" + ex.getMessage());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        auth.getName();
+        model.addAttribute("username", auth.getName());
+        model.addAttribute("roles", auth.getAuthorities());
+
+        model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+
+        Set<Long> lista = new HashSet<>();
+        lista.add(1L);
+        model.addAttribute("modulosNecesarios", lista);
+
+        model.addAttribute("error", "Error interno del servidor");
+        model.addAttribute("message", ex.getMessage());
         return "error/500";
     }
 

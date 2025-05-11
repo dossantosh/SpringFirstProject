@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.springfirstproject.models.User;
+import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
@@ -29,7 +31,6 @@ public class DashboardController {
     public String showDashboard(Model model, Principal principal) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        auth.getName();
         model.addAttribute("username", auth.getName());
         model.addAttribute("roles", auth.getAuthorities());
 
@@ -40,7 +41,12 @@ public class DashboardController {
         model.addAttribute("modulos", user.getModules());
         model.addAttribute("submodulos", user.getSubmodules());
         */ 
-        model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+
+        User user = userService.findByUsername(auth.getName());
+        model.addAttribute("userModules", user.getModules().toString());
+
+        UserChikito userCh = userChikitoService.findByUsername(auth.getName());
+        model.addAttribute("chikito", userCh);
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);

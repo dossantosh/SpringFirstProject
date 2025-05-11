@@ -1,5 +1,7 @@
 package com.example.springfirstproject.models;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,4 +23,16 @@ public class Roles {
     @Column(unique = true, length = 20, name = "name_role")
     private String nameRole;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Roles roles = (Roles) o;
+        return Objects.equals(idRole, roles.idRole);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idRole);
+    }
 }
