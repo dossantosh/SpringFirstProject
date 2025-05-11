@@ -1,5 +1,7 @@
 package com.example.springfirstproject.models;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -7,10 +9,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="modules")
 public class Modules {
@@ -19,12 +23,15 @@ public class Modules {
     @Column(name="id_module")
     private Long idModule;
 
-    @Column(unique = true, length = 50, name = "name_module")
+    @Column(unique = true, length = 50, name = "name_module", nullable = false)
     private String nameModule;
 
     @Column(length = 50, name = "imagen_module")
     private String imagenModule;
-    
+
+    @ManyToMany(mappedBy = "modules")
+    private Set<User> users = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

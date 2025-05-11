@@ -1,6 +1,6 @@
 package com.example.springfirstproject.service;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +40,7 @@ public class UserChikitoService {
                 .orElseThrow(() -> new UsernameNotFoundException("UsuarioChikito: " + username + " no encontrado"));
     }
 
-    public List<UserChikito> findAll() {
-        return userChikitoRepository.findAll();
+    public Set<UserChikito> findAll() {
+        return new HashSet<>(userChikitoRepository.findAll());
     }
-
-    /*
-     * public List<User> findAll() {
-     * return UserRepository.findAll();
-     * }
-     */
-
 }

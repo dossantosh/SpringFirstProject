@@ -1,7 +1,8 @@
 package com.example.springfirstproject.service;
 
 import java.util.Optional;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,12 @@ public class SubmoduleService {
         return submoduleRepository.findById(id);
     } 
 
-    public List<Submodules> listarSubmodulo(List<Long> lista){
-        return submoduleRepository.findAllById(lista);
-
+    public Set<Submodules> listarSubmodulo(Set<Long> listaId){
+        return new HashSet<>(submoduleRepository.findAllById(listaId));
     } 
     
-    public List<Submodules> listarTodosSubmodulos(){
-        return submoduleRepository.findAll();
-
+    public Set<Submodules> listarTodosSubmodulos(){
+        return new HashSet<>(submoduleRepository.findAll());
     } 
 
 }

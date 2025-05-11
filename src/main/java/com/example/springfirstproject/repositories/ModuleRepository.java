@@ -9,8 +9,6 @@ import com.example.springfirstproject.models.Modules;
 
 @Repository
 public interface ModuleRepository extends JpaRepository<Modules, Long> {
-    //findAll() ya lo incluye automáticamente
-
-    // Sacamos el modulo por ID
+    
     Optional<Modules> findById(Long idModule);
 }

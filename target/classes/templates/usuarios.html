@@ -92,13 +92,36 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Roles</th>
+                                        <th>Modulos</th>
+                                        <th>Submodulos</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="usuario : ${usuarios}">
-                                        <td th:text="${usuario.idUser}">1</td>
-                                        <td th:text="${usuario.username}">juan</td>
-                                        <td th:text="${usuario.roles}">[ROLE_USER]</td>
+                                        <td th:text="${usuario.idUser}"></td>
+                                        <td th:text="${usuario.username}"></td>
+                                        <td>
+                                            <ul>
+                                                <li th:each="rol : ${usuario.roles}" th:text="${rol.nameRole}">
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <!--
+                                        <td>
+                                            <ul>
+                                                <li th:each="mod : ${usuario.modules}"
+                                                    th:text="${mod.nameModule}">
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        -->
+                                        <td>
+                                            <ul>
+                                                <li th:each="sub : ${usuario.submodules}"
+                                                    th:text="${sub.nameSubmodule}">
+                                                </li>
+                                            </ul>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

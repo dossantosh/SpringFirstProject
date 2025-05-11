@@ -1,7 +1,8 @@
 package com.example.springfirstproject.service;
 
 import java.util.Optional;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,13 @@ public class RoleService {
         return roleRepository.findById(id);
 } 
 
-    public List<Roles> listarRoles(List<Long> lista){
-        return roleRepository.findAllById(lista);
+    public Set<Roles> listarRoles(Set<Long> listaId){
+        return new HashSet<>(roleRepository.findAllById(listaId));
 
 } 
     
-    public List<Roles> listarTodosRoles(){
-        return roleRepository.findAll();
+    public Set<Roles> listarTodosRoles(){
+        return new HashSet<>(roleRepository.findAll());
 
 } 
 

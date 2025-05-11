@@ -3,7 +3,6 @@ package com.example.springfirstproject.service;
 import java.util.Optional;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -107,14 +106,7 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario: " + username + " no encontrado"));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Set<User> findAll() {
+        return new HashSet<>(userRepository.findAll());
     }
-
-    /*
-     * public List<User> findAll() {
-     * return UserRepository.findAll();
-     * }
-     */
-
 }

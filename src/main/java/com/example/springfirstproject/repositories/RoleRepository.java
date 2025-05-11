@@ -9,9 +9,7 @@ import com.example.springfirstproject.models.Roles;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Roles, Long> {
-    //findAll() ya lo incluye automáticamente
-
-    // Sacamos el rol por ID
+    
     Optional<Roles> findById(Long idRole);
 
 }

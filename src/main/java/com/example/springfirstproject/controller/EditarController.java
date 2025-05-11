@@ -46,20 +46,11 @@ public class EditarController {
     @GetMapping("/editar") // /perfil/editar
     public String mostrarFormularioEdicion(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
 
-        Set<Roles> setRoles = new HashSet<>(roleService.listarTodosRoles());
-        Set<Modules> setMod = new HashSet<>(moduleService.listarTodosModulos());
-        Set<Submodules> setSub = new HashSet<>(submoduleService.listarTodosSubmodulos());
-
-        System.out.println("User roles: " + user.getRoles());
-        System.out.println("User modules: " + user.getModules());
-        System.out.println("User submodules: " + user.getSubmodules());
-
-        model.addAttribute("user", user);
-        model.addAttribute("todosLosRoles", setRoles);
-        model.addAttribute("todosLosModulos", setMod);
-        model.addAttribute("todosLosSubmodulos", setSub);
+        model.addAttribute("user", userService.findByUsername(username));
+        model.addAttribute("todosLosRoles", roleService.listarTodosRoles());
+        model.addAttribute("todosLosModulos", moduleService.listarTodosModulos());
+        model.addAttribute("todosLosSubmodulos", submoduleService.listarTodosSubmodulos());
         return "perfil/editar";
     }
 

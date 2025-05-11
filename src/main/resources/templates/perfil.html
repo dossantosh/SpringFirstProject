@@ -77,9 +77,16 @@
             </h2>
           </div>
           <div class="card-body">
-            <div class="row g-4">
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+              <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+              <div>
+                Bienvenido a tu área personal. Aquí puedes acceder a todas las funcionalidades
+                disponibles según tus modulos:
+                <br>
+                <span th:text="${userModules}"></span>
+              </div>
+            </div>
               <!-- Información básica de perfil -->
-              <div class="col-md-6">
                 <div class="card h-100 border-0">
                   <div class="card-body">
                     <h5 class="card-title">Datos de la cuenta</h5>
@@ -92,9 +99,15 @@
                     </p>
                     -->
                     <p><strong>Roles:</strong>
-                      <span th:each="r : ${roles}" th:text="${r} + ' '"></span>
+                      <span th:text="${listaRol}"></span>
                     </p>
-                    <!-- Mostrar sección avanzada sólo a ADMIN :contentReference[oaicite:6]{index=6} -->
+                    <p><strong>Modulos:</strong>
+                      <span th:text="${listaMod}"></span>
+                    </p>
+                    <p><strong>Submodulos:</strong>
+                      <span th:text="${listaSub}"></span>
+                    </p>
+                    <!-- Mostrar sección avanzada sólo a ADMIN -->
                     <div th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
                       <p class="text-danger"><strong>Permisos administrativos:</strong>
                         Sí
@@ -102,23 +115,19 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- Avatar y acciones -->
-              <div class="col-md-6">
-                <div class="card h-100 border-0 text-center">
-                  <div class="card-body d-flex flex-column justify-content-center">
-                    <img th:src="@{/images/users/{u}.png(u=${username})}" alt="Avatar" class="rounded-circle mb-3"
-                      width="120" height="120">
-                    <a th:href="@{/perfil/editar}" class="btn btn-primary btn-sm mb-2">
-                      <i class="bi bi-pencil-fill me-1"></i> Editar perfil
-                    </a>
-                    <a th:href="@{/cambiar-password}" class="btn btn-outline-secondary btn-sm">
-                      <i class="bi bi-key-fill me-1"></i> Cambiar contraseña
-                    </a>
-                  </div>
+            <!-- Avatar y acciones -->
+            <div class="col-md-6">
+              <div class="card h-100 border-0 text-center">
+                <div class="card-body d-flex flex-column justify-content-center">
+                  <a th:href="@{/perfil/editar}" class="btn btn-primary btn-sm mb-2">
+                    <i class="bi bi-pencil-fill me-1"></i> Editar perfil
+                  </a>
+                  <a th:href="@{/cambiar-password}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-key-fill me-1"></i> Cambiar contraseña
+                  </a>
                 </div>
               </div>
-            </div> <!-- /.row g-4 -->
+            </div>
           </div> <!-- /.card-body -->
         </div> <!-- /.card -->
       </div>
