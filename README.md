@@ -1,2 +1,2 @@
 # SpringProject
-First web project using spring.
+First web project using spring, thymeleaf and postgresql.
