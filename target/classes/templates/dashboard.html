@@ -132,6 +132,65 @@
         </div>
     </main>
 
+     <main class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <h2 class="h4 mb-0">
+                            <i class="bi bi-house-door me-2 text-primary"></i>Panel de Control
+                        </h2>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row mt-4">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
+                                        <h3 class="h5 card-title">Mi Perfil</h3>
+                                        <p class="card-text">Administra tu información personal y configuración de
+                                            cuenta.</p>
+                                        <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
+                                            Ver perfil <i class="bi bi-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
+                                        <h3 class="h5 card-title">Mis Documentos</h3>
+                                        <p class="card-text">Accede y gestiona tus documentos y archivos personales.</p>
+                                        <a th:href="@{/documents}" class="btn btn-outline-primary btn-sm">
+                                            Ver documentos <i class="bi bi-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4" ¡>
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-gear fs-1 text-primary mb-3"></i>
+                                        <h3 class="h5 card-title">Configuración</h3>
+                                        <p class="card-text">Personaliza tu experiencia y preferencias de la aplicación.
+                                        </p>
+                                        <a th:href="@{/settings}" class="btn btn-outline-primary btn-sm">
+                                            Configurar <i class="bi bi-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">

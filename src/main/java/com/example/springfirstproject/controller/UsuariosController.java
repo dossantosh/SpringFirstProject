@@ -31,7 +31,7 @@ public class UsuariosController {
     @GetMapping("/usuarios")
     public String showUsuarios(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(auth.getName());
+        //User user = userService.findByUsername(auth.getName());
 
         model.addAttribute("usuarios", userService.findAll());
         model.addAttribute("username", auth.getName());
