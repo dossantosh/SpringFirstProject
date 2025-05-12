@@ -10,8 +10,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <!-- Bootstrap CSS (v5.3) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" th:href="@{/css/css.css}">
+  <!-- Custom CSS
+  <link rel="stylesheet" th:href="@{/css/custom.css}">
+  -->
 </head>
 
 <body class="bg-light">
@@ -86,35 +87,35 @@
                 <span th:text="${userModules}"></span>
               </div>
             </div>
-              <!-- Información básica de perfil -->
-                <div class="card h-100 border-0">
-                  <div class="card-body">
-                    <h5 class="card-title">Datos de la cuenta</h5>
-                    <p><strong>Usuario:</strong>
-                      <span sec:authentication="name"></span>
-                    </p>
-                    <!--
+            <!-- Información básica de perfil -->
+            <div class="card h-100 border-0">
+              <div class="card-body">
+                <h5 class="card-title">Datos de la cuenta</h5>
+                <p><strong>Usuario:</strong>
+                  <span sec:authentication="name"></span>
+                </p>
+                <!--
                     <p><strong>Email:</strong>
                       <span th:text="${email}">correo@ejemplo.com</span>
                     </p>
                     -->
-                    <p><strong>Roles:</strong>
-                      <span th:text="${listaRol}"></span>
-                    </p>
-                    <p><strong>Modulos:</strong>
-                      <span th:text="${listaMod}"></span>
-                    </p>
-                    <p><strong>Submodulos:</strong>
-                      <span th:text="${listaSub}"></span>
-                    </p>
-                    <!-- Mostrar sección avanzada sólo a ADMIN -->
-                    <div th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
-                      <p class="text-danger"><strong>Permisos administrativos:</strong>
-                        Sí
-                      </p>
-                    </div>
-                  </div>
+                <p><strong>Roles:</strong>
+                  <span th:text="${listaRol}"></span>
+                </p>
+                <p><strong>Modulos:</strong>
+                  <span th:text="${listaMod}"></span>
+                </p>
+                <p><strong>Submodulos:</strong>
+                  <span th:text="${listaSub}"></span>
+                </p>
+                <!-- Mostrar sección avanzada sólo a ADMIN -->
+                <div th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                  <p class="text-danger"><strong>Permisos administrativos:</strong>
+                    Sí
+                  </p>
                 </div>
+              </div>
+            </div>
             <!-- Avatar y acciones -->
             <div class="col-md-6">
               <div class="card h-100 border-0 text-center">

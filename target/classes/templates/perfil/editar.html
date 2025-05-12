@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Editar Perfil</title>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Bootstrap CSS (v5.3) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS
+  <link rel="stylesheet" th:href="@{/css/custom.css}">
+  -->
 </head>
+
 <body class="bg-light">
   <div class="container my-5">
     <div class="card shadow-sm">
@@ -26,11 +35,8 @@
             <label class="form-label">Roles</label>
             <div class="list-group">
               <label class="list-group-item" th:each="rol : ${todosLosRoles}">
-                <input type="checkbox"
-                       class="form-check-input me-1"
-                       th:name="rolesSeleccionados"
-                       th:value="${rol.idRole}"
-                       th:checked="${user.roles.contains(rol)}" />
+                <input type="checkbox" class="form-check-input me-1" th:name="rolesSeleccionados"
+                  th:value="${rol.idRole}" th:checked="${user.roles.contains(rol)}" />
                 <span th:text="${rol.nameRole}">Roles</span>
               </label>
             </div>
@@ -56,11 +62,8 @@
             <label class="form-label">Submódulos</label>
             <div class="list-group">
               <label class="list-group-item" th:each="sub : ${todosLosSubmodulos}">
-                <input type="checkbox"
-                       class="form-check-input me-1"
-                       th:name="submodulosSeleccionados"
-                       th:value="${sub.idSubmodule}"
-                       th:checked="${user.submodules.contains(sub)}" />
+                <input type="checkbox" class="form-check-input me-1" th:name="submodulosSeleccionados"
+                  th:value="${sub.idSubmodule}" th:checked="${user.submodules.contains(sub)}" />
                 <span th:text="${sub.nameSubmodule}">Submódulo</span>
               </label>
             </div>
@@ -78,4 +81,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

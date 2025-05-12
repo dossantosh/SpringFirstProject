@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,11 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/css/css.css}">
+    <!-- Bootstrap CSS (v5.3) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS
+  <link rel="stylesheet" th:href="@{/css/custom.css}">
+  -->
 </head>
 
 <body class="bg-light">
@@ -68,7 +72,7 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Content    col-lg-9 -->
     <main class="container my-4">
         <div class="row justify-content-center">
             <div class="col-lg-9">
@@ -77,36 +81,36 @@
                         <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>Panel de Usuarios
                         </h2>
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-primary d-flex align-items-center" role="alert">
-                            <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-                            <div>
-                                Esta área solo es accesible para usuarios con privilegios de administrador.
-                                Todas las acciones quedan registradas en el sistema.
+                    <div class="card h-100 border-0">
+                        <div class="card-body">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+                                <div>
+                                    Esta área solo es accesible para usuarios con privilegios de administrador.
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mt-4">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>Roles</th>
-                                        <th>Modulos</th>
-                                        <th>Submodulos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="usuario : ${usuarios}">
-                                        <td th:text="${usuario.idUser}"></td>
-                                        <td th:text="${usuario.username}"></td>
-                                        <td>
-                                            <ul>
-                                                <li th:each="rol : ${usuario.roles}" th:text="${rol.nameRole}">
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <!--
+                            <div class="row mt-4">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Roles</th>
+                                            <th>Modulos</th>
+                                            <th>Submodulos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="usuario : ${usuarios}">
+                                            <td th:text="${usuario.idUser}"></td>
+                                            <td th:text="${usuario.username}"></td>
+                                            <td>
+                                                <ul>
+                                                    <li th:each="rol : ${usuario.roles}" th:text="${rol.nameRole}">
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <!--
                                         <td>
                                             <ul>
                                                 <li th:each="mod : ${usuario.modules}"
@@ -115,16 +119,17 @@
                                             </ul>
                                         </td>
                                         -->
-                                        <td>
-                                            <ul>
-                                                <li th:each="sub : ${usuario.submodules}"
-                                                    th:text="${sub.nameSubmodule}">
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            <td>
+                                                <ul>
+                                                    <li th:each="sub : ${usuario.submodules}"
+                                                        th:text="${sub.nameSubmodule}">
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
