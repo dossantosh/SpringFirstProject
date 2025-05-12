@@ -10,12 +10,13 @@ import java.lang.annotation.Target;
  * Puede aplicarse a nivel de método o clase
  * Ejemplo: @RequierePermiso("CREAR_USUARIO")
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequiereSubmodulo {
     /**
      * Lista de permisos requeridos para acceder al recurso
+     * 
      * @return Array de strings con los nombres de los permisos
      */
-    String[] value();
+    long[] value();
 }

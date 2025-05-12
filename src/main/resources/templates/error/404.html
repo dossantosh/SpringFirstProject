@@ -32,12 +32,14 @@
                             <i class="bi bi-speedometer2 me-1"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i> Administración
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i> Usuarios
                         </a>
@@ -71,7 +73,7 @@
                     <div class="card-body text-center py-5">
                         <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:4rem;"></i>
                         <h1 class="mt-3 text-danger" th:text="${error} ?: 'Acceso denegado'">No se ha enontrado</h1>
-                        <p class="lead text-muted mb-4">
+                        <p class="lead text-muted mb-4" th:text="${message} ?: 'Verifique la URL'">
                             Error 404: Verifique la URL.
                         </p>
                         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
