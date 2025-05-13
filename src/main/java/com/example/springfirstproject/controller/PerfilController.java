@@ -18,10 +18,10 @@ import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
 // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-@Data
+@AllArgsConstructor
 @Controller
 @RequiereModulo({ 2L })
 public class PerfilController {
@@ -33,9 +33,14 @@ public class PerfilController {
     @GetMapping("/perfil")
     public String showPerfilPanel(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(auth.getName());
 
         model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+
+        Set<Long> lista = new HashSet<>();
+        lista.add(1L);
+        model.addAttribute("modulosNecesarios", lista);
+
+        User user = userService.findByUsername(auth.getName());
 
         model.addAttribute("user", user);
 
@@ -55,10 +60,6 @@ public class PerfilController {
         model.addAttribute("listaRol", sbRol);
         model.addAttribute("listaMod", sbMod);
         model.addAttribute("listaSub", sbSub);
-
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulosNecesarios", lista);
         return "perfil";
     }
 }

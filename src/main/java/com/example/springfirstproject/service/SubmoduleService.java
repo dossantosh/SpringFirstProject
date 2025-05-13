@@ -16,15 +16,15 @@ public class SubmoduleService {
     @Autowired
     private SubmoduleRepository submoduleRepository;
 
-    public Optional<Submodules> buscarModulo(Long id){
+    public Optional<Submodules> findById(Long id){
         return submoduleRepository.findById(id);
     } 
 
-    public Set<Submodules> listarSubmodulo(Set<Long> listaId){
+    public Set<Submodules> findAllById(Set<Long> listaId){
         return new HashSet<>(submoduleRepository.findAllById(listaId));
     } 
     
-    public Set<Submodules> listarTodosSubmodulos(){
+    public Set<Submodules> findAll(){
         return new HashSet<>(submoduleRepository.findAll());
     } 
 

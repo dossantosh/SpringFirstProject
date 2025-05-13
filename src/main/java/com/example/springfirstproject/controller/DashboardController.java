@@ -1,11 +1,8 @@
 package com.example.springfirstproject.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.SequencedSet;
 import java.util.Set;
 
@@ -18,20 +15,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 import com.example.springfirstproject.models.Noticias;
-import com.example.springfirstproject.models.User;
 import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.UserChikitoService;
-import com.example.springfirstproject.service.UserService;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
-//@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-@Data
+@AllArgsConstructor
 @Controller
 @RequiereModulo({ 2L })
 public class DashboardController {
-    @Autowired
-    private final UserService userService;
     @Autowired
     private final UserChikitoService userChikitoService;
 

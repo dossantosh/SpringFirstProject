@@ -16,15 +16,15 @@ public class NoticiaService {
     @Autowired
     private NoticiaRepository noticiaRepository;
 
-        public Optional<Noticias> buscarNoticias(Long id){
+    public Optional<Noticias> findById(Long id) {
         return noticiaRepository.findById(id);
-        } 
+    }
 
-    public Set<Noticias> listarNoticias(List<Long> lista){
+    public Set<Noticias> findAllById(List<Long> lista) {
         return new HashSet<>(noticiaRepository.findAllById(lista));
-        } 
-    
-    public Set<Noticias> listarTodasNoticias() {
+    }
+
+    public Set<Noticias> findAll() {
         return new HashSet<>(noticiaRepository.findAll());
-}
+    }
 }

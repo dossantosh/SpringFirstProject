@@ -19,19 +19,11 @@ public class UserChikitoService {
     @Autowired
     private final UserChikitoRepository userChikitoRepository;
 
-    public UserChikito saveUserChikito(String username, Set<Long> roles, Set<Long> modulos, Set<Long> submodulos) {
-
-        UserChikito userChikito = new UserChikito();
-
-        userChikito.setUsername(username);
-        userChikito.setRoles(roles);
-        userChikito.setModules(modulos);
-        userChikito.setSubmodules(submodulos);
-
-        return userChikitoRepository.save(userChikito);
+    public UserChikito saveUserChikito(UserChikito userCH) {
+        return userChikitoRepository.save(userCH);
     }
 
-    public boolean usernameExists(String username) {
+    public boolean existsByUsername(String username) {
         return userChikitoRepository.existsByUsername(username);
     }
 

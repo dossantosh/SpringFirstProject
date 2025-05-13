@@ -94,7 +94,7 @@
                                     <div class="card-body text-center">
                                         <i class="bi bi-person-circle fs-1 text-primary mb-3"></i>
                                         <h3 class="h5 card-title">Información Personal</h3>
-                                        <p class="card-text">Actualiza tu nombre, correo y otros datos personales.</p>
+                                        <p class="card-text">Actualiza tus datos personales.</p>
                                         <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
                                             Editar <i class="bi bi-arrow-right ms-1"></i>
                                         </a>
@@ -108,7 +108,7 @@
                                     <div class="card-body text-center">
                                         <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
                                         <h3 class="h5 card-title">Seguridad</h3>
-                                        <p class="card-text">Cambia tu contraseña y ajusta la seguridad de tu cuenta.
+                                        <p class="card-text">Ajusta la seguridad de tu cuenta.
                                         </p>
                                         <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
                                             Configurar <i class="bi bi-arrow-right ms-1"></i>
@@ -131,14 +131,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Mensaje cuando no hay configuraciones 
-                        <div th:if="${configuraciones.empty}" class="text-center mt-5">
-                            <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
-                            <h4>No hay configuraciones disponibles.</h4>
-                            <p>Vuelve más tarde para ajustar tus preferencias.</p>
-                        </div>
-                        -->
                     </div>
                 </div>
             </div>

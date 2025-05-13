@@ -115,15 +115,12 @@
                                                     </li>
                                                 </ul>
                                             </td>
-                                            <!--
-                                        <td>
-                                            <ul>
-                                                <li th:each="mod : ${usuario.modules}"
-                                                    th:text="${mod.nameModule}">
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        -->
+                                            <td>
+                                                <ul>
+                                                    <li th:each="modu : ${usuario.modules}" th:text="${modu.name}">
+                                                    </li>
+                                                </ul>
+                                            </td>
                                             <td>
                                                 <ul>
                                                     <li th:each="sub : ${usuario.submodules}" th:text="${sub.name}">

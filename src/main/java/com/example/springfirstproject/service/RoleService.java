@@ -15,16 +15,16 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public Optional<Roles> buscarRol(Long id){
+    public Optional<Roles> findById(Long id){
         return roleRepository.findById(id);
 } 
 
-    public Set<Roles> listarRoles(Set<Long> listaId){
+    public Set<Roles> findAllById(Set<Long> listaId){
         return new HashSet<>(roleRepository.findAllById(listaId));
 
 } 
     
-    public Set<Roles> listarTodosRoles(){
+    public Set<Roles> findAll(){
         return new HashSet<>(roleRepository.findAll());
 
 } 

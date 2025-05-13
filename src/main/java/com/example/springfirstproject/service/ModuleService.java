@@ -16,15 +16,15 @@ public class ModuleService {
     @Autowired
     private ModuleRepository moduleRepository;
 
-        public Optional<Modules> buscarModules(Long id){
+    public Optional<Modules> findById(Long id) {
         return moduleRepository.findById(id);
-        } 
+    }
 
-    public Set<Modules> listarModulos(List<Long> lista){
+    public Set<Modules> findAllById(List<Long> lista) {
         return new HashSet<>(moduleRepository.findAllById(lista));
-        } 
-    
-    public Set<Modules> listarTodosModulos() {
+    }
+
+    public Set<Modules> findAll() {
         return new HashSet<>(moduleRepository.findAll());
-}
+    }
 }

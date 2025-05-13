@@ -13,16 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.UserChikitoService;
-import com.example.springfirstproject.service.UserService;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
+@AllArgsConstructor
 @Controller
 @RequiereModulo({ 2L })
 public class ConfigurationController {
-    @Autowired
-    private final UserService userService;
     @Autowired
     private final UserChikitoService userChikitoService;
 

@@ -13,17 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.UserChikitoService;
-import com.example.springfirstproject.service.UserService;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
-//@PreAuthorize("hasRole('ADMIN')")
-@Data
+@AllArgsConstructor
 @Controller
 @RequiereModulo({ 1L, 2L })
 public class AdminController {
-    @Autowired
-    private final UserService userService;
     @Autowired
     private final UserChikitoService userChikitoService;
 

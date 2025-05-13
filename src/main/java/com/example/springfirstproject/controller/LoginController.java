@@ -1,9 +1,11 @@
 package com.example.springfirstproject.controller;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,19 +13,43 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
+import com.example.springfirstproject.models.Modules;
+import com.example.springfirstproject.models.Roles;
+import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.models.User;
+import com.example.springfirstproject.models.UserChikito;
+import com.example.springfirstproject.repositories.ModuleRepository;
+import com.example.springfirstproject.repositories.RoleRepository;
+import com.example.springfirstproject.repositories.SubmoduleRepository;
+import com.example.springfirstproject.repositories.UserRepository;
+import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
+@AllArgsConstructor
 @Controller
 public class LoginController {
+    
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private final RoleRepository roleRepository;
+
+    @Autowired
+    private final ModuleRepository moduleRepository;
+
+    @Autowired
+    private final SubmoduleRepository submoduleRepository;
+
+    @Autowired
+    private final UserChikitoService userChikitoService;
+
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String showLoginForm() {
@@ -47,39 +73,75 @@ public class LoginController {
             return "register";
         }
 
-        if (userService.usernameExists(user.getUsername())) {
+        if (userService.existsByUsername(user.getUsername())) {
             model.addAttribute("error", "El nombre de usuario ya existe");
             return "register";
         }
 
-        Set<Long> roles = new HashSet<>();
-        Set<Long> modulos = new HashSet<>();
-        Set<Long> submodulos = new HashSet<>();
+        if (!user.getPassword().startsWith("{bcrypt}")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        Set<Roles> roles = new HashSet<>();
+        Set<Modules> modulos = new HashSet<>();
+        Set<Submodules> submodulos = new HashSet<>();
+
+        Set<Long> rolesId = new HashSet<>();
+        Set<Long> modulosId = new HashSet<>();
+        Set<Long> submodulosId = new HashSet<>();
 
         if (user.getUsername().equals("sevas")) {
-            roles.add(1L);
-            modulos.add(1L);
-            submodulos.add(1L);
-            roles.add(2L);
-            modulos.add(2L);
-            submodulos.add(2L);
-
-            userService.saveUser(user, roles, modulos, submodulos);
-            return respuesta;
+            rolesId.add(1L);
+            modulosId.add(1L);
+            submodulosId.add(1L);
         }
-        if (user.getUsername().equals("dossantosh")) {
-            roles.add(2L);
-            modulos.add(2L);
-            submodulos.add(2L);
 
-            userService.saveUser(user, roles, modulos, submodulos);
-            return respuesta;
+        rolesId.add(2L);
+        modulosId.add(2L);
+        submodulosId.add(2L);
+
+        for (Long rol : rolesId) {
+            Optional<Roles> role = roleRepository.findById(rol);
+
+            if (role.isPresent()) {
+                Roles existingRole = role.get();
+                roles.add(existingRole);
+            }
         }
-        roles.add(2L);
-        modulos.add(2L);
-        submodulos.add(2L);
+        for (Long modulo : modulosId) {
+            Optional<Modules> module = moduleRepository.findById(modulo);
 
-        userService.saveUser(user, roles, modulos, submodulos);
+            if (module.isPresent()) {
+                Modules existingModule = module.get();
+                modulos.add(existingModule);
+            }
+        }
+        for (Long submodulo : submodulosId) {
+            Optional<Submodules> submodule = submoduleRepository.findById(submodulo);
+
+            if (submodule.isPresent()) {
+                Submodules existingSubmodule = submodule.get();
+                submodulos.add(existingSubmodule);
+            }
+        }
+
+        if (roles.isEmpty() || modulos.isEmpty() || submodulos.isEmpty()) {
+            return null;
+        }
+
+        user.setRoles(roles);
+        user.setModules(modulos);
+        user.setSubmodules(submodulos);
+
+        UserChikito userCh = new UserChikito();
+        
+        userCh.setUsername(user.getUsername());
+        userCh.setRoles(rolesId);
+        userCh.setModules(modulosId);
+        userCh.setSubmodules(submodulosId);
+
+        userService.saveUser(user);
+        userChikitoService.saveUserChikito(userCh);
         return respuesta;
     }
 
