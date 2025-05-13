@@ -20,14 +20,14 @@ import lombok.*;
 public class Modules {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
-    @Column(name="id_module")
-    private Long idModule;
+    @Column(name = "id_module")
+    private Long id;
 
-    @Column(unique = true, length = 50, name = "name_module", nullable = false)
-    private String nameModule;
+    @Column(unique = true, length = 50, nullable = false)
+    private String name;
 
-    @Column(length = 50, name = "imagen_module")
-    private String imagenModule;
+    @Column(length = 50)
+    private String imagen;
 
     @ManyToMany(mappedBy = "modules")
     private Set<User> users = new HashSet<>();
@@ -37,11 +37,11 @@ public class Modules {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Modules modules = (Modules) o;
-        return Objects.equals(idModule, modules.idModule);
+        return Objects.equals(id, modules.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idModule);
+        return Objects.hash(id);
     }
 }

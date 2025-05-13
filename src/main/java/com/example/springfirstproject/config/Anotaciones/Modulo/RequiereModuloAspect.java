@@ -37,7 +37,7 @@ public class RequiereModuloAspect {
         for (long modId : required) {
             boolean has = user.getModules()
                               .stream()
-                              .anyMatch(m -> m.getIdModule() == modId);
+                              .anyMatch(m -> m.getId() == modId);
             if (has) {
                 return pjp.proceed();
             }

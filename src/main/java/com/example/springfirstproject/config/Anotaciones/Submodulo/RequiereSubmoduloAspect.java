@@ -37,7 +37,7 @@ public class RequiereSubmoduloAspect {
         for (long subId : required) {
             boolean has = user.getSubmodules()
                               .stream()
-                              .anyMatch(m -> m.getIdSubmodule() == subId);
+                              .anyMatch(m -> m.getId() == subId);
             if (has) {
                 return pjp.proceed();
             }

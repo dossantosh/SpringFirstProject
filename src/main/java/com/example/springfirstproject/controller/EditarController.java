@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.springfirstproject.models.User;
+import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 import com.example.springfirstproject.models.Modules;
 import com.example.springfirstproject.models.Roles;
 import com.example.springfirstproject.models.Submodules;
 
-import com.example.springfirstproject.service.ModuleService;
 import com.example.springfirstproject.service.RoleService;
+import com.example.springfirstproject.service.ModuleService;
 import com.example.springfirstproject.service.SubmoduleService;
 import com.example.springfirstproject.service.UserService;
 
@@ -25,6 +26,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/perfil")
 @Transactional
+@RequiereModulo({ 2L })
 public class EditarController {
 
     private final UserService userService;

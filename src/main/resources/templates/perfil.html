@@ -50,6 +50,11 @@
               <i class="bi bi-person-circle me-1"></i> Mi Perfil
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/configuracion}">
+              <i class="bi bi-gear me-1"></i> Configuración
+            </a>
+          </li>
         </ul>
         <div class="d-flex align-items-center">
           <span class="text-white me-3 d-none d-lg-block">
@@ -147,11 +152,16 @@
           <h5 class="mb-3">Enlaces</h5>
           <ul class="list-unstyled">
             <ul class="list-unstyled">
-              <li class="mb-2">
-                <a th:href="@{/dashboard}" class="text-white-50 text-decoration-none">Dashboard</a>
+              <li class="mb-2"><a th:href="@{/dashboard}" class="text-white-50 text-decoration-none">Dashboard</a>
               </li>
               <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
                 <a th:href="@{/admin}" class="text-white-50 text-decoration-none">Administración</a>
+              </li>
+              <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                <a th:href="@{/usuarios}" class="text-white-50 text-decoration-none">Usuarios</a>
+              </li>
+              <li class="mb-2"><a th:href="@{/configuracion}"
+                  class="text-white-50 text-decoration-none">Configuración</a>
               </li>
             </ul>
           </ul>

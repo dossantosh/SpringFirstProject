@@ -19,21 +19,21 @@ public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_role")
-    private Long idRole;
+    private Long id;
 
-    @Column(unique = true, length = 20, name = "name_role")
-    private String nameRole;
+    @Column(unique = true, length = 20)
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Roles roles = (Roles) o;
-        return Objects.equals(idRole, roles.idRole);
+        return Objects.equals(id, roles.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idRole);
+        return Objects.hash(id);
     }
 }

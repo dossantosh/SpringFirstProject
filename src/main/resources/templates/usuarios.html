@@ -36,14 +36,14 @@
                             <i class="bi bi-speedometer2 me-1"></i> Dashboard
                         </a>
                     </li>
-                    <!--<li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> -->
-                    <!--<li class="nav-item" sec:authorize="hasRole('ADMIN')"> -->
-                    <li class="nav-item">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i> Administración
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link active" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i> Usuarios
                         </a>
@@ -51,6 +51,11 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/perfil}">
                             <i class="bi bi-person-circle me-1"></i> Mi Perfil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/configuracion}">
+                            <i class="bi bi-gear me-1"></i> Configuración
                         </a>
                     </li>
                 </ul>
@@ -102,11 +107,11 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="usuario : ${usuarios}">
-                                            <td th:text="${usuario.idUser}"></td>
+                                            <td th:text="${usuario.id}"></td>
                                             <td th:text="${usuario.username}"></td>
                                             <td>
                                                 <ul>
-                                                    <li th:each="rol : ${usuario.roles}" th:text="${rol.nameRole}">
+                                                    <li th:each="rol : ${usuario.roles}" th:text="${rol.name}">
                                                     </li>
                                                 </ul>
                                             </td>
@@ -121,8 +126,7 @@
                                         -->
                                             <td>
                                                 <ul>
-                                                    <li th:each="sub : ${usuario.submodules}"
-                                                        th:text="${sub.nameSubmodule}">
+                                                    <li th:each="sub : ${usuario.submodules}" th:text="${sub.name}">
                                                     </li>
                                                 </ul>
                                             </td>
@@ -156,7 +160,12 @@
                                     class="text-white-50 text-decoration-none">Administración</a>
                             </li>
                             <li class="mb-2"><a th:href="@{/perfil}"
-                                    class="text-white-50 text-decoration-none">Perfil</a></li>
+                                    class="text-white-50 text-decoration-none">Perfil</a>
+                            </li>
+                            </li>
+                            <li class="mb-2"><a th:href="@{/configuracion}"
+                                    class="text-white-50 text-decoration-none">Configuración</a>
+                            </li>
                         </ul>
                     </ul>
                 </div>

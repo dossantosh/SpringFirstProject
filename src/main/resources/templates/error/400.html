@@ -14,17 +14,19 @@
 
 <body class="bg-light">
 
-    <!-- NAVBAR (idéntico al dashboard) -->
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
-                <img th:src="@{/images/logo.png}" alt="Logo" height="30" class="me-2">
+                <img th:src="@{/images/logo.png}" alt="Logo de la aplicación" height="30" class="me-2">
                 <span class="fw-bold">The Dawn of Man</span>
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -32,12 +34,14 @@
                             <i class="bi bi-speedometer2 me-1"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i> Administración
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i> Usuarios
                         </a>
@@ -47,14 +51,22 @@
                             <i class="bi bi-person-circle me-1"></i> Mi Perfil
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/configuracion}">
+                            <i class="bi bi-gear me-1"></i> Configuración
+                        </a>
+                    </li>
                 </ul>
+
                 <div class="d-flex align-items-center">
                     <span class="text-white me-3 d-none d-lg-block">
                         <i class="bi bi-person-circle me-1"></i>
-                        <span th:text="${username}">Usuario</span>
+                        <span th:text="${username}"></span>
                     </span>
                     <form th:action="@{/logout}" method="post" class="d-flex">
-                        <button type="submit" class="btn btn-outline-light">
+                        <!-- Token CSRF (descomenta cuando configures CSRF) -->
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-outline-light" aria-label="Cerrar sesión">
                             <i class="bi bi-box-arrow-right me-1"></i> Salir
                         </button>
                     </form>

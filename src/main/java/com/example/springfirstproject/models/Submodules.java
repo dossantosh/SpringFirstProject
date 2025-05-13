@@ -20,10 +20,10 @@ public class Submodules {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
     @Column(name="id_submodule")
-    private Long idSubmodule;
+    private Long id;
 
-    @Column(unique = true, length = 50, name = "name_submodule")
-    private String nameSubmodule;
+    @Column(unique = true, length = 50)
+    private String name;
 
     @ManyToOne()
     @JoinColumn(name="id_module")
@@ -34,11 +34,11 @@ public class Submodules {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Submodules submodules = (Submodules) o;
-        return Objects.equals(idSubmodule, submodules.idSubmodule);
+        return Objects.equals(id, submodules.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idSubmodule);
+        return Objects.hash(id);
     }
 }

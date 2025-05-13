@@ -5,10 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.springfirstproject.models.Modules;
+import com.example.springfirstproject.models.Noticias;
 
 @Repository
-public interface ModuleRepository extends JpaRepository<Modules, Long> {
+public interface NoticiaRepository extends JpaRepository<Noticias, Long> {
     
-    Optional<Modules> findById(Long id);
+    Optional<Noticias> findById(Long idNoticia);
 }
+

@@ -26,12 +26,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
     @Column(name = "id_user")
-    private Long idUser;
+    private Long id;
 
-    @Column(unique = true, length = 50, name = "username")
+    @Column(unique = true, length = 50)
     private String username;
 
-    @Column(length = 100, name = "password")
+    @Column(length = 100)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -1,8 +1,6 @@
 package com.example.springfirstproject.controller;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +11,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
-import com.example.springfirstproject.models.Noticias;
-import com.example.springfirstproject.models.User;
 import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
 import lombok.Data;
 
-//@PreAuthorize("hasRole('ADMIN')")  
 @Data
 @Controller
-@RequiereModulo({ 1L, 2L })
-public class UsuariosController {
-
+@RequiereModulo({ 2L })
+public class ConfigurationController {
     @Autowired
     private final UserService userService;
     @Autowired
     private final UserChikitoService userChikitoService;
 
-    @GetMapping("/usuarios")
-    public String showUsuarios(Model model) {
+    @GetMapping("/configuracion")
+    public String showAdminPanel(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         model.addAttribute("username", auth.getName());
@@ -45,12 +39,6 @@ public class UsuariosController {
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);
 
-        SequencedSet<User> setUsuarios = new LinkedHashSet<>();
-        for (User usuario : userService.findAll()) {
-            setUsuarios.add(usuario);
-        }
-        model.addAttribute("usuarios", setUsuarios);
-
-        return "usuarios";
+        return "configuracion";
     }
 }

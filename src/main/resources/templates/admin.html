@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Bootstrap CSS (v5.3) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom CSS
+    <!-- Custom CSS
   <link rel="stylesheet" th:href="@{/css/custom.css}">
   -->
 </head>
@@ -25,7 +25,7 @@
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -36,14 +36,14 @@
                             <i class="bi bi-speedometer2 me-1"></i> Dashboard
                         </a>
                     </li>
-                    <!--<li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> -->
-                    <!--<li class="nav-item" sec:authorize="hasRole('ADMIN')"> -->
-                    <li class="nav-item">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link active" th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i> Administración
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                        th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i> Usuarios
                         </a>
@@ -53,12 +53,17 @@
                             <i class="bi bi-person-circle me-1"></i> Mi Perfil
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/configuracion}">
+                            <i class="bi bi-gear me-1"></i> Configuración
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="d-flex align-items-center">
                     <span class="text-white me-3 d-none d-lg-block">
                         <i class="bi bi-person-circle me-1"></i>
-                        <span th:text="${#authentication.name}"></span>
+                        <span th:text="${username}"></span>
                     </span>
                     <form th:action="@{/logout}" method="post" class="d-flex">
                         <!-- Token CSRF (descomenta cuando configures CSRF) -->
@@ -165,12 +170,18 @@
                     <ul class="list-unstyled">
                         <ul class="list-unstyled">
                             <li class="mb-2"><a th:href="@{/dashboard}"
-                                    class="text-white-50 text-decoration-none">Dashboard</a></li>
+                                    class="text-white-50 text-decoration-none">Dashboard</a>
+                            </li>
                             <li class="mb-2"><a th:href="@{/usuarios}"
                                     class="text-white-50 text-decoration-none">Usuarios</a>
                             </li>
                             <li class="mb-2"><a th:href="@{/perfil}"
-                                    class="text-white-50 text-decoration-none">Perfil</a></li>
+                                    class="text-white-50 text-decoration-none">Perfil</a>
+                            </li>
+                            </li>
+                            <li class="mb-2"><a th:href="@{/configuracion}"
+                                    class="text-white-50 text-decoration-none">Configuración</a>
+                            </li>
                         </ul>
                     </ul>
                 </div>
