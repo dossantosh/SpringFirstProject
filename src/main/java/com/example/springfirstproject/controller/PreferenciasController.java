@@ -9,6 +9,7 @@ import com.example.springfirstproject.service.UserChikitoService;
 import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @AllArgsConstructor
 @RequiereModulo({ 2L })
+@ControllerAdvice
 @Controller
 public class PreferenciasController {
     @Autowired
@@ -42,21 +46,25 @@ public class PreferenciasController {
         model.addAttribute("modulosNecesarios", lista);
 
         Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.getId());
-        model.addAttribute("preferencias", preferencias);
+        model.addAttribute("preferencias", preferencias != null ? preferencias : new Preferencias());
 
         return "preferencias";
     }
 
     @PostMapping("/preferencias")
-    public String guardarPreferencias(@ModelAttribute Preferencias preferencias) {
+    public String guardarPreferencias(@ModelAttribute Preferencias preferencias, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserChikito userCh = userChikitoService.findByUsername(auth.getName());
-        // Establecer el userId antes de guardar
         preferencias.setUserId(userCh.getId());
 
-        // Guardar las nuevas preferencias
-        preferenciasService.guardarPreferencias(preferencias);
+        try {
+            preferenciasService.guardarPreferencias(preferencias);
+            redirectAttributes.addFlashAttribute("successMessage", "Preferencias guardadas correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Ocurrió un error al guardar las preferencias.");
+            e.printStackTrace();
+        }
 
-        return "redirect:/preferencias";
+        return "redirect:/configuracion";
     }
 }

@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Bootstrap CSS (v5.3) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS
-  <link rel="stylesheet" th:href="@{/css/custom.css}">
-  -->
+    <!-- Cargar el CSS correcto según las preferencias -->
+    <link
+        th:href="@{'/css/' + (${preferencias.tema == 'dark'} ? 'dark.css' : (${preferencias.tema == 'light'} ? 'light.css' : 'auto.css'))}"
+        rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
@@ -82,51 +83,70 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h2 class="h4 mb-0">
-                            <i class="bi bi-house-door me-2 text-primary"></i>Panel de Control
-                        </h2>
-                    </div>
-                    <div class="card-body">
+                    <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                        <div
+                            th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
+                            <div
+                                th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                <h2 class="h4 mb-0">
+                                    <i class="bi bi-house-door me-2 text-primary"></i>Panel de Control
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
 
-                        <div class="row mt-4">
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Mi Perfil</h3>
-                                        <p class="card-text">Administra tu información personal y configuración de
-                                            cuenta.</p>
-                                        <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
-                                            Ver perfil <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                            <div class="row mt-4">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Mi Perfil</h3>
+                                                <p class="card-text">Administra tu información personal y configuración
+                                                    de
+                                                    cuenta.</p>
+                                                <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
+                                                    Ver perfil <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Mis Documentos</h3>
-                                        <p class="card-text">Accede y gestiona tus documentos y archivos personales.</p>
-                                        <a th:href="@{/documents}" class="btn btn-outline-primary btn-sm">
-                                            Ver documentos <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Mis Documentos</h3>
+                                                <p class="card-text">Accede y gestiona tus documentos y archivos
+                                                    personales.
+                                                </p>
+                                                <a th:href="@{/documents}" class="btn btn-outline-primary btn-sm">
+                                                    Ver documentos <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-gear fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Configuración</h3>
-                                        <p class="card-text">Personaliza tu experiencia y preferencias de la aplicación.
-                                        </p>
-                                        <a th:href="@{/configuracion}" class="btn btn-outline-primary btn-sm">
-                                            Configurar <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-gear fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Configuración</h3>
+                                                <p class="card-text">Personaliza tu experiencia y preferencias de la
+                                                    aplicación.
+                                                </p>
+                                                <a th:href="@{/configuracion}" class="btn btn-outline-primary btn-sm">
+                                                    Configurar <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -141,36 +161,50 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h2 class="h4 mb-0">
-                            <i class="bi bi-newspaper me-2 text-primary"></i>Noticias
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mt-4">
-                            <div th:each="noticia, iterStat : ${noticias}" class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <img th:src="@{${noticia.imagen}}" class="card-img-top" alt="Imagen de Noticia">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title" th:text="${noticia.titulo}"></h3>
-                                        <p class="card-text" th:text="${noticia.resumen}"></p>
-                                        <a th:href="@{/news/{id}(id=${noticia.id})}"
-                                            class="btn btn-outline-primary btn-sm">
-                                            Leer más <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
-                                    </div>
-                                    <div class="card-footer bg-white border-top text-muted small">
-                                        <i class="bi bi-calendar-event me-1"></i>
-                                        <span th:text="${noticia.fecha}"></span>
+                    <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                        <div
+                            th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
+                            <div
+                                th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                <h2 class="h4 mb-0">
+                                    <i class="bi bi-newspaper me-2 text-primary"></i>Noticias
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mt-4">
+                                <div th:each="noticia, iterStat : ${noticias}" class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <img th:src="@{${noticia.imagen}}" class="card-img-top"
+                                                alt="Imagen de Noticia">
+                                            <div class="card-body">
+                                                <h3 class="h5 card-title" th:text="${noticia.titulo}"></h3>
+                                                <p class="card-text" th:text="${noticia.resumen}"></p>
+                                                <a th:href="@{/news/{id}(id=${noticia.id})}"
+                                                    class="btn btn-outline-primary btn-sm">
+                                                    Leer más <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                            <div
+                                                th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
+                                                <div
+                                                    th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                                    <i class="bi bi-calendar-event me-1"></i>
+                                                    <span th:text="${noticia.fecha}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Mensaje cuando no hay noticias -->
-                        <div th:if="${noticias.empty}" class="text-center mt-5">
-                            <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
-                            <h4>No hay noticias disponibles.</h4>
-                            <p>Vuelve más tarde para ver las últimas actualizaciones.</p>
+                            <!-- Mensaje cuando no hay noticias -->
+                            <div th:if="${noticias.empty}" class="text-center mt-5">
+                                <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
+                                <h4>No hay noticias disponibles.</h4>
+                                <p>Vuelve más tarde para ver las últimas actualizaciones.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -200,7 +234,8 @@
                         <li class="mb-2"><a th:href="@{/perfil}" class="text-white-50 text-decoration-none">Perfil</a>
                         </li>
                         </li>
-                        <li class="mb-2"><a th:href="@{/configuracion}" class="text-white-50 text-decoration-none">Configuración</a>
+                        <li class="mb-2"><a th:href="@{/configuracion}"
+                                class="text-white-50 text-decoration-none">Configuración</a>
                         </li>
                     </ul>
                 </div>

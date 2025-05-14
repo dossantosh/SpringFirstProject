@@ -6,16 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel de Administración</title>
 
+    <!-- Cargar el CSS correcto según las preferencias -->
+    <link
+        th:href="@{'/css/' + (${preferencias.tema == 'dark'} ? 'dark.css' : (${preferencias.tema == 'light'} ? 'light.css' : 'auto.css'))}"
+        rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Bootstrap CSS (v5.3) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS
-  <link rel="stylesheet" th:href="@{/css/custom.css}">
-  -->
+    <!-- Cargar el CSS correcto según las preferencias -->
+    <link
+        th:href="@{'/css/' + (${preferencias.tema == 'dark'} ? 'dark.css' : (${preferencias.tema == 'light'} ? 'light.css' : 'auto.css'))}"
+        rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
@@ -82,70 +87,92 @@
         <div class="row justify-content-center">
             <div class="col-lg-9">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>Panel de Administración
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-primary d-flex align-items-center" role="alert">
-                            <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-                            <div>
-                                Esta área solo es accesible para usuarios con privilegios de administrador.
+                    <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                        <div
+                            th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
+                            <div
+                                th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>Panel de
+                                    Administración
+                                </h2>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title">
-                                            <i class="bi bi-people-fill me-2 text-primary"></i>Usuarios
-                                        </h3>
-                                        <p class="card-text">Gestión de usuarios del sistema, permisos y roles.</p>
-                                        <a th:href="@{/usuarios}" class="btn btn-outline-primary btn-sm">
-                                            Gestionar usuarios <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
-                                    </div>
+                        <div class="card-body">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+                                <div>
+                                    Esta área solo es accesible para usuarios con privilegios de administrador.
                                 </div>
                             </div>
-
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title">
-                                            <i class="bi bi-shield-lock me-2 text-primary"></i>Seguridad
-                                        </h3>
-                                        <p class="card-text">Configuración de políticas de seguridad y contraseñas.</p>
-                                        <a th:href="@{/admin/security}" class="btn btn-outline-primary btn-sm">
-                                            Configurar seguridad <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                            <div class="row mt-4">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body">
+                                                <h3 class="h5 card-title">
+                                                    <i class="bi bi-people-fill me-2 text-primary"></i>Usuarios
+                                                </h3>
+                                                <p class="card-text">Gestión de usuarios del sistema, permisos y roles.
+                                                </p>
+                                                <a th:href="@{/usuarios}" class="btn btn-outline-primary btn-sm">
+                                                    Gestionar usuarios <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title">
-                                            <i class="bi bi-gear-fill me-2 text-primary"></i>Sistema
-                                        </h3>
-                                        <p class="card-text">Ajustes generales del sistema y preferencias.</p>
-                                        <a th:href="@{/admin/settings}" class="btn btn-outline-primary btn-sm">
-                                            Configurar sistema <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body">
+                                                <h3 class="h5 card-title">
+                                                    <i class="bi bi-shield-lock me-2 text-primary"></i>Seguridad
+                                                </h3>
+                                                <p class="card-text">Configuración de políticas de seguridad y
+                                                    contraseñas.
+                                                </p>
+                                                <a th:href="@{/admin/security}" class="btn btn-outline-primary btn-sm">
+                                                    Configurar seguridad <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title">
-                                            <i class="bi bi-clipboard-data me-2 text-primary"></i>Registros
-                                        </h3>
-                                        <p class="card-text">Visualización de logs y actividad del sistema.</p>
-                                        <a th:href="@{/admin/audit}" class="btn btn-outline-primary btn-sm">
-                                            Ver registros <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body">
+                                                <h3 class="h5 card-title">
+                                                    <i class="bi bi-gear-fill me-2 text-primary"></i>Sistema
+                                                </h3>
+                                                <p class="card-text">Ajustes generales del sistema y preferencias.</p>
+                                                <a th:href="@{/admin/settings}" class="btn btn-outline-primary btn-sm">
+                                                    Configurar sistema <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body">
+                                                <h3 class="h5 card-title">
+                                                    <i class="bi bi-clipboard-data me-2 text-primary"></i>Registros
+                                                </h3>
+                                                <p class="card-text">Visualización de logs y actividad del sistema.</p>
+                                                <a th:href="@{/admin/audit}" class="btn btn-outline-primary btn-sm">
+                                                    Ver registros <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

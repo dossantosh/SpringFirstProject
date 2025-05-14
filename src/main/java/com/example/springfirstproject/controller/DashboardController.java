@@ -44,7 +44,7 @@ public class DashboardController {
 
         Noticias salida = new Noticias(1L, "The Dawn of Man: disponible en...", "Ya se puede comprar the dawn of man en las plataformas oficiales...", "13/05/2025", "imagen");
         Noticias fechaSalida = new Noticias(1L, "Fecha de salida: The Dawn of Man", "La fecha de salida ya está confirmada para el 13/05/2025. Ya podéis reservar en las plataformas...", "10/04/2025", "imagen");
-        Noticias prueba = new Noticias(1L, "Esto es una prueba que...", "Primera prueba del sistema de noticias", "03/04/2025", "imagen");
+        Noticias prueba = new Noticias(1L, "Esto es una prueba que...", "Primera prueba del sistema de noticias y si o is tiene que tener, al menos, dos lineas", "03/04/2025", "imagen");
 
         setNoticias.add(salida);
         setNoticias.add(fechaSalida);

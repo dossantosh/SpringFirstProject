@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Bootstrap CSS (v5.3) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS
-  <link rel="stylesheet" th:href="@{/css/custom.css}">
-  -->
+    <!-- Cargar el CSS correcto según las preferencias -->
+    <link
+        th:href="@{'/css/' + (${preferencias.tema == 'dark'} ? 'dark.css' : (${preferencias.tema == 'light'} ? 'light.css' : 'auto.css'))}"
+        rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
@@ -81,52 +82,67 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h2 class="h4 mb-0">
-                            <i class="bi bi-gear me-2 text-primary"></i>Configuración
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mt-4">
-                            <!-- Perfil -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-person-circle fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Información Personal</h3>
-                                        <p class="card-text">Actualiza tus datos personales.</p>
-                                        <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
-                                            Editar <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                    <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                        <div
+                            th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
+                            <div
+                                th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                <h2 class="h4 mb-0">
+                                    <i class="bi bi-gear me-2 text-primary"></i>Configuración
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mt-4">
+                                <!-- Perfil -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-person-circle fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Información Personal</h3>
+                                                <p class="card-text">Actualiza tus datos personales.</p>
+                                                <a th:href="@{/perfil/editar}" class="btn btn-outline-primary btn-sm">
+                                                    Editar <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Seguridad -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Seguridad</h3>
-                                        <p class="card-text">Ajusta la seguridad de tu cuenta.
-                                        </p>
-                                        <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
-                                            Configurar <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <!-- Seguridad -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Seguridad</h3>
+                                                <p class="card-text">Ajusta la seguridad de tu cuenta.
+                                                </p>
+                                                <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
+                                                    Configurar <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Preferencias -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-sliders fs-1 text-primary mb-3"></i>
-                                        <h3 class="h5 card-title">Preferencias</h3>
-                                        <p class="card-text">Personaliza las preferencias de tu experiencia.</p>
-                                        <a th:href="@{/preferencias}" class="btn btn-outline-primary btn-sm">
-                                            Ajustar <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                <!-- Preferencias -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div
+                                            th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <div class="card-body text-center">
+                                                <i class="bi bi-sliders fs-1 text-primary mb-3"></i>
+                                                <h3 class="h5 card-title">Preferencias</h3>
+                                                <p class="card-text">Personaliza las preferencias de tu experiencia.</p>
+                                                <a th:href="@{/preferencias}" class="btn btn-outline-primary btn-sm">
+                                                    Ajustar <i class="bi bi-arrow-right ms-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
