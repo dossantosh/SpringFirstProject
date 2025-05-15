@@ -9,14 +9,7 @@
             "name": "SpringFirstProject",
             "request": "launch",
             "mainClass": "com.example.springfirstproject.SpringFirstProject",
-            "projectName": "springfirstapp"
-        },
-        {
-            "type": "java",
-            "name": "SpringFirstProject",
-            "request": "launch",
-            "mainClass": "com.example.springfirstproject.SpringFirstProject",
-            "projectName": "proyectonico"
+            "projectName": "SpringFirstProject"
         },
         {
             "type": "java",

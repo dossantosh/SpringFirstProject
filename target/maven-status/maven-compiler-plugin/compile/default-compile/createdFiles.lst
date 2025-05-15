@@ -1,4 +1,5 @@
 com\example\springfirstproject\config\Anotaciones\Modulo\RequiereModuloAspect.class
+com\example\springfirstproject\config\GlobalPreferencesControllerAdvice.class
 com\example\springfirstproject\controller\PerfilController.class
 com\example\springfirstproject\models\User.class
 com\example\springfirstproject\repositories\UserChikitoRepository.class
