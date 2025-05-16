@@ -17,7 +17,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/principal}">
                 <img th:src="@{/images/logo.png}" alt="Logo de la aplicación" height="30" class="me-2">
                 <span class="fw-bold">The Dawn of Man</span>
             </a>
@@ -30,8 +30,8 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/dashboard}">
-                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        <a class="nav-link" th:href="@{/principal}">
+                            <i class="bi bi-speedometer2 me-1"></i> Principal
                         </a>
                     </li>
                     <li class="nav-item" th:each="mid : ${modulosNecesarios}"
@@ -86,8 +86,8 @@
                             Error 400: No eixste esa URL
                         </p>
                         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                            <a th:href="@{/dashboard}" class="btn btn-primary btn-lg">
-                                <i class="bi bi-arrow-left-circle me-1"></i> Volver al Dashboard
+                            <a th:href="@{/principal}" class="btn btn-primary btn-lg">
+                                <i class="bi bi-arrow-left-circle me-1"></i> Volver al Principal
                             </a>
                             <a th:href="@{/login}" class="btn btn-outline-secondary btn-lg">
                                 <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
@@ -103,7 +103,6 @@
         </div>
     </main>
 
-    <!-- FOOTER (idéntico al dashboard) -->
     <footer class="bg-dark text-white py-4 mt-auto">
         <div class="container">
             <div class="row">
@@ -114,7 +113,7 @@
                 <div class="col-md-3">
                     <h5 class="mb-3">Enlaces</h5>
                     <ul class="list-unstyled">
-                        <li><a th:href="@{/dashboard}" class="text-white-50">Dashboard</a></li>
+                        <li><a th:href="@{/principal}" class="text-white-50">Principal</a></li>
                         <li th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
                             <a th:href="@{/admin}" class="text-white-50">Administración</a>
                         </li>

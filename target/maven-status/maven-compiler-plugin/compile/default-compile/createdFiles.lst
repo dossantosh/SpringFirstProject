@@ -7,6 +7,7 @@ com\example\springfirstproject\models\Preferencias.class
 com\example\springfirstproject\repositories\NoticiaRepository.class
 com\example\springfirstproject\SpringFirstProject.class
 com\example\springfirstproject\controller\AdminController.class
+com\example\springfirstproject\config\Idioma\InternationalizationConfig.class
 com\example\springfirstproject\service\NoticiaService.class
 com\example\springfirstproject\service\UserService.class
 com\example\springfirstproject\service\ModuleService.class
@@ -21,7 +22,6 @@ com\example\springfirstproject\config\Anotaciones\Modulo\RequiereModulo.class
 com\example\springfirstproject\controller\LoginController.class
 com\example\springfirstproject\config\Anotaciones\Submodulo\RequiereSubmodulo.class
 com\example\springfirstproject\repositories\SubmoduleRepository.class
-com\example\springfirstproject\controller\DashboardController.class
 com\example\springfirstproject\repositories\ModuleRepository.class
 com\example\springfirstproject\repositories\UserRepository.class
 com\example\springfirstproject\service\RoleService.class
@@ -31,8 +31,10 @@ com\example\springfirstproject\controller\ConfigurationController.class
 com\example\springfirstproject\models\Noticias.class
 com\example\springfirstproject\repositories\RoleRepository.class
 com\example\springfirstproject\controller\EditarController.class
+com\example\springfirstproject\config\Idioma\WebConfig.class
 com\example\springfirstproject\models\UserChikito.class
 com\example\springfirstproject\service\UserChikitoService.class
 com\example\springfirstproject\controller\UsuariosController.class
 com\example\springfirstproject\controller\PreferenciasController.class
+com\example\springfirstproject\controller\PrincipalController.class
 com\example\springfirstproject\repositories\PreferenciasRepository.class

@@ -1,23 +1,13 @@
 package com.example.springfirstproject.service;
 
-import java.util.Optional;
 import java.util.SequencedSet;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.springfirstproject.models.Modules;
-import com.example.springfirstproject.models.Roles;
-import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.models.User;
-import com.example.springfirstproject.repositories.ModuleRepository;
-import com.example.springfirstproject.repositories.RoleRepository;
-import com.example.springfirstproject.repositories.SubmoduleRepository;
 import com.example.springfirstproject.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;

@@ -23,12 +23,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Controller
 @RequiereModulo({ 2L })
-public class DashboardController {
+public class PrincipalController {
     @Autowired
     private final UserChikitoService userChikitoService;
 
-    @GetMapping("/dashboard")
-    public String showDashboard(Model model, Principal principal) {
+    @GetMapping("/principal")
+    public String showPrincipal(Model model, Principal principal) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         model.addAttribute("username", auth.getName());
@@ -51,6 +51,6 @@ public class DashboardController {
         setNoticias.add(prueba);
 
         model.addAttribute("noticias", setNoticias);
-        return "dashboard";
+        return "principal";
     }
 }

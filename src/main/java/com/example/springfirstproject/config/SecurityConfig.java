@@ -25,12 +25,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/dashboard", "/perfil/**", "/admin/**", "/usuarios").authenticated()
+                        .requestMatchers("/principal", "/admin/", "/usuarios", "/perfil/**", "/admin/**", "/configuracion/**").authenticated()
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")  
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/principal", true)
                         .failureUrl("/login?error=true")
                         .permitAll())
                 .logout(logout -> logout

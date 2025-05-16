@@ -17,7 +17,7 @@
 <body th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/principal}">
                 <img th:src="@{/images/logo.png}" alt="Logo de la aplicación" height="30" class="me-2">
                 <span class="fw-bold">The Dawn of Man</span>
             </a>
@@ -28,26 +28,34 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/dashboard}"><i class="bi bi-speedometer2 me-1"></i>
-                            Dashboard</a>
+                        <a class="nav-link" th:href="@{/principal}">
+                            <i class="bi bi-speedometer2 me-1"></i> <label
+                                th:text="#{principal.titulo}">Principal</label>
+                        </a>
                     </li>
                     <li class="nav-item" th:each="mid : ${modulosNecesarios}"
                         th:if="${#sets.contains(chikito.modules, mid)}">
-                        <a class="nav-link" th:href="@{/admin}"><i class="bi bi-shield-lock me-1"></i>
-                            Administración</a>
+                        <a class="nav-link" th:href="@{/admin}">
+                            <i class="bi bi-shield-lock me-1"></i> <label
+                                th:text="#{admin.titulo}">Adminisración</label>
+                        </a>
                     </li>
                     <li class="nav-item" th:each="mid : ${modulosNecesarios}"
                         th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
-                            <i class="bi bi-people-fill me-2"></i> Usuarios
+                            <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.titulo}">Usuarios</label>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/perfil}"><i class="bi bi-person-circle me-1"></i> Mi Perfil</a>
+                        <a class="nav-link" th:href="@{/perfil}">
+                            <i class="bi bi-person-circle me-1"></i> <label th:text="#{perfil.titulo}">Mi Perfil</label>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/preferencias}"><i class="bi bi-gear me-1"></i>
-                            Configuración</a>
+                        <a class="nav-link active" th:href="@{/configuracion}">
+                            <i class="bi bi-gear me-1"></i> <label
+                                th:text="#{configuracion.titulo}">Configuracion</label>
+                        </a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
@@ -57,8 +65,10 @@
                     </span>
                     <form th:action="@{/logout}" method="post" class="d-flex">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-outline-light"><i class="bi bi-box-arrow-right me-1"></i>
-                            Salir</button>
+                        <button type="submit" class="btn btn-outline-light">
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            <label th:text="#{salir}">Salir</label>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -74,51 +84,63 @@
                             th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
                             <div
                                 th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                <h2 class="h4 mb-0"><i class="bi bi-sliders me-2 text-primary"></i> Preferencias</h2>
+                                <h2 class="h4 mb-0">
+                                    <i class="bi bi-sliders me-2 text-primary"></i><label
+                                        th:text="#{preferencias.titulo}">Preferencias</label>
+                                </h2>
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="/preferencias" method="post">
+                            <form action="/configuracion/preferencias" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                                 <div th:if="${successMessage}" class="alert alert-success">[[${successMessage}]]</div>
                                 <div th:if="${errorMessage}" class="alert alert-danger">[[${errorMessage}]]</div>
 
                                 <div class="mb-3">
-                                    <label for="tema" class="form-label">Tema</label>
+                                    <label for="tema" class="form-label" th:text="#{preferencias.tema}">Tema</label>
                                     <select class="form-select" id="tema" name="tema">
-                                        <option value="auto" th:selected="${preferencias.tema == 'auto'}">Automático
+                                        <option value="auto" th:selected="${preferencias.tema == 'auto'}"
+                                            th:text="#{preferencias.tema.auto}">Automático
                                         </option>
-                                        <option value="dark" th:selected="${preferencias.tema == 'dark'}">Oscuro
+                                        <option value="dark" th:selected="${preferencias.tema == 'dark'}"
+                                            th:text="#{preferencias.tema.dark}">Oscuro
                                         </option>
-                                        <option value="light" th:selected="${preferencias.tema == 'light'}">Claro
+                                        <option value="light" th:selected="${preferencias.tema == 'light'}"
+                                            th:text="#{preferencias.tema.light}">Claro
                                         </option>
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="idioma" class="form-label">Idioma</label>
+                                    <label for="idioma" class="form-label"
+                                        th:text="#{preferencias.idioma}">Idioma</label>
                                     <select class="form-select" id="idioma" name="idioma">
-                                        <option value="es" th:selected="${preferencias.idioma == 'es'}">Español</option>
-                                        <option value="en" th:selected="${preferencias.idioma == 'en'}">Inglés</option>
+                                        <option value="es" th:selected="${preferencias.idioma == 'es'}"
+                                            th:text="#{idioma.es}">Español</option>
+                                        <option value="en" th:selected="${preferencias.idioma == 'en'}"
+                                            th:text="#{idioma.en}">Inglés</option>
                                     </select>
                                 </div>
 
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" id="notificacionesEmail"
                                         name="notificacionesEmail" th:checked="${preferencias.notificacionesEmail}">
-                                    <label class="form-check-label" for="notificacionesEmail">Notificaciones por
+                                    <label class="form-check-label" for="notificacionesEmail"
+                                        th:text="#{preferencias.email}">Notificaciones por
                                         Email</label>
                                 </div>
 
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" id="notificacionesSMS"
                                         name="notificacionesSMS" th:checked="${preferencias.notificacionesSMS}">
-                                    <label class="form-check-label" for="notificacionesSMS">Notificaciones por
+                                    <label class="form-check-label" for="notificacionesSMS"
+                                        th:text="#{preferencias.sms}">Notificaciones por
                                         SMS</label>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                                <button type="submit" class="btn btn-primary w-100"
+                                    th:text="#{preferencias.guardar}">Guardar Cambios</button>
                             </form>
                         </div>
                     </div>

@@ -6,35 +6,34 @@ import com.example.springfirstproject.models.UserChikito;
 import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.UserChikitoService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.Locale;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @AllArgsConstructor
 @RequiereModulo({ 2L })
-@ControllerAdvice
 @Controller
 public class PreferenciasController {
-    @Autowired
+
     private final UserChikitoService userChikitoService;
+    private final PreferenciasService preferenciasService;
+    private final LocaleResolver localeResolver;
 
-    @Autowired
-    private PreferenciasService preferenciasService;
-
-    @GetMapping("/preferencias")
+    @GetMapping("configuracion/preferencias")
     public String mostrarPreferencias(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -47,22 +46,26 @@ public class PreferenciasController {
 
         Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.getId());
         model.addAttribute("preferencias", preferencias != null ? preferencias : new Preferencias());
-
-        return "preferencias";
+        return "configuracion/preferencias";
     }
 
-    @PostMapping("/preferencias")
-    public String guardarPreferencias(@ModelAttribute Preferencias preferencias, RedirectAttributes redirectAttributes) {
+    @PostMapping("configuracion/preferencias")
+    public String guardarPreferencias(@ModelAttribute Preferencias preferencias,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            RedirectAttributes redirectAttributes) {
+        // Obtén usuario y asigna
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserChikito userCh = userChikitoService.findByUsername(auth.getName());
         preferencias.setUserId(userCh.getId());
 
         try {
             preferenciasService.guardarPreferencias(preferencias);
+            // Aplica inmediatamente el locale elegido
+            localeResolver.setLocale(request, response, Locale.forLanguageTag(preferencias.getIdioma()));
             redirectAttributes.addFlashAttribute("successMessage", "Preferencias guardadas correctamente.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Ocurrió un error al guardar las preferencias.");
-            e.printStackTrace();
         }
 
         return "redirect:/configuracion";

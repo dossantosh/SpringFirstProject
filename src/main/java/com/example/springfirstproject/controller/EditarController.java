@@ -30,7 +30,6 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/perfil")
 @Transactional
 @RequiereModulo({ 2L })
 public class EditarController {
@@ -46,7 +45,7 @@ public class EditarController {
     @Autowired
     private final UserChikitoService userChikitoService;
 
-    @GetMapping("/editar") // /perfil/editar
+    @GetMapping("perfil/editar") // /perfil/editar
     public String mostrarFormularioEdicion(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
