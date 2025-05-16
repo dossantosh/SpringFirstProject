@@ -124,8 +124,7 @@
                     </p>
                     <!-- Mostrar sección avanzada sólo a ADMIN -->
                     <div th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
-                      <p class="text-danger"><strong th:text="#{perfil.permisos}">Permisos administrativos:</strong>
-                        Sí
+                      <p class="text-danger"><strong th:text="#{perfil.permisos}">Permisos administrativos: Sí</strong>
                       </p>
                     </div>
                   </div>

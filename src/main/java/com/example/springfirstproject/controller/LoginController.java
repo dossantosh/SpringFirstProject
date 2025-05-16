@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.springfirstproject.models.Modules;
+import com.example.springfirstproject.models.Preferencias;
 import com.example.springfirstproject.models.Roles;
 import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.models.User;
 import com.example.springfirstproject.models.UserChikito;
-import com.example.springfirstproject.repositories.ModuleRepository;
-import com.example.springfirstproject.repositories.RoleRepository;
-import com.example.springfirstproject.repositories.SubmoduleRepository;
-import com.example.springfirstproject.repositories.UserRepository;
+import com.example.springfirstproject.service.ModuleService;
+import com.example.springfirstproject.service.PreferenciasService;
+import com.example.springfirstproject.service.RoleService;
+import com.example.springfirstproject.service.SubmoduleService;
 import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
@@ -32,18 +33,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Controller
 public class LoginController {
-    
+
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final PreferenciasService preferenciasService;
 
     @Autowired
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Autowired
-    private final ModuleRepository moduleRepository;
+    private final ModuleService moduleService;
 
     @Autowired
-    private final SubmoduleRepository submoduleRepository;
+    private final SubmoduleService submoduleService;
 
     @Autowired
     private final UserChikitoService userChikitoService;
@@ -78,6 +81,11 @@ public class LoginController {
             return "register";
         }
 
+        if (userService.existsByEmail(user.getEmail())) {
+            model.addAttribute("error", "El correo ya existe");
+            return "register";
+        }
+
         if (!user.getPassword().startsWith("{bcrypt}")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -101,7 +109,7 @@ public class LoginController {
         submodulosId.add(2L);
 
         for (Long rol : rolesId) {
-            Optional<Roles> role = roleRepository.findById(rol);
+            Optional<Roles> role = roleService.findById(rol);
 
             if (role.isPresent()) {
                 Roles existingRole = role.get();
@@ -109,7 +117,7 @@ public class LoginController {
             }
         }
         for (Long modulo : modulosId) {
-            Optional<Modules> module = moduleRepository.findById(modulo);
+            Optional<Modules> module = moduleService.findById(modulo);
 
             if (module.isPresent()) {
                 Modules existingModule = module.get();
@@ -117,7 +125,7 @@ public class LoginController {
             }
         }
         for (Long submodulo : submodulosId) {
-            Optional<Submodules> submodule = submoduleRepository.findById(submodulo);
+            Optional<Submodules> submodule = submoduleService.findById(submodulo);
 
             if (submodule.isPresent()) {
                 Submodules existingSubmodule = submodule.get();
@@ -129,19 +137,27 @@ public class LoginController {
             return null;
         }
 
-        user.setRoles(roles);
-        user.setModules(modulos);
-        user.setSubmodules(submodulos);
-
         UserChikito userCh = new UserChikito();
-        
+
         userCh.setUsername(user.getUsername());
         userCh.setRoles(rolesId);
         userCh.setModules(modulosId);
         userCh.setSubmodules(submodulosId);
 
-        userService.saveUser(user);
+        Preferencias preferencias = new Preferencias();
+        preferencias.setUserId(userCh.getId());
+        preferencias.setTema("auto");
+        preferencias.setIdioma("es");
+        preferencias.setNotificacionesEmail(false);
+        preferencias.setNotificacionesSMS(false);
+        preferenciasService.guardarPreferencias(preferencias);
+
+        user.setRoles(roles);
+        user.setModules(modulos);
+        user.setSubmodules(submodulos);
+
         userChikitoService.saveUserChikito(userCh);
+        userService.saveUser(user);
         return respuesta;
     }
 

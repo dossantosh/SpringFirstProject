@@ -95,14 +95,15 @@
                             th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
                             <div
                                 th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>Administración
+                                <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>
+                                   <label th:text="#{admin.titulo}">Administración</label> 
                                 </h2>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-                                <div>
+                                <div th:text="#{admin.mensaje}">
                                     Esta área solo es accesible para usuarios con privilegios de administrador.
                                 </div>
                             </div>
@@ -113,12 +114,13 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body">
                                                 <h3 class="h5 card-title">
-                                                    <i class="bi bi-people-fill me-2 text-primary"></i>Usuarios
+                                                    <i class="bi bi-people-fill me-2 text-primary"></i>
+                                                    <label th:text="#{admin.usuarios}">Usuarios</label> 
                                                 </h3>
-                                                <p class="card-text">Gestión de usuarios del sistema, permisos y roles.
+                                                <p class="card-text" th:text="#{admin.usuarios.texto}">Gestión de usuarios del sistema, permisos y roles.
                                                 </p>
                                                 <a th:href="@{/usuarios}" class="btn btn-outline-primary btn-sm">
-                                                    Gestionar usuarios <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{admin.usuarios.boton}">Gestionar usuarios</label> <i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -131,12 +133,13 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body">
                                                 <h3 class="h5 card-title">
-                                                    <i class="bi bi-shield-lock me-2 text-primary"></i>Seguridad
+                                                    <i class="bi bi-shield-lock me-2 text-primary"></i>
+                                                    <label th:text="#{admin.seguridad}">Seguridad</label> 
                                                 </h3>
-                                                <p class="card-text">Configuración de políticas de seguridad.
+                                                <p class="card-text" th:text="#{admin.usuarios.texto}">Configuración de políticas de seguridad.
                                                 </p>
                                                 <a th:href="@{/admin/security}" class="btn btn-outline-primary btn-sm">
-                                                    Configurar seguridad <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{admin.seguridad.boton}">Configurar seguridad</label>  <i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -149,11 +152,12 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body">
                                                 <h3 class="h5 card-title">
-                                                    <i class="bi bi-gear-fill me-2 text-primary"></i>Sistema
+                                                    <i class="bi bi-gear-fill me-2 text-primary"></i>
+                                                    <label th:text="#{admin.sistema}">Sistema</label> 
                                                 </h3>
-                                                <p class="card-text">Ajustes generales del sistema y preferencias.</p>
+                                                <p class="card-text" th:text="#{admin.seguridad.texto}">Ajustes generales del sistema y preferencias.</p>
                                                 <a th:href="@{/admin/settings}" class="btn btn-outline-primary btn-sm">
-                                                    Configurar sistema <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{admin.sistema.boton}">Configurar sistema</label> <i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -166,11 +170,12 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body">
                                                 <h3 class="h5 card-title">
-                                                    <i class="bi bi-clipboard-data me-2 text-primary"></i>Registros
+                                                    <i class="bi bi-clipboard-data me-2 text-primary"></i>
+                                                    <label th:text="#{admin.registros}">Registros</label> 
                                                 </h3>
-                                                <p class="card-text">Visualización de logs y actividad del sistema.</p>
+                                                <p class="card-text" th:text="#{admin.registros.texto}">Visualización de logs y actividad del sistema.</p>
                                                 <a th:href="@{/admin/audit}" class="btn btn-outline-primary btn-sm">
-                                                    Ver registros <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{admin.registros.boton}">Ver registros</label><i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 import com.example.springfirstproject.models.Noticias;
 import com.example.springfirstproject.models.UserChikito;
+import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.UserChikitoService;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +27,8 @@ import lombok.AllArgsConstructor;
 public class PrincipalController {
     @Autowired
     private final UserChikitoService userChikitoService;
+    @Autowired
+    private final PreferenciasService preferenciasService;
 
     @GetMapping("/principal")
     public String showPrincipal(Model model, Principal principal) {
@@ -40,11 +43,30 @@ public class PrincipalController {
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);
 
-        SequencedSet< Noticias > setNoticias = new LinkedHashSet<>();  
+        SequencedSet<Noticias> setNoticias = new LinkedHashSet<>();
 
-        Noticias salida = new Noticias(1L, "The Dawn of Man: disponible en...", "Ya se puede comprar the dawn of man en las plataformas oficiales...", "13/05/2025", "imagen");
-        Noticias fechaSalida = new Noticias(1L, "Fecha de salida: The Dawn of Man", "La fecha de salida ya está confirmada para el 13/05/2025. Ya podéis reservar en...", "10/04/2025", "imagen");
-        Noticias prueba = new Noticias(1L, "Esto es una prueba que...", "Primera prueba del sistema de noticias y si o is tiene que tener, al menos, dos lineas", "03/04/2025", "imagen");
+        Noticias salida;
+        Noticias fechaSalida;
+        Noticias prueba;
+
+        if (preferenciasService.obtenerPreferencias(userCh.getId()).getIdioma().equals("es")) {
+            salida = new Noticias(1L, "The Dawn of Man: disponible en...",
+                    "Ya se puede comprar the dawn of man en las plataformas oficiales...", "13/05/2025", "imagen");
+            fechaSalida = new Noticias(1L, "Fecha de salida: The Dawn of Man",
+                    "La fecha de salida ya está confirmada para el 13/05/2025. Ya podéis reservar en...", "10/04/2025",
+                    "imagen");
+            prueba = new Noticias(1L, "Esto es una prueba que...",
+                    "Primera prueba del sistema de noticias y si o is tiene que tener, al menos, dos lineas",
+                    "03/04/2025", "imagen");
+        } else {
+            salida = new Noticias(1L, "The Dawn of Man: available...",
+                    "The Dawn of Man is now available for purchase on official platforms..", "13/05/2025", "imagen");
+            fechaSalida = new Noticias(1L, "Departure date: The Dawn of Man",
+                    "The departure date is now confirmed for May 13, 2025. You can now book at...", "10/04/2025",
+                    "imagen");
+            prueba = new Noticias(1L, "This is a test that...",
+                    "First test of the news system and it has to have at least two lines.", "03/04/2025", "imagen");
+        }
 
         setNoticias.add(salida);
         setNoticias.add(fechaSalida);

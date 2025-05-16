@@ -94,7 +94,8 @@
                             <div
                                 th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                 <h2 class="h4 mb-0">
-                                    <i class="bi bi-house-door me-2 text-primary"></i>Panel Principal
+                                    <i class="bi bi-house-door me-2 text-primary"></i>
+                                    <label th:text="#{principal.titulo}"> Panel Principal</label>
                                 </h2>
                             </div>
                         </div>
@@ -107,12 +108,13 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body text-center">
                                                 <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
-                                                <h3 class="h5 card-title">Mi Perfil</h3>
-                                                <p class="card-text">Administra tu información personal y configuración
-                                                    de
-                                                    cuenta.</p>
+                                                <h3 class="h5 card-title" th:text="#{principal.perfil}">Perfil</h3>
+                                                <p class="card-text" th:text="#{principal.perfil.texto}">
+                                                    Administra tu información personal y configuración
+                                                    de cuenta.</p>
                                                 <a th:href="@{/perfil}" class="btn btn-outline-primary btn-sm">
-                                                    Ver perfil <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{principal.perfil.boton}">Ver perfil</label> <i
+                                                        class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -125,12 +127,15 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body text-center">
                                                 <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
-                                                <h3 class="h5 card-title">Mis Documentos</h3>
-                                                <p class="card-text">Accede y gestiona tus documentos y archivos
+                                                <h3 class="h5 card-title" th:text="#{principal.documentos}">Mis
+                                                    Documentos</h3>
+                                                <p class="card-text" th:text="#{principal.documentos.texto}">Accede y
+                                                    gestiona tus documentos y archivos
                                                     personales.
                                                 </p>
                                                 <a th:href="@{/documents}" class="btn btn-outline-primary btn-sm">
-                                                    Ver documentos <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{principal.documentos.boton}">Ver
+                                                        documentos</label> <i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -143,12 +148,16 @@
                                             th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                             <div class="card-body text-center">
                                                 <i class="bi bi-gear fs-1 text-primary mb-3"></i>
-                                                <h3 class="h5 card-title">Configuración</h3>
-                                                <p class="card-text">Personaliza tu experiencia y preferencias de la
+                                                <h3 class="h5 card-title" th:text="#{principal.configuracion}">
+                                                    Configuración</h3>
+                                                <p class="card-text" th:text="#{principal.configuracion.texto}">
+                                                    Personaliza tu experiencia y preferencias de la
                                                     aplicación.
                                                 </p>
                                                 <a th:href="@{/configuracion}" class="btn btn-outline-primary btn-sm">
-                                                    Configurar <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label
+                                                        th:text="#{principal.configuracion.boton}">Configurar</label><i
+                                                        class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -172,7 +181,8 @@
                             <div
                                 th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                 <h2 class="h4 mb-0">
-                                    <i class="bi bi-newspaper me-2 text-primary"></i>Noticias
+                                    <i class="bi bi-newspaper me-2 text-primary"></i>
+                                    <label th:text="#{principal.noticias}">Noticias</label>
                                 </h2>
                             </div>
                         </div>
@@ -189,7 +199,8 @@
                                                 <p class="card-text" th:text="${noticia.resumen}"></p>
                                                 <a th:href="@{/news/{id}(id=${noticia.id})}"
                                                     class="btn btn-outline-primary btn-sm">
-                                                    Leer más <i class="bi bi-arrow-right ms-1"></i>
+                                                    <label th:text="#{principal.noticias.boton}">Leer más</label>
+                                                    <i class="bi bi-arrow-right ms-1"></i>
                                                 </a>
                                             </div>
                                             <div

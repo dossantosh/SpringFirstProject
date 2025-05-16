@@ -18,13 +18,14 @@ public class UserService {
 
     @Autowired
     private final UserRepository userRepository;
-    
+
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario con id: " + id + " no encontrado"));
     }
 
     public User findByUsername(String username) {
@@ -32,8 +33,21 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario: " + username + " no encontrado"));
     }
 
-    public boolean isPresent(String username) {
-        return userRepository.findByUsername(username).isPresent();
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario con correo: " + email + " no encontrado"));
+    }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     public SequencedSet<User> findAll() {

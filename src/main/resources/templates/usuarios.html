@@ -85,7 +85,8 @@
                     <div
                         th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
                         <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                            <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>Usuarios
+                            <h2 class="h4 mb-0"><i class="bi bi-shield-lock me-2 text-primary"></i>
+                                <label th:text="#{usuarios.titulo}">Usuarios</label>
                             </h2>
                         </div>
                     </div>
@@ -94,7 +95,7 @@
                             <div class="card-body">
                                 <div class="alert alert-primary d-flex align-items-center" role="alert">
                                     <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-                                    <div>
+                                    <div th:text="#{usuarios.mensaje}">
                                         Esta área solo es accesible para usuarios con privilegios de administrador.
                                     </div>
                                 </div>
@@ -103,11 +104,11 @@
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Id</th>
-                                                    <th>Nombre</th>
-                                                    <th>Roles</th>
-                                                    <th>Modulos</th>
-                                                    <th>Submodulos</th>
+                                                    <th th:text="#{usuarios.id}">Id</th>
+                                                    <th th:text="#{usuarios.nombre}">Nombre</th>
+                                                    <th th:text="#{usuarios.roles}">Roles</th>
+                                                    <th th:text="#{usuarios.modulos}">Modulos</th>
+                                                    <th th:text="#{usuarios.submodulos}">Submodulos</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
