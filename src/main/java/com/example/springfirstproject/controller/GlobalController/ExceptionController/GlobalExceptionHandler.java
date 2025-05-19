@@ -34,6 +34,11 @@ public class GlobalExceptionHandler {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         
         model.addAttribute("username", auth.getName());
+
+        if(auth.getName().equals("anonymousUser")){
+            return;
+        }
+
         model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
         
         Set<Long> lista = new HashSet<>();

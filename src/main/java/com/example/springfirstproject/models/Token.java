@@ -16,8 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "email")
-public class VerificationToken {
+@Table(name = "token")
+public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 

@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,20 +20,20 @@ import com.example.springfirstproject.models.Roles;
 import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.models.User;
 import com.example.springfirstproject.models.UserChikito;
-import com.example.springfirstproject.models.VerificationToken;
-import com.example.springfirstproject.service.EmailService;
+import com.example.springfirstproject.models.Token;
 import com.example.springfirstproject.service.ModuleService;
 import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.RoleService;
 import com.example.springfirstproject.service.SubmoduleService;
+import com.example.springfirstproject.service.TokenService;
 import com.example.springfirstproject.service.UserChikitoService;
 import com.example.springfirstproject.service.UserService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class LoginController {
 
@@ -51,7 +49,7 @@ public class LoginController {
 
     private final UserChikitoService userChikitoService;
 
-    private final EmailService emailService;
+    private final TokenService tokenService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -91,6 +89,33 @@ public class LoginController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
+        crearUsuario(user);
+        return respuesta;
+    }
+
+    @GetMapping("/confirm")
+    @Transactional
+    public String confirmRegistration(@RequestParam("token") String getToken) {
+        Optional<Token> vToken = tokenService.findByToken(getToken);
+
+        if(!vToken.isPresent()){
+            return "redirect:/token-invalid";
+        }
+
+        Token token = vToken.get();
+
+        if (token == null || token.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return "redirect:/token-invalid";
+        }
+        
+        User user = token.getUser();
+        user.setEnabled(true);
+        userService.saveUser(user);
+        tokenService.deleteByToken(token.getToken());
+        return "redirect:/confirmacion-exitosa";
+    }
+
+    public void crearUsuario(User user){
         Set<Roles> roles = new HashSet<>();
         Set<Modules> modulos = new HashSet<>();
         Set<Submodules> submodulos = new HashSet<>();
@@ -135,7 +160,7 @@ public class LoginController {
         }
 
         if (roles.isEmpty() || modulos.isEmpty() || submodulos.isEmpty()) {
-            return null;
+            return;
         }
 
         UserChikito userCh = new UserChikito();
@@ -161,22 +186,8 @@ public class LoginController {
         userChikitoService.saveUserChikito(userCh);
         userService.saveUser(user);
 
-        String token = emailService.createVerificationToken(user);
-        emailService.sendVerificationEmail(user.getEmail(), token);
-        return respuesta;
-    }
-
-    @GetMapping("/confirm")
-    public String confirmRegistration(@RequestParam("token") String token) {
-        VerificationToken vToken = tokenService.findByToken(token);
-        if (vToken == null || vToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return "redirect:/token-invalid";
-        }
-        User user = vToken.getUser();
-        user.setEnabled(true);
-        userService.saveUser(user);
-        tokenService.deleteToken(vToken);
-        return "redirect:/confirmacion-exitosa";
+        String token = tokenService.createVerificationToken(user);
+        tokenService.sendVerificationEmail(user.getEmail(), token);
     }
 
 }
