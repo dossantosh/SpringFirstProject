@@ -1,4 +1,4 @@
-package com.example.springfirstproject.controller.ExceptionController;
+package com.example.springfirstproject.controller.GlobalController.ExceptionController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -32,8 +32,10 @@ public class GlobalExceptionHandler {
 
     private void addCommonAttributes(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
         model.addAttribute("username", auth.getName());
         model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+        
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);

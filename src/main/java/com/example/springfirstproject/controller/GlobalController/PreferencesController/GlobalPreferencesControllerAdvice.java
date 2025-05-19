@@ -1,4 +1,4 @@
-package com.example.springfirstproject.config;
+package com.example.springfirstproject.controller.GlobalController.PreferencesController;
 
 import com.example.springfirstproject.models.Preferencias;
 import com.example.springfirstproject.models.UserChikito;

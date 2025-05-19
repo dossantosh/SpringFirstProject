@@ -3,7 +3,6 @@ package com.example.springfirstproject.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,6 +33,9 @@ public class User {
     @Column(unique = true, length = 50)
     private String email;
 
+    @Column
+    private Boolean enabled;
+
     @Column(length = 100)
     private String password;
 
@@ -42,10 +44,10 @@ public class User {
     private Set<Roles> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_modules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_module",  referencedColumnName = "id_module"))
+    @JoinTable(name = "users_modules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id_module"))
     private Set<Modules> modules = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_submodules", joinColumns = @JoinColumn(name = "id_user",  referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_submodule", referencedColumnName = "id_submodule"))
+    @JoinTable(name = "users_submodules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_submodule", referencedColumnName = "id_submodule"))
     private Set<Submodules> submodules = new HashSet<>();
 }

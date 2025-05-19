@@ -18,6 +18,7 @@ com\example\springfirstproject\models\Submodules.class
 com\example\springfirstproject\service\PreferenciasService.class
 com\example\springfirstproject\config\Anotaciones\Submodulo\RequiereSubmoduloAspect.class
 com\example\springfirstproject\service\SubmoduleService.class
+com\example\springfirstproject\service\EmailService.class
 com\example\springfirstproject\config\Anotaciones\Modulo\RequiereModulo.class
 com\example\springfirstproject\controller\LoginController.class
 com\example\springfirstproject\config\Anotaciones\Submodulo\RequiereSubmodulo.class
@@ -34,7 +35,9 @@ com\example\springfirstproject\controller\EditarController.class
 com\example\springfirstproject\config\Idioma\WebConfig.class
 com\example\springfirstproject\models\UserChikito.class
 com\example\springfirstproject\service\UserChikitoService.class
+com\example\springfirstproject\repositories\TokenRepository.class
 com\example\springfirstproject\controller\UsuariosController.class
 com\example\springfirstproject\controller\PreferenciasController.class
+com\example\springfirstproject\models\VerificationToken.class
 com\example\springfirstproject\controller\PrincipalController.class
 com\example\springfirstproject\repositories\PreferenciasRepository.class

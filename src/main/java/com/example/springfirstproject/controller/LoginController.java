@@ -1,10 +1,12 @@
 package com.example.springfirstproject.controller;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springfirstproject.models.Modules;
 import com.example.springfirstproject.models.Preferencias;
@@ -19,6 +22,8 @@ import com.example.springfirstproject.models.Roles;
 import com.example.springfirstproject.models.Submodules;
 import com.example.springfirstproject.models.User;
 import com.example.springfirstproject.models.UserChikito;
+import com.example.springfirstproject.models.VerificationToken;
+import com.example.springfirstproject.service.EmailService;
 import com.example.springfirstproject.service.ModuleService;
 import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.RoleService;
@@ -34,24 +39,20 @@ import lombok.AllArgsConstructor;
 @Controller
 public class LoginController {
 
-    @Autowired
     private final UserService userService;
-    @Autowired
+
     private final PreferenciasService preferenciasService;
 
-    @Autowired
     private final RoleService roleService;
 
-    @Autowired
     private final ModuleService moduleService;
 
-    @Autowired
     private final SubmoduleService submoduleService;
 
-    @Autowired
     private final UserChikitoService userChikitoService;
 
-    @Autowired
+    private final EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
@@ -152,13 +153,30 @@ public class LoginController {
         preferencias.setNotificacionesSMS(false);
         preferenciasService.guardarPreferencias(preferencias);
 
+        user.setEnabled(false);
         user.setRoles(roles);
         user.setModules(modulos);
         user.setSubmodules(submodulos);
 
         userChikitoService.saveUserChikito(userCh);
         userService.saveUser(user);
+
+        String token = emailService.createVerificationToken(user);
+        emailService.sendVerificationEmail(user.getEmail(), token);
         return respuesta;
+    }
+
+    @GetMapping("/confirm")
+    public String confirmRegistration(@RequestParam("token") String token) {
+        VerificationToken vToken = tokenService.findByToken(token);
+        if (vToken == null || vToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return "redirect:/token-invalid";
+        }
+        User user = vToken.getUser();
+        user.setEnabled(true);
+        userService.saveUser(user);
+        tokenService.deleteToken(vToken);
+        return "redirect:/confirmacion-exitosa";
     }
 
 }

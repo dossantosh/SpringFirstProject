@@ -16,8 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-        // En lugar de usar clr.setCookieName("LOCALE")...
-        // Usa directamente el constructor que acepta el nombre de la cookie:
         CookieLocaleResolver clr = new CookieLocaleResolver("LOCALE");
 
         // Configura la edad de la cookie (usa la variante Duration):
