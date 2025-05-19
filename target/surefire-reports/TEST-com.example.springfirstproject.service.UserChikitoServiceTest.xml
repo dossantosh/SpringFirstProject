@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.example.springfirstproject.SpringFirstProjectTests" time="7.29" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.example.springfirstproject.service.UserChikitoServiceTest" time="1.107" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -10,10 +10,8 @@
     <property name="user.variant" value=""/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="user.timezone" value="Europe/Madrid"/>
-    <property name="org.jboss.logging.provider" value="slf4j"/>
     <property name="os.name" value="Windows 10"/>
     <property name="java.vm.specification.version" value="21"/>
-    <property name="APPLICATION_NAME" value="SpringFirstProject"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="ES"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
@@ -32,8 +30,6 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
-    <property name="java.awt.headless" value="true"/>
     <property name="surefire.real.class.path" value="C:\Users\sebas.dosantos\AppData\Local\Temp\surefire12689987265255249814\surefirebooter-20250519103714276_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -48,14 +44,11 @@
     <property name="localRepository" value="C:\Users\sebas.dosantos\.m2\repository"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
     <property name="java.io.tmpdir" value="C:\Users\SEBAS~1.DOS\AppData\Local\Temp\"/>
-    <property name="com.zaxxer.hikari.pool_number" value="1"/>
     <property name="java.version" value="21.0.6"/>
     <property name="user.dir" value="c:\Users\sebas.dosantos\Desktop\git\SpringFirstProject"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="PID" value="10632"/>
     <property name="sun.os.patch.level" value=""/>
-    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk-21\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Users\sebas.dosantos\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\sebas.dosantos\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\apache-maven-3.9.9\bin;C:\Users\sebas.dosantos\AppData\Local\Microsoft\WindowsApps;C:\Users\sebas.dosantos\AppData\Local\Programs\Microsoft VS Code\bin;C:\DELFIN24\SHARED;C:\Users\sebas.dosantos\AppData\Local\GitHubDesktop\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl;."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
@@ -64,48 +57,17 @@
     <property name="java.vm.version" value="21.0.6+8-LTS-188"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
-    <property name="LOGGED_APPLICATION_NAME" value="[SpringFirstProject] "/>
   </properties>
-  <testcase name="contextLoads" classname="com.example.springfirstproject.SpringFirstProjectTests" time="0.036">
-    <system-out><![CDATA[10:37:16.183 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.springfirstproject.SpringFirstProjectTests]: SpringFirstProjectTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-10:37:16.304 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.springfirstproject.SpringFirstProject for test class com.example.springfirstproject.SpringFirstProjectTests
-10:37:16.487 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
-
- :: Spring Boot ::                (v3.4.0)
-
-2025-05-19T10:37:16.780+02:00  INFO 10632 --- [SpringFirstProject] [           main] c.e.s.SpringFirstProjectTests            : Starting SpringFirstProjectTests using Java 21.0.6 with PID 10632 (started by sebas.dosantos in c:\Users\sebas.dosantos\Desktop\git\SpringFirstProject)
-2025-05-19T10:37:16.781+02:00  INFO 10632 --- [SpringFirstProject] [           main] c.e.s.SpringFirstProjectTests            : No active profile set, falling back to 1 default profile: "default"
-2025-05-19T10:37:18.032+02:00  INFO 10632 --- [SpringFirstProject] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-05-19T10:37:18.110+02:00  INFO 10632 --- [SpringFirstProject] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 8 JPA repository interfaces.
-2025-05-19T10:37:18.896+02:00  INFO 10632 --- [SpringFirstProject] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-05-19T10:37:19.133+02:00  INFO 10632 --- [SpringFirstProject] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2f112ade
-2025-05-19T10:37:19.149+02:00  INFO 10632 --- [SpringFirstProject] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-05-19T10:37:19.272+02:00  INFO 10632 --- [SpringFirstProject] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-05-19T10:37:19.356+02:00  INFO 10632 --- [SpringFirstProject] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
-2025-05-19T10:37:19.403+02:00  INFO 10632 --- [SpringFirstProject] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-05-19T10:37:19.567+02:00  INFO 10632 --- [SpringFirstProject] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-05-19T10:37:19.614+02:00  WARN 10632 --- [SpringFirstProject] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-05-19T10:37:19.629+02:00  INFO 10632 --- [SpringFirstProject] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
-	Database driver: undefined/unknown
-	Database version: 17.4
-	Autocommit mode: undefined/unknown
-	Isolation level: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2025-05-19T10:37:20.533+02:00  INFO 10632 --- [SpringFirstProject] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-05-19T10:37:20.692+02:00  INFO 10632 --- [SpringFirstProject] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-05-19T10:37:21.566+02:00  WARN 10632 --- [SpringFirstProject] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-05-19T10:37:21.609+02:00  INFO 10632 --- [SpringFirstProject] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
-2025-05-19T10:37:22.125+02:00  WARN 10632 --- [SpringFirstProject] [           main] o.s.boot.actuate.endpoint.EndpointId     : Endpoint ID 'swagger-ui' contains invalid characters, please migrate to a valid format.
-2025-05-19T10:37:23.185+02:00  INFO 10632 --- [SpringFirstProject] [           main] c.e.s.SpringFirstProjectTests            : Started SpringFirstProjectTests in 6.714 seconds (process running for 8.807)
-]]></system-out>
+  <testcase name="cuandoNoExisteUsername_existsByUsernameDevuelveFalse" classname="com.example.springfirstproject.service.UserChikitoServiceTest" time="1.06">
+    <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\sebas.dosantos\.m2\repository\net\bytebuddy\byte-buddy-agent\1.15.10\byte-buddy-agent-1.15.10.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
   </testcase>
+  <testcase name="cuandoExisteUsername_existsByUsernameDevuelveTrue" classname="com.example.springfirstproject.service.UserChikitoServiceTest" time="0.0"/>
+  <testcase name="findAll_devuelveConjuntoDeUsuarios" classname="com.example.springfirstproject.service.UserChikitoServiceTest" time="0.015"/>
+  <testcase name="findByUsername_conUsuarioExistente_devuelveUserChikito" classname="com.example.springfirstproject.service.UserChikitoServiceTest" time="0.0"/>
+  <testcase name="findByUsername_sinUsuario_lanzaUsernameNotFoundException" classname="com.example.springfirstproject.service.UserChikitoServiceTest" time="0.016"/>
 </testsuite>

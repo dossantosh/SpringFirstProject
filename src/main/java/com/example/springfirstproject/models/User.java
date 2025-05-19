@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Getter
@@ -31,6 +31,7 @@ public class User {
     private String username;
 
     @Column(unique = true, length = 50)
+    @Email
     private String email;
 
     @Column

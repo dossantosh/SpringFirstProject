@@ -1,5 +1,4 @@
 com\example\springfirstproject\config\Anotaciones\Modulo\RequiereModuloAspect.class
-com\example\springfirstproject\config\GlobalPreferencesControllerAdvice.class
 com\example\springfirstproject\controller\PerfilController.class
 com\example\springfirstproject\models\User.class
 com\example\springfirstproject\repositories\UserChikitoRepository.class
@@ -18,7 +17,6 @@ com\example\springfirstproject\models\Submodules.class
 com\example\springfirstproject\service\PreferenciasService.class
 com\example\springfirstproject\config\Anotaciones\Submodulo\RequiereSubmoduloAspect.class
 com\example\springfirstproject\service\SubmoduleService.class
-com\example\springfirstproject\service\EmailService.class
 com\example\springfirstproject\config\Anotaciones\Modulo\RequiereModulo.class
 com\example\springfirstproject\controller\LoginController.class
 com\example\springfirstproject\config\Anotaciones\Submodulo\RequiereSubmodulo.class
@@ -27,7 +25,6 @@ com\example\springfirstproject\repositories\ModuleRepository.class
 com\example\springfirstproject\repositories\UserRepository.class
 com\example\springfirstproject\service\RoleService.class
 com\example\springfirstproject\service\UserDetailsServiceImpl.class
-com\example\springfirstproject\controller\ExceptionController\GlobalExceptionHandler.class
 com\example\springfirstproject\controller\ConfigurationController.class
 com\example\springfirstproject\models\Noticias.class
 com\example\springfirstproject\repositories\RoleRepository.class
@@ -38,6 +35,5 @@ com\example\springfirstproject\service\UserChikitoService.class
 com\example\springfirstproject\repositories\TokenRepository.class
 com\example\springfirstproject\controller\UsuariosController.class
 com\example\springfirstproject\controller\PreferenciasController.class
-com\example\springfirstproject\models\VerificationToken.class
 com\example\springfirstproject\controller\PrincipalController.class
 com\example\springfirstproject\repositories\PreferenciasRepository.class

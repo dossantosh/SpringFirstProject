@@ -58,8 +58,7 @@
                                 <label for="email" class="form-label">Gmail</label>
                                 <input type="email" class="form-control" id="email" th:field="*{email}" required
                                     pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-                                    title="Debe ser una dirección de Gmail válida"
-                                    autocomplete="email">
+                                    title="Debe ser una dirección de Gmail válida" autocomplete="email">
                                 <div class="invalid-feedback" id="emailFeedback">
                                     Ingresa un correo de Gmail válido
                                 </div>
@@ -84,6 +83,7 @@
 
                             <!-- Token CSRF (descomenta cuando configures CSRF) -->
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
                             <button type="submit" class="btn btn-primary w-100 py-2">
                                 <i class="bi bi-person-plus-fill me-2"></i>Registrarse
@@ -106,6 +106,16 @@
             </div>
         </div>
     </div>
+
+    <!--Sistema reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lc7yj8rAAAAANYhZpZfwuVPiDXE7Xpq-gLPuLsa"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Lc7yj8rAAAAANYhZpZfwuVPiDXE7Xpq-gLPuLsa', { action: 'register' }).then(function (token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
 
     <!-- Validación en el cliente -->
     <script>
