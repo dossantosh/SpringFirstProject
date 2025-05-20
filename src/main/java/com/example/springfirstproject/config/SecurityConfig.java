@@ -7,24 +7,27 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.springfirstproject.service.UserDetailsServiceImpl;
+import com.example.springfirstproject.config.security.CaptchaValidationFilter;
+import com.example.springfirstproject.config.security.UserDetailsServiceImpl;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
         private final UserDetailsServiceImpl userDetailsService;
-
-        public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
-                this.userDetailsService = userDetailsService;
-        }
+        private final CaptchaValidationFilter captchaValidationFilter;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+                                .addFilterBefore(captchaValidationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/", "/confirm", "/token-invalid", "/login",
+                                                .requestMatchers(  "/login", "/confirm", "/token-invalid",
                                                                 "/register", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
                                                 .requestMatchers("/principal", "/usuarios", "/perfil/**",

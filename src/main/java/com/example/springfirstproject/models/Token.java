@@ -2,6 +2,8 @@ package com.example.springfirstproject.models;
 
 import java.time.LocalDateTime;
 
+import com.example.springfirstproject.models.User.User;
+
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

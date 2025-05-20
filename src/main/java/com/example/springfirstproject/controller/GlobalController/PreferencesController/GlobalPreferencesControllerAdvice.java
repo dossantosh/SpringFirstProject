@@ -1,9 +1,10 @@
 package com.example.springfirstproject.controller.GlobalController.PreferencesController;
 
-import com.example.springfirstproject.models.Preferencias;
-import com.example.springfirstproject.models.UserChikito;
+import com.example.springfirstproject.models.User.Preferencias;
+import com.example.springfirstproject.models.User.UserChikito;
 import com.example.springfirstproject.service.PreferenciasService;
-import com.example.springfirstproject.service.UserChikitoService;
+import com.example.springfirstproject.service.User.UserChikitoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

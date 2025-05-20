@@ -15,9 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.springfirstproject.models.UserChikito;
-import com.example.springfirstproject.repositories.UserChikitoRepository;
-import com.example.springfirstproject.service.UserChikitoService;
+import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.repositories.User.UserChikitoRepository;
+import com.example.springfirstproject.service.User.UserChikitoService;
 
 @ActiveProfiles("test")
 //@ExtendWith(MockitoExtension.class) //igual que mocks.close();

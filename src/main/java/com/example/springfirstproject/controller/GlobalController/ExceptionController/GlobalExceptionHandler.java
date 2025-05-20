@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import com.example.springfirstproject.service.UserChikitoService;
+import com.example.springfirstproject.service.User.UserChikitoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;

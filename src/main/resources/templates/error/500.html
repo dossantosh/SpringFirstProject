@@ -29,33 +29,7 @@
 
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="bi bi-speedometer2 me-1"></i> Principal
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="bi bi-shield-lock me-1"></i> Administración
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="bi bi-people-fill me-2"></i> Usuarios
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="bi bi-person-circle me-1"></i> Mi Perfil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="bi bi-gear me-1"></i> Configuración
-                        </a>
-                    </li>
                 </ul>
-
                 <div class="d-flex align-items-center">
                     <span class="text-white me-3 d-none d-lg-block">
                         <i class="bi bi-person-circle me-1"></i>
@@ -84,7 +58,7 @@
                         <p class="lead text-muted mb-4" th:text="${message} ?: 'Inténtelo de nuevo'">
                             Error 500: Inténtelo de nuevo.
                         </p>
-                        
+
                         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                             <a th:href="@{/principal}" class="btn btn-primary btn-lg">
                                 <i class="bi bi-arrow-left-circle me-1"></i> Volver a Principal

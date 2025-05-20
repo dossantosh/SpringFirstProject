@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.springfirstproject.service.UserChikitoServiceTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.107 s -- in com.example.springfirstproject.service.UserChikitoServiceTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.262 s -- in com.example.springfirstproject.service.UserChikitoServiceTest

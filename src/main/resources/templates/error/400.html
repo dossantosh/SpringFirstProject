@@ -29,33 +29,6 @@
 
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/principal}">
-                            <i class="bi bi-speedometer2 me-1"></i> Principal
-                        </a>
-                    </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
-                        th:if="${#sets.contains(chikito.modules, mid)}">
-                        <a class="nav-link" th:href="@{/admin}">
-                            <i class="bi bi-shield-lock me-1"></i> Administración
-                        </a>
-                    </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
-                        th:if="${#sets.contains(chikito.modules, mid)}">
-                        <a class="nav-link" th:href="@{/usuarios}">
-                            <i class="bi bi-people-fill me-2"></i> Usuarios
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/perfil}">
-                            <i class="bi bi-person-circle me-1"></i> Mi Perfil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/configuracion}">
-                            <i class="bi bi-gear me-1"></i> Configuración
-                        </a>
-                    </li>
                 </ul>
 
                 <div class="d-flex align-items-center">

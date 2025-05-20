@@ -9,8 +9,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.example.springfirstproject.models.User;
-import com.example.springfirstproject.repositories.UserRepository;
+import com.example.springfirstproject.models.User.User;
+import com.example.springfirstproject.repositories.User.UserRepository;
 
 @Aspect
 @Component

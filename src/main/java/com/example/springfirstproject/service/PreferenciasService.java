@@ -1,10 +1,10 @@
 package com.example.springfirstproject.service;
 
-import com.example.springfirstproject.models.Preferencias;
-import com.example.springfirstproject.repositories.PreferenciasRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.springfirstproject.models.User.Preferencias;
+import com.example.springfirstproject.repositories.User.PreferenciasRepository;
 
 @Service
 public class PreferenciasService {
