@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.example.springfirstproject.models.Permisos.Modules;
+import com.example.springfirstproject.models.permisos.Modules;
 import com.example.springfirstproject.repositories.Permisos.ModuleRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,11 @@
-package com.example.springfirstproject.models.Permisos;
+package com.example.springfirstproject.models.permisos;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
-import com.example.springfirstproject.models.User.User;
+import com.example.springfirstproject.models.user.User;
 
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Modules {
     private String imagen;
 
     @ManyToMany(mappedBy = "modules")
-    private Set<User> users = new HashSet<>();
+    private Set <User> users = new LinkedHashSet <>();
 
     @Override
     public boolean equals(Object o) {

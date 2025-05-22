@@ -2,8 +2,8 @@ package com.example.springfirstproject.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.springfirstproject.models.User.Preferencias;
-import com.example.springfirstproject.repositories.User.PreferenciasRepository;
+import com.example.springfirstproject.models.user.Preferencias;
+import com.example.springfirstproject.repositories.user.PreferenciasRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -2,7 +2,7 @@ package com.example.springfirstproject.service.objects;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.SequencedSet;
+import java.util.LinkedHashSet;
 
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class BrandService {
         return brandRepository.findByName(name);
     }
 
-    public SequencedSet<Brands> findAll() {
+    public LinkedHashSet<Brands> findAll() {
         return new LinkedHashSet<>(brandRepository.findAll());
     }
 

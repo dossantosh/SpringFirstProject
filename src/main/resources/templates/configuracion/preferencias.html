@@ -40,14 +40,7 @@
                         </a>
                     </li>
                     <li class="nav-item" th:each="mid : ${modulosNecesarios}"
-                        th:if="${#sets.contains(chikito.modules, mid)}">
-                        <a class="nav-link" th:href="@{/admin}">
-                            <i class="bi bi-shield-lock me-1"></i> <label
-                                th:text="#{admin.titulo}">Adminisración</label>
-                        </a>
-                    </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
-                        th:if="${#sets.contains(chikito.modules, mid)}">
+                        th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.titulo}">Usuarios</label>
                         </a>
@@ -67,7 +60,7 @@
                 <div class="d-flex align-items-center">
                     <span class="text-white me-3 d-none d-lg-block">
                         <i class="bi bi-person-circle me-1"></i>
-                        <span th:text="${chikito.username}"></span>
+                        <span th:text="${userAuth.username}"></span>
                     </span>
                     <form th:action="@{/logout}" method="post" class="d-flex">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

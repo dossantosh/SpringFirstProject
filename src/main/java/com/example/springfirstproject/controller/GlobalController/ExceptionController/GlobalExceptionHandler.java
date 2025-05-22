@@ -1,4 +1,4 @@
-package com.example.springfirstproject.controller.GlobalController.ExceptionController;
+package com.example.springfirstproject.controller.globalController.exceptionController;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     private void addCommonAttributes(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
             return;
         }
 
-        model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+        model.addAttribute("userAuth", userAuthService.findByUsername(auth.getName()));
         
         Set<Long> lista = new HashSet<>();
         lista.add(1L);

@@ -68,7 +68,7 @@
                         </div>
                         <!-- link para admins ver logs -->
                         <div class="mt-4" th:each="mid : ${modulosNecesarios}"
-                            th:if="${#sets.contains(chikito.modules, mid)}"></div>
+                            th:if="${#sets.contains(userAuth.modules, mid)}"></div>
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                     <h5 class="mb-3">Enlaces</h5>
                     <ul class="list-unstyled">
                         <li><a th:href="@{/principal}" class="text-white-50">Principal</a></li>
-                        <li th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+                        <li th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
                             <a th:href="@{/admin}" class="text-white-50">Administración</a>
                         </li>
                         <li><a th:href="@{/perfil}" class="text-white-50">Perfil</a></li>

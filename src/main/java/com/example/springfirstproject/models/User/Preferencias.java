@@ -1,9 +1,7 @@
-package com.example.springfirstproject.models.User;
+package com.example.springfirstproject.models.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -21,8 +19,7 @@ import lombok.Setter;
 public class Preferencias {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserId", nullable = false, unique = true)
+    @Column(name = "userId", nullable = false, unique = true)
     private Long userId;
 
     @Column(name = "email")

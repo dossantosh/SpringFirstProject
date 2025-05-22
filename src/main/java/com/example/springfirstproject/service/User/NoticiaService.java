@@ -1,4 +1,4 @@
-package com.example.springfirstproject.service.User;
+package com.example.springfirstproject.service.user;
 
 import java.util.Optional;
 import java.util.HashSet;

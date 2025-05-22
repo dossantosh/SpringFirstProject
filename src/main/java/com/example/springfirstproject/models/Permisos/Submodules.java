@@ -1,4 +1,4 @@
-package com.example.springfirstproject.models.Permisos;
+package com.example.springfirstproject.models.permisos;
 
 import java.util.Objects;
 

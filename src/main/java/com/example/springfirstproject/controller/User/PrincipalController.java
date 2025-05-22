@@ -1,10 +1,10 @@
-package com.example.springfirstproject.controller.User;
+package com.example.springfirstproject.controller.user;
 
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.SequencedSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.springframework.security.core.Authentication;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
 import com.example.springfirstproject.models.Noticias;
-import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.PreferenciasService;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiereModulo({ 2L })
 public class PrincipalController {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     private final PreferenciasService preferenciasService;
 
@@ -36,23 +36,23 @@ public class PrincipalController {
 
         model.addAttribute("username", auth.getName());
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);
 
-        SequencedSet<Noticias> setNoticias = new LinkedHashSet<>();
+        LinkedHashSet<Noticias> setNoticias = new LinkedHashSet<>();
 
         Noticias salida;
         Noticias fechaSalida;
         Noticias prueba;
 
-        if (preferenciasService.obtenerPreferencias(userCh.get().getId()).getIdioma().equals("es")) {
+        if (preferenciasService.obtenerPreferencias(userAuth.get().getId()).getIdioma().equals("es")) {
             salida = new Noticias(1L, "The Dawn of Man: disponible en...",
                     "Ya se puede comprar the dawn of man en las plataformas oficiales...", "13/05/2025", "imagen");
             fechaSalida = new Noticias(1L, "Fecha de salida: The Dawn of Man",

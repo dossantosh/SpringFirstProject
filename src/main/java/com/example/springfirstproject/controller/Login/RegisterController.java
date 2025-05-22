@@ -1,9 +1,8 @@
-package com.example.springfirstproject.controller.Login;
+package com.example.springfirstproject.controller.login;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -16,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springfirstproject.config.security.ReCaptchaValidationService;
 import com.example.springfirstproject.models.Token;
-import com.example.springfirstproject.models.Permisos.Modules;
-import com.example.springfirstproject.models.Permisos.Roles;
-import com.example.springfirstproject.models.Permisos.Submodules;
-import com.example.springfirstproject.models.User.Preferencias;
-import com.example.springfirstproject.models.User.User;
-import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.models.permisos.Modules;
+import com.example.springfirstproject.models.permisos.Roles;
+import com.example.springfirstproject.models.permisos.Submodules;
+import com.example.springfirstproject.models.user.Preferencias;
+import com.example.springfirstproject.models.user.User;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.TokenService;
-import com.example.springfirstproject.service.User.UserChikitoService;
-import com.example.springfirstproject.service.User.UserService;
 import com.example.springfirstproject.service.permisos.ModuleService;
 import com.example.springfirstproject.service.permisos.RoleService;
 import com.example.springfirstproject.service.permisos.SubmoduleService;
+import com.example.springfirstproject.service.user.UserAuthService;
+import com.example.springfirstproject.service.user.UserService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -48,7 +47,7 @@ public class RegisterController {
 
     private final SubmoduleService submoduleService;
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     private final TokenService tokenService;
 
@@ -121,13 +120,17 @@ public class RegisterController {
     }
 
     public void crearUsuario(User user) {
-        Set<Roles> roles = new HashSet<>();
-        Set<Modules> modulos = new HashSet<>();
-        Set<Submodules> submodulos = new HashSet<>();
+        LinkedHashSet<Roles> roles = new LinkedHashSet<>();
+        LinkedHashSet<Modules> modulos = new LinkedHashSet<>();
+        LinkedHashSet<Submodules> submodulos = new LinkedHashSet<>();
 
-        Set<Long> rolesId = new HashSet<>();
-        Set<Long> modulosId = new HashSet<>();
-        Set<Long> submodulosId = new HashSet<>();
+        LinkedHashSet<Long> rolesId = new LinkedHashSet<>();
+        LinkedHashSet<Long> modulosId = new LinkedHashSet<>();
+        LinkedHashSet<Long> submodulosId = new LinkedHashSet<>();
+
+        LinkedHashSet<String> rolesN = new LinkedHashSet<>();
+        LinkedHashSet<String> modulosN = new LinkedHashSet<>();
+        LinkedHashSet<String> submodulosN = new LinkedHashSet<>();
 
         if (user.getUsername().equals("sevas")) {
             rolesId.add(1L);
@@ -145,6 +148,7 @@ public class RegisterController {
             if (role.isPresent()) {
                 Roles existingRole = role.get();
                 roles.add(existingRole);
+                rolesN.add(existingRole.getName());
             }
         }
         for (Long modulo : modulosId) {
@@ -153,6 +157,7 @@ public class RegisterController {
             if (module.isPresent()) {
                 Modules existingModule = module.get();
                 modulos.add(existingModule);
+                modulosN.add(existingModule.getName());
             }
         }
         for (Long submodulo : submodulosId) {
@@ -161,6 +166,7 @@ public class RegisterController {
             if (submodule.isPresent()) {
                 Submodules existingSubmodule = submodule.get();
                 submodulos.add(existingSubmodule);
+                submodulosN.add(existingSubmodule.getName());
             }
         }
 
@@ -168,15 +174,16 @@ public class RegisterController {
             return;
         }
 
-        UserChikito userCh = new UserChikito();
+        UserAuth userAuth = new UserAuth();
 
-        userCh.setUsername(user.getUsername());
-        userCh.setRoles(rolesId);
-        userCh.setModules(modulosId);
-        userCh.setSubmodules(submodulosId);
+        userAuth.setUsername(user.getUsername());
+        userAuth.setRoles(rolesId);
+        userAuth.setModules(modulosId);
+        userAuth.setSubmodules(submodulosId);
+        userAuthService.saveuserAuth(userAuth);
 
         Preferencias preferencias = new Preferencias();
-        preferencias.setUserId(userCh.getId());
+        preferencias.setUserId(userAuth.getId());
         preferencias.setTema("auto");
         preferencias.setIdioma("es");
         preferencias.setNotificacionesEmail(false);
@@ -188,7 +195,7 @@ public class RegisterController {
         user.setModules(modulos);
         user.setSubmodules(submodulos);
 
-        userChikitoService.saveUserChikito(userCh);
+        preferenciasService.guardarPreferencias(preferencias);
         userService.saveUser(user);
 
         String token = tokenService.createVerificationToken(user);

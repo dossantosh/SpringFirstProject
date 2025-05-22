@@ -1,4 +1,4 @@
-package com.example.springfirstproject.config.Anotaciones.Submodulo;
+package com.example.springfirstproject.config.Anotaciones.submodulo;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

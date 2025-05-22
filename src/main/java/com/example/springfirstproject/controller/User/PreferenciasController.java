@@ -1,10 +1,10 @@
-package com.example.springfirstproject.controller.User;
+package com.example.springfirstproject.controller.user;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
-import com.example.springfirstproject.models.User.Preferencias;
-import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
+import com.example.springfirstproject.models.user.Preferencias;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.PreferenciasService;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class PreferenciasController {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     private final PreferenciasService preferenciasService;
     
@@ -41,17 +41,17 @@ public class PreferenciasController {
     public String mostrarPreferencias(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);
 
-        Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.get().getId());
+        Preferencias preferencias = preferenciasService.obtenerPreferencias(userAuth.get().getId());
         model.addAttribute("preferencias", preferencias != null ? preferencias : new Preferencias());
         return "configuracion/preferencias";
     }
@@ -63,11 +63,11 @@ public class PreferenciasController {
             RedirectAttributes redirectAttributes) {
         // Obtén usuario y asigna
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        preferencias.setUserId(userCh.get().getId());
+        preferencias.setUserId(userAuth.get().getId());
 
         try {
             preferenciasService.guardarPreferencias(preferencias);

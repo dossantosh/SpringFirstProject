@@ -1,11 +1,11 @@
-package com.example.springfirstproject.models.User;
+package com.example.springfirstproject.models.user;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.example.springfirstproject.models.Permisos.Modules;
-import com.example.springfirstproject.models.Permisos.Roles;
-import com.example.springfirstproject.models.Permisos.Submodules;
+import com.example.springfirstproject.models.permisos.Modules;
+import com.example.springfirstproject.models.permisos.Roles;
+import com.example.springfirstproject.models.permisos.Submodules;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,13 +46,13 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id_role"))
-    private Set<Roles> roles = new HashSet<>();
+    private Set<Roles> roles = new LinkedHashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_modules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id_module"))
-    private Set<Modules> modules = new HashSet<>();
+    private Set<Modules> modules = new LinkedHashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_submodules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_submodule", referencedColumnName = "id_submodule"))
-    private Set<Submodules> submodules = new HashSet<>();
+    private Set<Submodules> submodules = new LinkedHashSet<>();
 }

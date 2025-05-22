@@ -1,9 +1,9 @@
-package com.example.springfirstproject.controller.GlobalController.PreferencesController;
+package com.example.springfirstproject.controller.globalController.preferencesController;
 
-import com.example.springfirstproject.models.User.Preferencias;
-import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.models.user.Preferencias;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.PreferenciasService;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @ControllerAdvice
 public class GlobalPreferencesControllerAdvice {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     private final PreferenciasService preferenciasService;
 
@@ -37,16 +37,16 @@ public class GlobalPreferencesControllerAdvice {
         }
 
         // Cargar preferencias del usuario autenticado
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if(!userCh.isPresent()){
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if(!userAuth.isPresent()){
             return null;
         }
-        Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.get().getId());
+        Preferencias preferencias = preferenciasService.obtenerPreferencias(userAuth.get().getId());
 
         // Si no existen preferencias, crearlas
         if (preferencias == null) {
             preferencias = new Preferencias();
-            preferencias.setUserId(userCh.get().getId());
+            preferencias.setUserId(userAuth.get().getId());
             preferencias.setTema("auto");
             preferencias.setIdioma("es");
             preferencias.setNotificacionesEmail(false);

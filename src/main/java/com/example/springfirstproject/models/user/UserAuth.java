@@ -1,6 +1,6 @@
-package com.example.springfirstproject.models.User;
+package com.example.springfirstproject.models.user;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -9,29 +9,35 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "usersChikito")
-public class UserChikito {
+@Table(name = "user_auth")
+public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
-    @Column(name = "id_userChikito")
+    @Column(name = "id_user_auth")
     private Long id;
 
     @Column(unique = true, length = 50)
     private String username;
 
-    @Column
-    private Set<Long> roles =  new HashSet<>();
+    @Column(unique = true, length = 50)
+    @Email
+    private String email;
 
     @Column
-    private Set<Long> modules =  new HashSet<>();
+    private Boolean enabled;
 
     @Column
-    private Set<Long> submodules =  new HashSet<>();
+    private Set<Long> roles = new LinkedHashSet<>();
 
+    @Column
+    private Set<Long> modules = new LinkedHashSet<>();
+
+    @Column
+    private Set<Long> submodules = new LinkedHashSet<>();
 }

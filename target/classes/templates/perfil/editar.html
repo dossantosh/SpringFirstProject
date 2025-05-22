@@ -41,12 +41,7 @@
               <label>Perfumes</label>
             </a>
           </li>
-          <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
-            <a class="nav-link" th:href="@{/admin}">
-              <i class="bi bi-shield-lock me-1"></i> <label th:text="#{admin.titulo}">Adminisración</label>
-            </a>
-          </li>
-          <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+          <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/usuarios}">
               <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.titulo}">Usuarios</label>
             </a>
@@ -104,10 +99,11 @@
                 <!-- Nombre de usuario -->
                 <div class="mb-3">
                   <label for="username" class="form-label" th:text="#{editar.nombre}">Nombre de usuario</label>
-                  <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="Ej. 'josesito18'" required />
+                  <input type="text" id="username" th:field="*{username}" class="form-control"
+                    placeholder="Ej. 'josesito18'" required />
                 </div>
 
-                <div th:each="modu : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, modu)}">
+                <div th:each="modu : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, modu)}">
                   <div class="row">
                     <!-- Roles -->
                     <div class="col-md-4 mb-3" th:if="${todosLosRoles != null}">
@@ -183,11 +179,9 @@
             <li class="mb-2"><a th:href="@{/principal}" class="text-white-50 text-decoration-none"
                 th:text="#{principal.titulo}">Principal</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
-              <a th:href="@{/admin}" class="text-white-50 text-decoration-none"
-                th:text="#{admin.titulo}">Administración</a>
+            <li class="mb-2"><a th:href="@{/perfumes}" class="text-white-50 text-decoration-none">Perfumes</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(chikito.modules, mid)}">
+            <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
               <a th:href="@{/usuarios}" class="text-white-50 text-decoration-none"
                 th:text="#{usuarios.titulo}">Usuarios</a>
             </li>

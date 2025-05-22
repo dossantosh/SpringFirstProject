@@ -1,4 +1,4 @@
-package com.example.springfirstproject.controller.User;
+package com.example.springfirstproject.controller.user;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
-import com.example.springfirstproject.models.Permisos.Modules;
-import com.example.springfirstproject.models.Permisos.Roles;
-import com.example.springfirstproject.models.Permisos.Submodules;
-import com.example.springfirstproject.models.User.User;
-import com.example.springfirstproject.models.User.UserChikito;
-import com.example.springfirstproject.service.User.UserChikitoService;
-import com.example.springfirstproject.service.User.UserService;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
+import com.example.springfirstproject.models.permisos.Modules;
+import com.example.springfirstproject.models.permisos.Roles;
+import com.example.springfirstproject.models.permisos.Submodules;
+import com.example.springfirstproject.models.user.User;
+import com.example.springfirstproject.models.user.UserAuth;
+import com.example.springfirstproject.service.user.UserAuthService;
+import com.example.springfirstproject.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,17 +28,17 @@ public class PerfilController {
 
     private final UserService userService;
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     @GetMapping("/perfil")
     public String showPerfilPanel(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);

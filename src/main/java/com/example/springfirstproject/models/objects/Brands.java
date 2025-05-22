@@ -1,6 +1,6 @@
 package com.example.springfirstproject.models.objects;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -30,5 +30,5 @@ public class Brands {
     private String name;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Perfumes> perfumes = new HashSet<>(); 
+    private Set<Perfumes> perfumes = new LinkedHashSet<>();
 }

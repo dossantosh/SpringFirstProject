@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.example.springfirstproject.models.Permisos.Roles;
+import com.example.springfirstproject.models.permisos.Roles;
 import com.example.springfirstproject.repositories.Permisos.RoleRepository;
 
 import lombok.RequiredArgsConstructor;

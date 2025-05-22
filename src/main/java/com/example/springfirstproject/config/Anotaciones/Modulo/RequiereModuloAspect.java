@@ -1,4 +1,4 @@
-package com.example.springfirstproject.config.Anotaciones.Modulo;
+package com.example.springfirstproject.config.Anotaciones.modulo;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,8 +8,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.example.springfirstproject.models.User.User;
-import com.example.springfirstproject.repositories.User.UserRepository;
+import com.example.springfirstproject.models.user.User;
+import com.example.springfirstproject.repositories.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

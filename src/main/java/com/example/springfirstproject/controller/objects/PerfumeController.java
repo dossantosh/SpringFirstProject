@@ -1,15 +1,15 @@
 package com.example.springfirstproject.controller.objects;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
-import com.example.springfirstproject.models.User.UserChikito;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
 import com.example.springfirstproject.models.objects.Brands;
 import com.example.springfirstproject.models.objects.PerfumeView;
 import com.example.springfirstproject.models.objects.Perfumes;
 import com.example.springfirstproject.models.objects.Tipos;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.objects.BrandService;
 import com.example.springfirstproject.service.objects.PerfumeService;
 import com.example.springfirstproject.service.objects.TipoService;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiereModulo({ 2L })
 public class PerfumeController {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
     private final PerfumeService perfumeService;
     private final BrandService brandService;
     private final TipoService tipoService;
@@ -44,11 +44,11 @@ public class PerfumeController {
             return;
         }
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);

@@ -1,4 +1,4 @@
-package com.example.springfirstproject.controller.User;
+package com.example.springfirstproject.controller.user;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,22 +7,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.springfirstproject.models.Permisos.Modules;
-import com.example.springfirstproject.models.Permisos.Roles;
-import com.example.springfirstproject.models.Permisos.Submodules;
-import com.example.springfirstproject.models.User.User;
-import com.example.springfirstproject.models.User.UserChikito;
-import com.example.springfirstproject.service.User.UserChikitoService;
-import com.example.springfirstproject.service.User.UserService;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
+import com.example.springfirstproject.models.permisos.Modules;
+import com.example.springfirstproject.models.permisos.Roles;
+import com.example.springfirstproject.models.permisos.Submodules;
+import com.example.springfirstproject.models.user.User;
+import com.example.springfirstproject.models.user.UserAuth;
 import com.example.springfirstproject.service.permisos.ModuleService;
 import com.example.springfirstproject.service.permisos.RoleService;
 import com.example.springfirstproject.service.permisos.SubmoduleService;
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
+import com.example.springfirstproject.service.user.UserAuthService;
+import com.example.springfirstproject.service.user.UserService;
 
 import jakarta.transaction.Transactional;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -41,17 +43,17 @@ public class EditarController {
 
     private final SubmoduleService submoduleService;
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     @GetMapping("perfil/editar") // /perfil/editar
     public String mostrarFormularioEdicion(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
@@ -74,9 +76,9 @@ public class EditarController {
     @PostMapping("/editar") // /perfil/editar
     public String procesarFormularioEdicion(
             @ModelAttribute("user") User userActualizado,
-            @RequestParam(value = "rolesSeleccionados", required = false) Set<Long> rolesId,
-            @RequestParam(value = "modulosSeleccionados", required = false) Set<Long> modulosId,
-            @RequestParam(value = "submodulosSeleccionados", required = false) Set<Long> submodulosId,
+            @RequestParam(value = "rolesSeleccionados", required = false) LinkedHashSet<Long> rolesId,
+            @RequestParam(value = "modulosSeleccionados", required = false) LinkedHashSet<Long> modulosId,
+            @RequestParam(value = "submodulosSeleccionados", required = false) LinkedHashSet<Long> submodulosId,
             RedirectAttributes flash) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -86,15 +88,15 @@ public class EditarController {
         }
         User existingUser = user.get();
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(username);
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(username);
+        if (!userAuth.isPresent()) {
             return null;
         }
-        UserChikito existingCh = userCh.get();
+        UserAuth existingCh = userAuth.get();
 
-        Set<Roles> roles = new HashSet<>();
-        Set<Modules> modulos = new HashSet<>();
-        Set<Submodules> submodulos = new HashSet<>();
+        LinkedHashSet<Roles> roles = new LinkedHashSet<>();
+        LinkedHashSet<Modules> modulos = new LinkedHashSet<>();
+        LinkedHashSet<Submodules> submodulos = new LinkedHashSet<>();
 
         for (Long rol : rolesId) {
             Optional<Roles> role = roleService.findById(rol);
@@ -136,7 +138,7 @@ public class EditarController {
         existingCh.setSubmodules(submodulosId);
 
         userService.saveUser(existingUser);
-        userChikitoService.saveUserChikito(existingCh);
+        userAuthService.saveuserAuth(existingCh);
 
         flash.addFlashAttribute("success", "Perfil actualizado correctamente");
         return "redirect:/perfil";

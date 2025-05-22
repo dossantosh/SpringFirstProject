@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.Token;
-import com.example.springfirstproject.models.User.User;
+import com.example.springfirstproject.models.user.User;
 import com.example.springfirstproject.repositories.TokenRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.example.springfirstproject.service.objects;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.SequencedSet;
+import java.util.LinkedHashSet;
 
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class TipoService {
         return tipoRepository.save(tipos);
     }
 
-    public SequencedSet<Tipos> findAll(){
+    public LinkedHashSet<Tipos> findAll(){
         return new LinkedHashSet<>(tipoRepository.findAll());
     }
 

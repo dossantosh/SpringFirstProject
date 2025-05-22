@@ -1,4 +1,4 @@
-package com.example.springfirstproject.controller.User;
+package com.example.springfirstproject.controller.user;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
-import com.example.springfirstproject.models.User.UserChikito;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.config.Anotaciones.modulo.RequiereModulo;
+import com.example.springfirstproject.models.user.UserAuth;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiereModulo({ 2L })
 public class ConfigurationController {
 
-    private final UserChikitoService userChikitoService;
+    private final UserAuthService userAuthService;
 
     @GetMapping("/configuracion")
     public String showAdminPanel(Model model) {
@@ -29,11 +29,11 @@ public class ConfigurationController {
 
         model.addAttribute("username", auth.getName());
 
-        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
-        if (!userCh.isPresent()) {
+        Optional<UserAuth> userAuth = userAuthService.findByUsername(auth.getName());
+        if (!userAuth.isPresent()) {
             return null;
         }
-        model.addAttribute("chikito", userCh.get());
+        model.addAttribute("userAuth", userAuth.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);

@@ -13,19 +13,19 @@ import org.mockito.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.springfirstproject.models.User.UserChikito;
-import com.example.springfirstproject.repositories.User.UserChikitoRepository;
-import com.example.springfirstproject.service.User.UserChikitoService;
+import com.example.springfirstproject.models.user.UserAuth;
+import com.example.springfirstproject.repositories.user.UserAuthRepository;
+import com.example.springfirstproject.service.user.UserAuthService;
 
 @ActiveProfiles("test")
 //@ExtendWith(MockitoExtension.class) //igual que mocks.close();
-class UserChikitoServiceTest {
+class userAuthServiceTest {
 
     @Mock
-    private UserChikitoRepository userChikitoRepository;
+    private UserAuthRepository userAuthRepository;
 
     @InjectMocks
-    private UserChikitoService userChikitoService;
+    private UserAuthService userAuthService;
 
     private AutoCloseable mocks;
 
@@ -43,84 +43,84 @@ class UserChikitoServiceTest {
     void cuandoExisteUsername_existsByUsernameDevuelveTrue() {
         // Arrange
         String username = "juan";
-        when(userChikitoRepository.existsByUsername(username)).thenReturn(true);
+        when(userAuthRepository.existsByUsername(username)).thenReturn(true);
 
         // Act
-        boolean resultado = userChikitoService.existsByUsername(username);
+        boolean resultado = userAuthService.existsByUsername(username);
 
         // Assert
         assertTrue(resultado, "El servicio debería devolver true cuando el repositorio indica que existe");
-        verify(userChikitoRepository, times(1)).existsByUsername(username);
+        verify(userAuthRepository, times(1)).existsByUsername(username);
     }
 
     @Test
     void cuandoNoExisteUsername_existsByUsernameDevuelveFalse() {
         // Arrange
         String username = "pepito";
-        when(userChikitoRepository.existsByUsername(username)).thenReturn(false);
+        when(userAuthRepository.existsByUsername(username)).thenReturn(false);
 
         // Act
-        boolean resultado = userChikitoService.existsByUsername(username);
+        boolean resultado = userAuthService.existsByUsername(username);
 
         // Assert
         assertFalse(resultado, "El servicio debería devolver false cuando el repositorio indica que no existe");
-        verify(userChikitoRepository, times(1)).existsByUsername(username);
+        verify(userAuthRepository, times(1)).existsByUsername(username);
     }
 
     @Test
-    void findByUsername_conUsuarioExistente_devuelveUserChikito() {
+    void findByUsername_conUsuarioExistente_devuelveuserAuth() {
         // Arrange
         String username = "maria";
-        UserChikito usuario = new UserChikito();
+        UserAuth usuario = new UserAuth();
         usuario.setId(1L);
         usuario.setUsername(username);
-        when(userChikitoRepository.findByUsername(username)).thenReturn(Optional.of(usuario));
+        when(userAuthRepository.findByUsername(username)).thenReturn(Optional.of(usuario));
 
         // Act
-        UserChikito encontrado = userChikitoService.findByUsername(username).get();
+        UserAuth encontrado = userAuthService.findByUsername(username).get();
 
         // Assert
         assertNotNull(encontrado, "El servicio no debería devolver null cuando el repositorio encuentra el usuario");
         assertEquals(1L, encontrado.getId(), "El ID devuelto debe coincidir con el del usuario mockeado");
         assertEquals(username, encontrado.getUsername());
-        verify(userChikitoRepository, times(1)).findByUsername(username);
+        verify(userAuthRepository, times(1)).findByUsername(username);
     }
 
     @Test
     void findByUsername_sinUsuario_lanzaUsernameNotFoundException() {
         // Arrange
         String username = "noexisto";
-        when(userChikitoRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(userAuthRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         // Act & Assert
         UsernameNotFoundException ex = assertThrows(
             UsernameNotFoundException.class,
-            () -> userChikitoService.findByUsername(username),
+            () -> userAuthService.findByUsername(username),
             "Se debe lanzar UsernameNotFoundException cuando el usuario no existe"
         );
         assertTrue(ex.getMessage().contains(username));
-        verify(userChikitoRepository, times(1)).findByUsername(username);
+        verify(userAuthRepository, times(1)).findByUsername(username);
     }
 
     @Test
     void findAll_devuelveConjuntoDeUsuarios() {
         // Arrange
-        UserChikito u1 = new UserChikito();
+        UserAuth u1 = new UserAuth();
         u1.setId(1L);
         u1.setUsername("alice");
-        UserChikito u2 = new UserChikito();
+        UserAuth u2 = new UserAuth();
         u2.setId(2L);
         u2.setUsername("bob");
-        when(userChikitoRepository.findAll()).thenReturn(java.util.List.of(u1, u2));
+        when(userAuthRepository.findAll()).thenReturn(java.util.List.of(u1, u2));
 
         // Act
-        Set<UserChikito> todos = userChikitoService.findAll();
+        Set<UserAuth> todos = userAuthService.findAll();
 
         // Assert
         assertNotNull(todos, "El resultado no debería ser null");
         assertEquals(2, todos.size(), "Debe devolver los dos usuarios mockeados");
         assertTrue(todos.contains(u1));
         assertTrue(todos.contains(u2));
-        verify(userChikitoRepository, times(1)).findAll();
+        verify(userAuthRepository, times(1)).findAll();
     }
 }
