@@ -4,7 +4,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -12,12 +11,14 @@ import org.springframework.stereotype.Component;
 import com.example.springfirstproject.models.User.User;
 import com.example.springfirstproject.repositories.User.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Aspect
 @Component
 public class RequiereSubmoduloAspect {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Around("@annotation(com.example.proyectonico.config.Anotaciones.Submodulo.RequiereSubmodulo) "
           + "|| @within(com.example.proyectonico.config.Anotaciones.Submodulo.RequiereSubmodulo)")

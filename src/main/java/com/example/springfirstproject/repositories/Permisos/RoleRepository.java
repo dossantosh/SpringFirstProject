@@ -10,6 +10,4 @@ import com.example.springfirstproject.models.Permisos.Roles;
 @Repository
 public interface RoleRepository extends JpaRepository<Roles, Long> {
     
-    Optional<Roles> findById(Long id);
-
 }

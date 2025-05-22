@@ -1,6 +1,5 @@
 package com.example.springfirstproject.controller.GlobalController.ExceptionController;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,15 +19,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private final UserChikitoService userChikitoService;
-
-    @Autowired
-    public GlobalExceptionHandler(UserChikitoService userChikitoService) {
-        this.userChikitoService = userChikitoService;
-    }
 
     private void addCommonAttributes(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.springfirstproject.models.Token;
 
-
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
 

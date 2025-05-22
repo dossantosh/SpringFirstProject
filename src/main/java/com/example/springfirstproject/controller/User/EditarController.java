@@ -1,6 +1,5 @@
 package com.example.springfirstproject.controller.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,34 +20,38 @@ import com.example.springfirstproject.service.permisos.SubmoduleService;
 import com.example.springfirstproject.config.Anotaciones.Modulo.RequiereModulo;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@AllArgsConstructor
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 @Transactional
 @RequiereModulo({ 2L })
 public class EditarController {
 
-    @Autowired
     private final UserService userService;
-    @Autowired
+
     private final RoleService roleService;
-    @Autowired
+
     private final ModuleService moduleService;
-    @Autowired
+
     private final SubmoduleService submoduleService;
-    @Autowired
+
     private final UserChikitoService userChikitoService;
 
     @GetMapping("perfil/editar") // /perfil/editar
     public String mostrarFormularioEdicion(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        model.addAttribute("chikito", userChikitoService.findByUsername(auth.getName()));
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        model.addAttribute("chikito", userCh.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
@@ -56,7 +59,12 @@ public class EditarController {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        model.addAttribute("user", userService.findByUsername(username));
+        Optional<User> user = userService.findByUsername(username);
+        if (!user.isPresent()) {
+            return null;
+        }
+        model.addAttribute("user", user.get());
+
         model.addAttribute("todosLosRoles", roleService.findAll());
         model.addAttribute("todosLosModulos", moduleService.findAll());
         model.addAttribute("todosLosSubmodulos", submoduleService.findAll());
@@ -72,8 +80,17 @@ public class EditarController {
             RedirectAttributes flash) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User userExistente = userService.findByUsername(username);
-        UserChikito userCh = userChikitoService.findByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
+        if (!user.isPresent()) {
+            return null;
+        }
+        User existingUser = user.get();
+
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(username);
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        UserChikito existingCh = userCh.get();
 
         Set<Roles> roles = new HashSet<>();
         Set<Modules> modulos = new HashSet<>();
@@ -108,18 +125,18 @@ public class EditarController {
             return null;
         }
 
-        userExistente.setUsername(userActualizado.getUsername());
-        userExistente.setRoles(roles);
-        userExistente.setModules(modulos);
-        userExistente.setSubmodules(submodulos);
+        existingUser.setUsername(userActualizado.getUsername());
+        existingUser.setRoles(roles);
+        existingUser.setModules(modulos);
+        existingUser.setSubmodules(submodulos);
 
-        userCh.setUsername(userActualizado.getUsername());
-        userCh.setRoles(rolesId);
-        userCh.setModules(modulosId);
-        userCh.setSubmodules(submodulosId);
+        existingCh.setUsername(userActualizado.getUsername());
+        existingCh.setRoles(rolesId);
+        existingCh.setModules(modulosId);
+        existingCh.setSubmodules(submodulosId);
 
-        userService.saveUser(userExistente);
-        userChikitoService.saveUserChikito(userCh);
+        userService.saveUser(existingUser);
+        userChikitoService.saveUserChikito(existingCh);
 
         flash.addFlashAttribute("success", "Perfil actualizado correctamente");
         return "redirect:/perfil";

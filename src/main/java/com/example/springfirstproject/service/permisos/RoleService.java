@@ -4,16 +4,17 @@ import java.util.Optional;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.Permisos.Roles;
 import com.example.springfirstproject.repositories.Permisos.RoleRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class RoleService {
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public Optional<Roles> findById(Long id){
         return roleRepository.findById(id);

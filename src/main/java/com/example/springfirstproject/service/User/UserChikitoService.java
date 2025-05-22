@@ -1,22 +1,20 @@
  package com.example.springfirstproject.service.User;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.User.UserChikito;
 import com.example.springfirstproject.repositories.User.UserChikitoRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserChikitoService {
 
-    @Autowired
     private final UserChikitoRepository userChikitoRepository;
 
     public UserChikito saveUserChikito(UserChikito userCH) {
@@ -27,9 +25,8 @@ public class UserChikitoService {
         return userChikitoRepository.existsByUsername(username);
     }
 
-    public UserChikito findByUsername(String username) {
-        return userChikitoRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("UsuarioChikito: " + username + " no encontrado"));
+    public Optional<UserChikito> findByUsername(String username) {
+        return userChikitoRepository.findByUsername(username);
     }
 
     public Set<UserChikito> findAll() {

@@ -34,6 +34,12 @@
                                 th:text="#{principal.titulo}">Principal</label>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/perfumes}">
+                            <i class="bi bi-droplet-half me-1"></i>
+                            <label>Perfumes</label>
+                        </a>
+                    </li>
                     <li class="nav-item" th:each="mid : ${modulosNecesarios}"
                         th:if="${#sets.contains(chikito.modules, mid)}">
                         <a class="nav-link" th:href="@{/admin}">
@@ -101,8 +107,8 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row mt-4">
-                                        <table>
-                                            <thead>
+                                        <table class="table table-hover align-middle">
+                                            <thead th:class="${preferencias.tema == 'dark' ? 'table-dark' : ''}">
                                                 <tr>
                                                     <th th:text="#{usuarios.id}">Id</th>
                                                     <th th:text="#{usuarios.nombre}">Nombre</th>
@@ -113,22 +119,29 @@
                                             </thead>
                                             <tbody>
                                                 <tr th:each="usuario : ${usuarios}">
-                                                    <td th:text="${usuario.id}"></td>
-                                                    <td th:text="${usuario.username}"></td>
-                                                    <td>
+                                                    <td th:text="${usuario.id}"
+                                                        th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                                        1</td>
+                                                    <td th:text="${usuario.username}"
+                                                        th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                                        Nombre</td>
+                                                    <td
+                                                        th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                                         <ul>
                                                             <li th:each="rol : ${usuario.roles}" th:text="${rol.name}">
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                    <td>
+                                                    <td
+                                                        th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                                         <ul>
                                                             <li th:each="modu : ${usuario.modules}"
                                                                 th:text="${modu.name}">
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                    <td>
+                                                    <td
+                                                        th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                                         <ul>
                                                             <li th:each="sub : ${usuario.submodules}"
                                                                 th:text="${sub.name}">
@@ -145,6 +158,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </main>
 
     <!-- Footer -->

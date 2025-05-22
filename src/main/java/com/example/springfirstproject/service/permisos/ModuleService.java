@@ -5,16 +5,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.Permisos.Modules;
 import com.example.springfirstproject.repositories.Permisos.ModuleRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class ModuleService {
-    @Autowired
-    private ModuleRepository moduleRepository;
+
+    private final ModuleRepository moduleRepository;
 
     public Optional<Modules> findById(Long id) {
         return moduleRepository.findById(id);

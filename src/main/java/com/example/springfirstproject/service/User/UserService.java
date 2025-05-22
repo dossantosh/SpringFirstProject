@@ -2,40 +2,39 @@ package com.example.springfirstproject.service.User;
 
 import java.util.SequencedSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.User.User;
 import com.example.springfirstproject.repositories.User.UserRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario con id: " + id + " no encontrado"));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario: " + username + " no encontrado"));
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario con correo: " + email + " no encontrado"));
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public SequencedSet<User> findAll() {
+        return new LinkedHashSet<>(userRepository.findAll());
     }
 
     public boolean existsById(Long id) {
@@ -48,9 +47,5 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    public SequencedSet<User> findAll() {
-        return new LinkedHashSet<>(userRepository.findAll());
     }
 }

@@ -5,16 +5,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.Noticias;
 import com.example.springfirstproject.repositories.NoticiaRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class NoticiaService {
-    @Autowired
-    private NoticiaRepository noticiaRepository;
+    
+    private final NoticiaRepository noticiaRepository;
 
     public Optional<Noticias> findById(Long id) {
         return noticiaRepository.findById(id);

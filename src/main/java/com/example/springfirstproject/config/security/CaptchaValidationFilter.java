@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class CaptchaValidationFilter extends OncePerRequestFilter {
 
     private final ReCaptchaValidationService captchaService;
+    
     private final AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler(
             "/login?captchaError=true");
 

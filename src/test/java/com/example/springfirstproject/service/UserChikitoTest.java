@@ -9,9 +9,7 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -79,7 +77,7 @@ class UserChikitoServiceTest {
         when(userChikitoRepository.findByUsername(username)).thenReturn(Optional.of(usuario));
 
         // Act
-        UserChikito encontrado = userChikitoService.findByUsername(username);
+        UserChikito encontrado = userChikitoService.findByUsername(username).get();
 
         // Assert
         assertNotNull(encontrado, "El servicio no debería devolver null cuando el repositorio encuentra el usuario");

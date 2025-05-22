@@ -12,10 +12,10 @@ import com.example.springfirstproject.models.Token;
 import com.example.springfirstproject.models.User.User;
 import com.example.springfirstproject.repositories.TokenRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
-@AllArgsConstructor
 public class TokenService {
 
   private final TokenRepository tokenRepository;

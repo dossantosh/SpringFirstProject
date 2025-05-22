@@ -8,6 +8,5 @@ import com.example.springfirstproject.models.User.Preferencias;
 @Repository
 public interface PreferenciasRepository extends JpaRepository<Preferencias, Long> {
 
-    // Puedes buscar por ID de usuario
     Preferencias findByUserId(Long userId);
 }

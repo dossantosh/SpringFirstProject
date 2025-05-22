@@ -1,16 +1,17 @@
 package com.example.springfirstproject.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springfirstproject.models.User.Preferencias;
 import com.example.springfirstproject.repositories.User.PreferenciasRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class PreferenciasService {
 
-    @Autowired
-    private PreferenciasRepository preferenciasRepository;
+    private final PreferenciasRepository preferenciasRepository;
 
     public Preferencias obtenerPreferencias(Long userId) {
         // Intentamos obtener las preferencias del usuario de la base de datos

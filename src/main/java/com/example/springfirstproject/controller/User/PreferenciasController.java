@@ -8,10 +8,10 @@ import com.example.springfirstproject.service.User.UserChikitoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.core.Authentication;
@@ -24,27 +24,34 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@AllArgsConstructor
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RequiereModulo({ 2L })
 @Controller
 public class PreferenciasController {
 
     private final UserChikitoService userChikitoService;
+
     private final PreferenciasService preferenciasService;
+    
     private final LocaleResolver localeResolver;
 
     @GetMapping("configuracion/preferencias")
     public String mostrarPreferencias(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        UserChikito userCh = userChikitoService.findByUsername(auth.getName());
-        model.addAttribute("chikito", userCh);
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        model.addAttribute("chikito", userCh.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
         model.addAttribute("modulosNecesarios", lista);
 
-        Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.getId());
+        Preferencias preferencias = preferenciasService.obtenerPreferencias(userCh.get().getId());
         model.addAttribute("preferencias", preferencias != null ? preferencias : new Preferencias());
         return "configuracion/preferencias";
     }
@@ -56,8 +63,11 @@ public class PreferenciasController {
             RedirectAttributes redirectAttributes) {
         // Obtén usuario y asigna
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserChikito userCh = userChikitoService.findByUsername(auth.getName());
-        preferencias.setUserId(userCh.getId());
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        preferencias.setUserId(userCh.get().getId());
 
         try {
             preferenciasService.guardarPreferencias(preferencias);

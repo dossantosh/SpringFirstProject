@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     
-    private static User user;
+    private final User user;
 
     /**
      * Devuelve la lista de GrantedAuthority a partir de los roles de User.

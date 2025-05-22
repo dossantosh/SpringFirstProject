@@ -3,10 +3,10 @@ package com.example.springfirstproject.controller.User;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.SequencedSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,15 +19,15 @@ import com.example.springfirstproject.models.User.UserChikito;
 import com.example.springfirstproject.service.PreferenciasService;
 import com.example.springfirstproject.service.User.UserChikitoService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 @RequiereModulo({ 2L })
 public class PrincipalController {
-    @Autowired
+
     private final UserChikitoService userChikitoService;
-    @Autowired
+
     private final PreferenciasService preferenciasService;
 
     @GetMapping("/principal")
@@ -36,8 +36,11 @@ public class PrincipalController {
 
         model.addAttribute("username", auth.getName());
 
-        UserChikito userCh = userChikitoService.findByUsername(auth.getName());
-        model.addAttribute("chikito", userCh);
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        model.addAttribute("chikito", userCh.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
@@ -49,7 +52,7 @@ public class PrincipalController {
         Noticias fechaSalida;
         Noticias prueba;
 
-        if (preferenciasService.obtenerPreferencias(userCh.getId()).getIdioma().equals("es")) {
+        if (preferenciasService.obtenerPreferencias(userCh.get().getId()).getIdioma().equals("es")) {
             salida = new Noticias(1L, "The Dawn of Man: disponible en...",
                     "Ya se puede comprar the dawn of man en las plataformas oficiales...", "13/05/2025", "imagen");
             fechaSalida = new Noticias(1L, "Fecha de salida: The Dawn of Man",

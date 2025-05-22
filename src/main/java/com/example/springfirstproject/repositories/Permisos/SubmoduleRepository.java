@@ -9,7 +9,5 @@ import com.example.springfirstproject.models.Permisos.Submodules;
 
 @Repository
 public interface SubmoduleRepository extends JpaRepository<Submodules, Long> {
-    
-    Optional<Submodules> findById(Long id);
 
 }

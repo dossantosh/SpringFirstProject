@@ -2,6 +2,7 @@ package com.example.springfirstproject.controller.Admin;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.SequencedSet;
 import java.util.Set;
 
@@ -37,8 +38,11 @@ public class UsuariosController {
 
         model.addAttribute("username", auth.getName());
 
-        UserChikito userCh = userChikitoService.findByUsername(auth.getName());
-        model.addAttribute("chikito", userCh);
+        Optional<UserChikito> userCh = userChikitoService.findByUsername(auth.getName());
+        if (!userCh.isPresent()) {
+            return null;
+        }
+        model.addAttribute("chikito", userCh.get());
 
         Set<Long> lista = new HashSet<>();
         lista.add(1L);
