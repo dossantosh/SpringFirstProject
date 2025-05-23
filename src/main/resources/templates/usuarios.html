@@ -34,7 +34,7 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/principal}">
                             <i class="bi bi-speedometer2 me-1"></i>
-                            <label th:text="#{usuarios.titulo}">Principal</label>
+                            <label th:text="#{principal.titulo}">Principal</label>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -43,7 +43,7 @@
                             <label>Perfumes</label>
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                    <li class="nav-item" th:each="mid : ${modulesNecesarios}"
                         th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link active" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i>
@@ -96,7 +96,7 @@
                     </div>
                     <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                         <div class="card-body">
-                            <form th:action="@{/admin/security}" method="get" class="row gy-3 gx-3 align-items-end">
+                            <form th:action="@{/usuarios}" method="get" class="row gy-3 gx-3 align-items-end">
                                 <div class="col-md-2">
                                     <label for="filterId" class="form-label">ID</label>
                                     <input type="number" class="form-control" id="filterId" name="id"
@@ -179,7 +179,8 @@
                                                 <a th:href="@{/usuarios/seleccionar/{id}(id=${u.id})}"
                                                     class="btn btn-primary w-100"
                                                     th:classappend="${preferencias.tema == 'dark'} ? 'btn-outline-light' : ''">
-                                                    <i class="bi bi-pencil-square me-1"></i><span th:text="#{usuarios.seleccionar}">Seleccionar</span>
+                                                    <i class="bi bi-pencil-square me-1"></i><span
+                                                        th:text="#{usuarios.seleccionar}">Seleccionar</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -191,22 +192,27 @@
                             <div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
                                 <nav>
                                     <ul class="pagination">
+                                        <!-- Previous Button -->
                                         <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
                                             <a class="page-link"
-                                                th:href="@{/admin/security(page=${currentPage - 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
-                                                <span th:text="#{usuarios.anterior}" >Anterior</span>
+                                                th:href="@{/usuarios(page=${currentPage - 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
+                                                <span th:text="#{usuarios.anterior}">Anterior</span>
                                             </a>
                                         </li>
+
+                                        <!-- Page Numbers -->
                                         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
                                             th:classappend="${i == currentPage} ? 'active'">
                                             <a class="page-link" th:text="${i + 1}"
-                                                th:href="@{/admin/security(page=${i}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
+                                                th:href="@{/usuarios(page=${i}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
                                             </a>
                                         </li>
+
+                                        <!-- Next Button -->
                                         <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
                                             <a class="page-link"
-                                                th:href="@{/admin/security(page=${currentPage + 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
-                                                <span th:text="#{usuarios.noUsuarios}">Siguiente</span> 
+                                                th:href="@{/usuarios(page=${currentPage + 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
+                                                <span th:text="#{usuarios.siguiente}">Siguiente</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -235,13 +241,14 @@
                         <div th:if="${selectedUser == null}" class="text-center py-5">
                             <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
                             <h5 th:text="#{usuarios.noUserSelected}">No hay ningún usuario seleccionado.</h5>
-                            <p th:text="#{usuarios.seleccionaUsu}">Selecciona un usuario de la lista para editar sus datos.</p>
+                            <p th:text="#{usuarios.seleccionaUsu}">Selecciona un usuario de la lista para editar sus
+                                datos.</p>
                         </div>
                         <div class="card-body">
                             <!-- Formulario de edición -->
                             <div th:unless="${selectedUser == null}">
-                                <form th:action="@{/admin/security/guardar}" th:object="${selectedUser}" method="post"
-                                    class="row gx-3 gy-3">
+                                <form th:action="@{/usuarios/guardar}" th:object="${selectedUser}" method="post"
+                                    class="row gx-3 gy-3" onsubmit="return validarSeleccion()">
                                     <!-- ID (solo lectura) -->
                                     <div class="col-md-1">
                                         <label for="userId" class="form-label">ID</label>
@@ -249,19 +256,22 @@
                                     </div>
                                     <!-- Username -->
                                     <div class="col-md-4">
-                                        <label for="userUsername" class="form-label" th:text="#{usuarios.nombre}">Usuario</label>
+                                        <label for="userUsername" class="form-label"
+                                            th:text="#{usuarios.nombre}">Usuario</label>
                                         <input type="text" id="userUsername" class="form-control" th:field="*{username}"
                                             placeholder="Nombre de usuario" required />
                                     </div>
                                     <!-- Email -->
                                     <div class="col-md-4">
-                                        <label for="userEmail" class="form-label" th:text="#{usuarios.email}">Email</label>
+                                        <label for="userEmail" class="form-label"
+                                            th:text="#{usuarios.email}">Email</label>
                                         <input type="email" id="userEmail" class="form-control" th:field="*{email}"
                                             placeholder="usuario@dominio.com" required />
                                     </div>
                                     <!-- Enabled -->
                                     <div class="col-md-3">
-                                        <label for="userEnabled" class="form-label" th:text="#{usuarios.enabled}">Activo</label>
+                                        <label for="userEnabled" class="form-label"
+                                            th:text="#{usuarios.enabled}">Activo</label>
                                         <select id="userEnabled" class="form-select" th:field="*{enabled}" required>
                                             <option th:value="true" th:text="#{usuarios.si}"
                                                 th:selected="${selectedUser.enabled == true}"></option>
@@ -270,41 +280,60 @@
                                         </select>
                                     </div>
                                     <!--Roles-->
-                                    <div class="col-md-4">
-                                        <span class="form-label" th:text="#{usuarios.roles}">Roles</span>
-                                        <div th:each="rol : ${allRoles}">
-                                            <input type="checkbox" th:id="'rol__' + ${rol.id}" name="roles"
-                                                th:value="${rol.id}" th:checked="${selectedUser.roles.contains(rol)}" />
-                                            <label th:for="'rol__' + ${rol.id}" th:text="${rol.name}"></label>
+                                    <div class="col-md-4 mb-3" th:if="${allRoles != null}">
+                                        <label class="form-label"><label th:text="#{usuarios.roles}">Roles</label> <span
+                                                class="text-danger">*</span></label>
+                                        <div class="list-group">
+                                            <label class="list-group-item" th:each="rol : ${allRoles}">
+                                                <input type="checkbox" class="form-check-input me-1"
+                                                    th:id="'rol__' + ${rol.id}" name="roles" th:value="${rol.id}"
+                                                    th:checked="${selectedUser.roles.contains(rol)}" />
+                                                <span th:for="'rol__' + ${rol.id}" th:text="${rol.name}">Rol</span>
+                                            </label>
                                         </div>
+                                        <div id="error-roles" class="error-text mt-1"></div>
                                     </div>
-                                    <!--Modulos-->
-                                    <div class="col-md-4">
-                                        <span class="form-label" th:text="#{usuarios.modules}">Modulos</span>
-                                        <div th:each="mid : ${allModules}">
-                                            <input type="checkbox" th:id="'modulo__' + ${mid.id}" name="modules"
-                                                th:value="${mid.id}"
-                                                th:checked="${selectedUser.modules.contains(mid)}" />
-                                            <label th:for="'modulo__' + ${mid.id}" th:text="${mid.name}"></label>
+                                    <!-- Módulos -->
+                                    <div class="col-md-4 mb-3" th:if="${allModules != null}">
+                                        <label class="form-label"><label th:text="#{usuarios.modules}">Módulos</label>
+                                            <span class="text-danger">*</span></label>
+                                        <div class="list-group">
+                                            <label class="list-group-item" th:each="mid : ${allModules}">
+                                                <input type="checkbox" th:id="'module__' + ${mid.id}"
+                                                    class="form-check-input me-1" name="modules" th:value="${mid.id}"
+                                                    th:checked="${selectedUser.modules.contains(mid)}" />
+                                                <span th:for="'module__' + ${mid.id}"
+                                                    th:text="${mid.name}">Módulo</span>
+                                            </label>
                                         </div>
+                                        <div id="error-modules" class="error-text mt-1"></div>
                                     </div>
-                                    <!--Submoduls-->
-                                    <div class="col-md-4">
-                                        <span class="form-label" th:text="#{usuarios.submodules}">Submodulos</span>
-                                        <div th:each="sub : ${allSubmodules}">
-                                            <input type="checkbox" th:id="'submodule__' + ${sub.id}" name="submodules"
-                                                th:value="${sub.id}"
-                                                th:checked="${selectedUser.submodules.contains(sub)}" />
-                                            <label th:for="'submodule__' + ${sub.id}" th:text="${sub.name}"></label>
+                                    <!-- Submodules -->
+                                    <div class="col-md-4 mb-3" th:if="${allSubmodules != null}">
+                                        <label class="form-label"><label
+                                                th:text="#{usuarios.submodules}">Submodules</label>
+                                            <span class="text-danger">*</span></label>
+                                        <div class="list-group">
+                                            <label class="list-group-item" th:each="sub : ${allSubmodules}">
+                                                <input type="checkbox" th:id="'submodule__' + ${sub.id}"
+                                                    class="form-check-input me-1" name="submodules" th:value="${sub.id}"
+                                                    th:checked="${selectedUser.submodules.contains(sub)}" />
+                                                <span th:for="'submodule__' + ${sub.id}"
+                                                    th:text="${sub.name}">Submodules</span>
+                                            </label>
                                         </div>
+                                        <div id="error-submodules" class="error-text mt-1"></div>
                                     </div>
+                                    <input type="hidden" th:field="*{password}" />
                                     <!-- Botones -->
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-success">
-                                            <i class="bi bi-save2 me-1"></i> <span th:text="#{usuarios.boton.guardar}">Guardar Cambios</span>
+                                            <i class="bi bi-save2 me-1"></i> <span th:text="#{usuarios.guardar}">Guardar
+                                                Cambios</span>
                                         </button>
                                         <a th:href="@{/usuarios/cancelar}" class="btn btn-outline-secondary ms-2">
-                                            <i class="bi bi-x-circle me-1"></i> <span th:text="#{usuarios.boton.cancelar}">Cancelar</span>
+                                            <i class="bi bi-x-circle me-1"></i> <span
+                                                th:text="#{usuarios.cancelar}">Cancelar</span>
                                         </a>
                                     </div>
                                 </form>
@@ -325,7 +354,7 @@
                         <i class="bi bi-people-fill me-2"></i>
                         Seguridad
                     </h5>
-                    <p class="small" th:text ="#{usuarios.titulo}" >Gestión de usuarios y permisos.</p>
+                    <p class="small" th:text="#{usuarios.titulo}">Gestión de usuarios y permisos.</p>
                 </div>
                 <div class="col-md-4">
                     <h5 class="mb-3" th:text="#{enlaces}">Enlaces</h5>
@@ -366,6 +395,41 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Validación de selección mínima -->
+    <script>
+        function validarSeleccion() {
+            // Ocultar mensajes de error individuales
+            ['roles', 'modules', 'submodules'].forEach(section => {
+                const el = document.getElementById('error-' + section);
+                if (el) el.style.display = 'none';
+            });
+
+            // Definir grupos a validar
+            const grupos = [
+                { name: 'roles', id: 'error-roles', label: 'Debes seleccionar al menos un rol.' },
+                { name: 'modules', id: 'error-modules', label: 'Debes seleccionar al menos un módulo.' },
+                { name: 'submodules', id: 'error-submodules', label: 'Debes seleccionar al menos un submódulo.' }
+            ];
+
+            let isValid = true;
+
+            grupos.forEach(grupo => {
+                const checkboxes = Array.from(document.getElementsByName(grupo.name));
+                if (checkboxes.length > 0) {
+                    const algunoSeleccionado = checkboxes.some(cb => cb.checked);
+                    if (!algunoSeleccionado) {
+                        const errElement = document.getElementById(grupo.id);
+                        errElement.textContent = grupo.label;
+                        errElement.style.display = 'block';
+                        isValid = false;
+                    }
+                }
+            });
+
+            return isValid; // Devuelve true/false basado solo en las validaciones individuales
+        }
+    </script>
 </body>
 
 </html>

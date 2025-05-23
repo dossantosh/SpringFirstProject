@@ -41,7 +41,7 @@
               <label>Perfumes</label>
             </a>
           </li>
-          <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+          <li class="nav-item" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/usuarios}">
               <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.titulo}">Usuarios</label>
             </a>
@@ -103,7 +103,7 @@
                     placeholder="Ej. 'josesito18'" required />
                 </div>
 
-                <div th:each="modu : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, modu)}">
+                <div th:each="modu : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, modu)}">
                   <div class="row">
                     <!-- Roles -->
                     <div class="col-md-4 mb-3" th:if="${todosLosRoles != null}">
@@ -120,40 +120,39 @@
                     </div>
 
                     <!-- Módulos -->
-                    <div class="col-md-4 mb-3" th:if="${todosLosModulos != null}">
-                      <label class="form-label"><label th:text="#{editar.modulos}">Módulos</label> <span
+                    <div class="col-md-4 mb-3" th:if="${todosLosmodules != null}">
+                      <label class="form-label"><label th:text="#{editar.modules}">Módulos</label> <span
                           class="text-danger">*</span></label>
                       <div class="list-group">
-                        <label class="list-group-item" th:each="modu : ${todosLosModulos}">
-                          <input type="checkbox" class="form-check-input me-1" name="modulosSeleccionados"
+                        <label class="list-group-item" th:each="modu : ${todosLosmodules}">
+                          <input type="checkbox" class="form-check-input me-1" name="modulesSeleccionados"
                             th:value="${modu.id}" th:checked="${user.modules.contains(modu)}" />
                           <span th:text="${modu.name}">Módulo</span>
                         </label>
                       </div>
-                      <div id="error-modulos" class="error-text mt-1"></div>
+                      <div id="error-modules" class="error-text mt-1"></div>
                     </div>
 
                     <!-- Submódulos -->
-                    <div class="col-md-4 mb-3" th:if="${todosLosSubmodulos != null}">
-                      <label class="form-label"><label th:text="#{editar.submodulos}">Submódulos</label> <span
+                    <div class="col-md-4 mb-3" th:if="${todosLosSubmodules != null}">
+                      <label class="form-label"><label th:text="#{editar.submodules}">Submódulos</label> <span
                           class="text-danger">*</span></label>
                       <div class="list-group">
-                        <label class="list-group-item" th:each="sub : ${todosLosSubmodulos}">
-                          <input type="checkbox" class="form-check-input me-1" name="submodulosSeleccionados"
+                        <label class="list-group-item" th:each="sub : ${todosLosSubmodules}">
+                          <input type="checkbox" class="form-check-input me-1" name="submodulesSeleccionados"
                             th:value="${sub.id}" th:checked="${user.submodules.contains(sub)}" />
                           <span th:text="${sub.name}">Submódulo</span>
                         </label>
                       </div>
-                      <div id="error-submodulos" class="error-text mt-1"></div>
+                      <div id="error-submodules" class="error-text mt-1"></div>
                     </div>
                   </div>
                 </div>
 
                 <!-- Botones -->
                 <div class="text-center">
-                  <a th:href="@{/perfil}" class="btn btn-secondary me-2" th:text="#{editar.boton.cancelar}">Cancelar</a>
-                  <button type="submit" class="btn btn-primary" th:text="#{editar.boton.guardar}">Guardar
-                    cambios</button>
+                  <a th:href="@{/perfil}" class="btn btn-secondary me-2" th:text="#{editar.cancelar}">Cancelar</a>
+                  <button type="submit" class="btn btn-primary" th:text="#{editar.guardar}">Guardar cambios</button>
                 </div>
             </div>
             </form>
@@ -181,7 +180,7 @@
             </li>
             <li class="mb-2"><a th:href="@{/perfumes}" class="text-white-50 text-decoration-none">Perfumes</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+            <li class="mb-2" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
               <a th:href="@{/usuarios}" class="text-white-50 text-decoration-none"
                 th:text="#{usuarios.titulo}">Usuarios</a>
             </li>
@@ -216,7 +215,7 @@
     function validarSeleccion() {
       // OCULTAR todos los mensajes de error
       document.getElementById('error-global').style.display = 'none';
-      ['roles', 'modulos', 'submodulos'].forEach(section => {
+      ['roles', 'modules', 'submodules'].forEach(section => {
         const el = document.getElementById('error-' + section);
         if (el) el.style.display = 'none';
       });
@@ -224,8 +223,8 @@
       // DEFINIR grupos a validar
       const grupos = [
         { name: 'rolesSeleccionados', id: 'error-roles', label: 'Debes seleccionar al menos un rol.' },
-        { name: 'modulosSeleccionados', id: 'error-modulos', label: 'Debes seleccionar al menos un módulo.' },
-        { name: 'submodulosSeleccionados', id: 'error-submodulos', label: 'Debes seleccionar al menos un submódulo.' }
+        { name: 'modulesSeleccionados', id: 'error-modules', label: 'Debes seleccionar al menos un módulo.' },
+        { name: 'submodulesSeleccionados', id: 'error-submodules', label: 'Debes seleccionar al menos un submódulo.' }
       ];
 
       let isValid = true;

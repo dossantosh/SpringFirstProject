@@ -44,7 +44,7 @@
                             <label>Perfumes</label>
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                    <li class="nav-item" th:each="mid : ${modulesNecesarios}"
                         th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i>
@@ -245,7 +245,7 @@
                         <li class="mb-2"><a th:href="@{/perfumes}"
                                 class="text-white-50 text-decoration-none">Perfumes</a>
                         </li>
-                        <li class="mb-2" th:each="mid : ${modulosNecesarios}"
+                        <li class="mb-2" th:each="mid : ${modulesNecesarios}"
                             th:if="${#sets.contains(userAuth.modules, mid)}">
                             <a th:href="@{/usuarios}" class="text-white-50 text-decoration-none"
                                 th:text="#{usuarios.titulo}">Usuarios</a>

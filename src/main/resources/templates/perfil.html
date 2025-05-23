@@ -41,7 +41,7 @@
               <label>Perfumes</label>
             </a>
           </li>
-          <li class="nav-item" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+          <li class="nav-item" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/usuarios}">
               <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.titulo}">Usuarios</label>
             </a>
@@ -97,7 +97,7 @@
                   <label th:text="#{perfil.mensaje}">
                     Bienvenido a tu área personal. Aquí puedes acceder a todas
                     las funcionalidades
-                    disponibles según tus modulos:</label>
+                    disponibles según tus modules:</label>
                   <br>
                   <span th:text="${userModules}"></span>
                 </div>
@@ -118,14 +118,14 @@
                     <p><strong th:text="#{perfil.roles}">Roles:</strong>
                       <span th:text="${listaRol}"></span>
                     </p>
-                    <p><strong th:text="#{perfil.modulos}">Modulos:</strong>
+                    <p><strong th:text="#{perfil.modules}">modules:</strong>
                       <span th:text="${listaMod}"></span>
                     </p>
-                    <p><strong th:text="#{perfil.submodulos}">Submodulos:</strong>
+                    <p><strong th:text="#{perfil.submodules}">Submodules:</strong>
                       <span th:text="${listaSub}"></span>
                     </p>
                     <!-- Mostrar sección avanzada sólo a ADMIN -->
-                    <div th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+                    <div th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
                       <p class="text-danger"><strong th:text="#{perfil.permisos}">Permisos administrativos: Sí</strong>
                       </p>
                     </div>
@@ -139,11 +139,11 @@
                 <div th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                   <div class="card-body d-flex flex-column justify-content-center">
                     <a th:href="@{/perfil/editar}" class="btn btn-primary btn-sm mb-2">
-                      <i class="bi bi-pencil-fill me-1"></i><label th:text="#{perfil.boton.editar}">Editar
+                      <i class="bi bi-pencil-fill me-1"></i><label th:text="#{perfil.editar}">Editar
                         perfil</label>
                     </a>
                     <a th:href="@{/cambiar-password}" class="btn btn-outline-secondary btn-sm">
-                      <i class="bi bi-key-fill me-1"></i><label th:text="#{perfil.boton.contrasena}">Cambiar
+                      <i class="bi bi-key-fill me-1"></i><label th:text="#{perfil.contrasena}">Cambiar
                         contraseña</label>
                     </a>
                   </div>
@@ -172,7 +172,7 @@
             </li>
             <li class="mb-2"><a th:href="@{/perfumes}" class="text-white-50 text-decoration-none">Perfumes</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulosNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+            <li class="mb-2" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
               <a th:href="@{/usuarios}" class="text-white-50 text-decoration-none"
                 th:text="#{usuarios.titulo}">Usuarios</a>
             </li>

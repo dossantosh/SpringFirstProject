@@ -41,10 +41,10 @@
                     <li class="nav-item">
                         <a class="nav-link active" th:href="@{/perfumes}">
                             <i class="bi bi-droplet-half me-1"></i>
-                            <label>Perfumes</label>
+                            <label th:text="#{perfumes.titulo}">Perfumes</label>
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulosNecesarios}"
+                    <li class="nav-item" th:each="mid : ${modulesNecesarios}"
                         th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link" th:href="@{/usuarios}">
                             <i class="bi bi-people-fill me-2"></i>
@@ -92,7 +92,7 @@
                         th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
                         <h2 class="h5 mb-0">
                             <i class="bi bi-search me-2 text-primary"></i>
-                            <label>Buscar Perfumes</label>
+                            <label th:text="#{perfumes.subtitulo}">Buscar Perfumes</label>
                         </h2>
                     </div>
                     <div class="card-body"
@@ -100,33 +100,33 @@
                         <div class="card-body">
                             <form th:action="@{/perfumes}" method="get" class="row gy-3 gx-3 align-items-end">
                                 <div class="col-md-2">
-                                    <label for="filtersId" class="form-label">ID</label>
+                                    <label for="filtersId" class="form-label" th:text="#{perfumes.id}">ID</label>
                                     <input type="number" class="form-control" id="filtersId" name="id"
                                         th:value="${filters.id}" placeholder="Ej. 123" />
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="filtersName" class="form-label">Nombre</label>
+                                    <label for="filtersName" class="form-label" th:text="#{perfumes.nombre}">Nombre</label>
                                     <input type="text" class="form-control" id="filtersName" name="name"
                                         th:value="${filters.name}" placeholder="Ej. 'Rosas'" />
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="filtersBrand" class="form-label">Marca</label>
+                                    <label for="filtersBrand" class="form-label" th:text="#{perfumes.marca}">Marca</label>
                                     <input type="text" class="form-control" id="filtersBrand" name="brand"
                                         th:value="${filters.brand}" placeholder="Ej. 'Dior'" />
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="filtersSeason" class="form-label">Temporada</label>
+                                    <label for="filtersSeason" class="form-label" th:text="#{perfumes.temporada}">Temporada</label>
                                     <select class="form-select" id="filtersSeason" name="season">
-                                        <option th:value="''" th:text="'Todas'">Todas</option>
-                                        <option th:value="Invierno" th:text="'Invierno'"
+                                        <option th:value="''" th:text="#{perfumes.todas}">Todas</option>
+                                        <option th:value="Invierno" th:text="#{perfumes.invierno}"
                                             th:selected="${filters.season == 'Invierno'}"></option>
-                                        <option th:value="Verano" th:text="'Verano'"
+                                        <option th:value="Verano" th:text="#{perfumes.verano}"
                                             th:selected="${filters.season == 'Verano'}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-2 text-end">
                                     <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-search me-1"></i> Buscar
+                                        <i class="bi bi-search me-1"></i> <span th:text="#{perfumes.buscar}">Buscar</span>
                                     </button>
                                 </div>
                             </form>
@@ -144,25 +144,25 @@
                         th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
                         <h2 class="h5 mb-0">
                             <i class="bi bi-list-ul me-2 text-primary"></i>
-                            <label>Lista de Perfumes</label>
+                            <label th:text="#{perfumes.lista}">Lista de Perfumes</label>
                         </h2>
                     </div>
                     <div class="card-body"
                         th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                         <div th:if="${perfumes.empty}" class="text-center py-5">
                             <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
-                            <h5>No se encontraron perfumes.</h5>
+                            <h5 th:text="#{perfumes.buscar}">No se encontraron perfumes.</h5>
                         </div>
                         <div th:unless="${perfumes.empty}">
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle">
                                     <thead th:class="${preferencias.tema == 'dark' ? 'table-dark' : ''}">
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
-                                            <th>Temporada</th>
-                                            <th>Seleccionar</th>
+                                            <th th:text="#{perfumes.id}">ID</th>
+                                            <th th:text="#{perfumes.nombre}">Nombre</th>
+                                            <th th:text="#{perfumes.marca}">Marca</th>
+                                            <th th:text="#{perfumes.temporada}">Temporada</th>
+                                            <th th:text="#{perfumes.seleccionar}">Seleccionar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -182,8 +182,9 @@
                                             <td
                                                 th:class="${preferencias.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                                 <a th:href="@{/perfumes/seleccionar/{id}(id=${perf.id})}"
+                                                th:classappend="${preferencias.tema == 'dark'} ? 'btn-outline-light' : ''"
                                                     class="btn btn-primary w-100">
-                                                    <i class="bi bi-pencil-square me-1"></i> Seleccionar
+                                                    <i class="bi bi-pencil-square me-1"></i><span th:text="#{perfumes.seleccionar}">Seleccionar</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -197,7 +198,7 @@
                                         <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
                                             <a class="page-link"
                                                 th:href="@{/perfumes(page=${currentPage - 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                                Anterior
+                                                <label th:text="#{perfumes.anterior}">Anterior</label>
                                             </a>
                                         </li>
 
@@ -211,7 +212,7 @@
                                         <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
                                             <a class="page-link"
                                                 th:href="@{/perfumes(page=${currentPage + 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                                Siguiente
+                                                <label th:text="#{perfumes.siguiente}">Siguiente</label>
                                             </a>
                                         </li>
                                     </ul>
@@ -231,7 +232,7 @@
                         th:class="${preferencias.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
                         <h2 class="h5 mb-0">
                             <i class="bi bi-pencil me-2 text-primary"></i>
-                            <label>Editar Perfume</label>
+                            <label th:text="#{perfumes.editar}">Editar Perfume</label>
                         </h2>
                     </div>
                     <div class="card-body"
@@ -239,8 +240,8 @@
                         <!-- Mensaje si no hay perfume seleccionado -->
                         <div th:if="${selectedPerfume == null}" class="text-center py-5">
                             <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
-                            <h5>No hay ningún perfume seleccionado.</h5>
-                            <p>Selecciona un perfume de la lista para editar sus datos.</p>
+                            <h5 th:text="#{perfumes.noPerfumeSelected}">No hay ningún perfume seleccionado.</h5>
+                            <p th:text="#{perfumes.seleccionaPerfume}">Selecciona un perfume de la lista para editar sus datos.</p>
                         </div>
                         <div class="card-body">
                             <!-- Formulario de edición -->
@@ -249,18 +250,18 @@
                                     class="row gx-3 gy-3">
                                     <!-- ID (solo lectura) -->
                                     <div class="col-md-1">
-                                        <label for="perfId" class="form-label">ID</label>
+                                        <label for="perfId" class="form-label" th:text="#{perfumes.id}">ID</label>
                                         <input type="text" id="perfId" class="form-control" th:field="*{id}" readonly />
                                     </div>
                                     <!-- Nombre -->
                                     <div class="col-md-4">
-                                        <label for="perfNombre" class="form-label">Nombre</label>
+                                        <label for="perfNombre" class="form-label" th:text="#{perfumes.nombre}">Nombre</label>
                                         <input type="text" id="perfNombre" class="form-control" th:field="*{name}"
                                             placeholder="Nombre del perfume" required />
                                     </div>
                                     <!-- Marca -->
                                     <div class="col-md-3">
-                                        <label for="perfMarca" class="form-label">Marca</label>
+                                        <label for="perfMarca" class="form-label" th:text="#{perfumes.marca}">Marca</label>
                                         <select id="perfMarca" class="form-select" th:field="*{brand.id}" required>
                                             <option th:value="''" disabled th:text="'-- Seleccionar marca --'"></option>
                                             <option th:each="b : ${brands}" th:value="${b.id}" th:text="${b.name}">
@@ -269,8 +270,8 @@
                                     </div>
                                     <!-- Tipo -->
                                     <div class="col-md-3">
-                                        <label for="perfTipo" class="form-label">Tipo</label>
-                                        <select id="perfTipo" class="form-select" th:field="*{tipo}" required>
+                                        <label for="perfTipo" class="form-label" th:text="#{perfumes.tipo}">Tipo</label>
+                                        <select id="perfTipo" class="form-select" th:field="*{tipo.id}" required>
                                             <option th:value="''" disabled th:text="'-- Seleccionar tipo --'"></option>
                                             <option th:each="ti : ${tipos}" th:value="${ti.id}" th:text="${ti.name}">
                                             </option>
@@ -278,37 +279,37 @@
                                     </div>
                                     <!-- Fecha -->
                                     <div class="col-md-1">
-                                        <label for="perfFecha" class="form-label">Año</label>
+                                        <label for="perfFecha" class="form-label" th:text="#{perfumes.fecha}">Año</label>
                                         <input type="number" step="0.1" id="perfFecha" class="form-control"
                                             th:field="*{fecha}" placeholder="Ej. 2000" required />
                                     </div>
                                     <!-- Temporada -->
                                     <div class="col-md-5">
-                                        <label for="perfTemporada" class="form-label">Temporada</label>
+                                        <label for="perfTemporada" class="form-label" th:text="#{perfumes.temporada}">Temporada</label>
                                         <select id="perfTemporada" class="form-select" th:field="*{season}" required>
                                             <option th:value="''" disabled th:text="'-- Seleccionar temporada --'">
                                             </option>
-                                            <option th:value="Invierno" th:text="'Invierno'"
+                                            <option th:value="Invierno" th:text="#{perfumes.invierno}"
                                                 th:selected="${selectedPerfume.season == 'Invierno'}"></option>
-                                            <option th:value="Verano" th:text="'Verano'"
+                                            <option th:value="Verano" th:text="#{perfumes.verano}"
                                                 th:selected="${selectedPerfume.season == 'Verano'}"></option>
                                         </select>
                                     </div>
                                     <!-- Volumen -->
                                     <div class="col-md-3">
-                                        <label for="perfVolumen" class="form-label">Volumen (ml)</label>
+                                        <label for="perfVolumen" class="form-label" th:text="#{perfumes.volumen}">Volumen (ml)</label>
                                         <input type="number" step="0.1" id="perfVolumen" class="form-control"
                                             th:field="*{volume}" placeholder="Ej. 50" required />
                                     </div>
                                     <!-- Precio -->
                                     <div class="col-md-3">
-                                        <label for="perfPrecio" class="form-label">Precio (€)</label>
+                                        <label for="perfPrecio" class="form-label" th:text="#{perfumes.precio}">Precio (€)</label>
                                         <input type="number" step="0.01" id="perfPrecio" class="form-control"
                                             th:field="*{price}" placeholder="Ej. 49.90" required />
                                     </div>
                                     <!-- Descripción -->
                                     <div class="col-12">
-                                        <label for="perfDescripcion" class="form-label">Descripción</label>
+                                        <label for="perfDescripcion" class="form-label" th:text="#{perfumes.descripcion}">Descripción</label>
                                         <textarea id="perfDescripcion" rows="3" class="form-control"
                                             th:field="*{description}"
                                             placeholder="Descripción detallada del perfume"></textarea>
@@ -316,10 +317,10 @@
                                     <!-- Botones -->
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-success">
-                                            <i class="bi bi-save2 me-1"></i> Guardar Cambios
+                                            <i class="bi bi-save2 me-1"> </i> <label th:text="#{perfumes.guardar}">Guardar Cambios</label> 
                                         </button>
                                         <a th:href="@{/perfumes/cancelar}" class="btn btn-outline-secondary ms-2">
-                                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                                            <i class="bi bi-x-circle me-1"></i> <span th:text="#{perfumes.cancelar}"> Cancelar</span>
                                         </a>
                                     </div>
                                 </form>
