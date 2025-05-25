@@ -10,10 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.springfirstproject.common.config.anotaciones.module.Requieremodule;
-import com.example.springfirstproject.permisos.modules.model.Modules;
-import com.example.springfirstproject.permisos.roles.model.Roles;
-import com.example.springfirstproject.permisos.submodules.model.Submodules;
+import com.example.springfirstproject.common.config.annotation.module.Requieremodule;
+import com.example.springfirstproject.permisos.model.Modules;
+import com.example.springfirstproject.permisos.model.Roles;
+import com.example.springfirstproject.permisos.model.Submodules;
 import com.example.springfirstproject.user.models.User;
 import com.example.springfirstproject.user.models.UserAuth;
 import com.example.springfirstproject.user.service.UserAuthService;

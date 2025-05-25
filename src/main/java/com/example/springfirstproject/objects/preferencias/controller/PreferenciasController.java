@@ -1,6 +1,6 @@
 package com.example.springfirstproject.objects.preferencias.controller;
 
-import com.example.springfirstproject.common.config.anotaciones.module.Requieremodule;
+import com.example.springfirstproject.common.config.annotation.module.Requieremodule;
 import com.example.springfirstproject.objects.preferencias.models.Preferencias;
 import com.example.springfirstproject.objects.preferencias.service.PreferenciasService;
 import com.example.springfirstproject.user.models.UserAuth;

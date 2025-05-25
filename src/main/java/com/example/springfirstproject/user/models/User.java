@@ -3,9 +3,9 @@ package com.example.springfirstproject.user.models;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.example.springfirstproject.permisos.modules.model.Modules;
-import com.example.springfirstproject.permisos.roles.model.Roles;
-import com.example.springfirstproject.permisos.submodules.model.Submodules;
+import com.example.springfirstproject.permisos.model.Modules;
+import com.example.springfirstproject.permisos.model.Roles;
+import com.example.springfirstproject.permisos.model.Submodules;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

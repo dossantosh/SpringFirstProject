@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.springfirstproject.common.config.anotaciones.module.Requieremodule;
+import com.example.springfirstproject.common.config.annotation.module.Requieremodule;
 import com.example.springfirstproject.user.models.User;
 import com.example.springfirstproject.user.models.UserAuth;
 import com.example.springfirstproject.user.service.UserAuthService;

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.springfirstproject.common.config.anotaciones.module.Requieremodule;
+import com.example.springfirstproject.common.config.annotation.module.Requieremodule;
 import com.example.springfirstproject.objects.noticias.model.Noticias;
 import com.example.springfirstproject.objects.preferencias.service.PreferenciasService;
 import com.example.springfirstproject.user.models.UserAuth;
