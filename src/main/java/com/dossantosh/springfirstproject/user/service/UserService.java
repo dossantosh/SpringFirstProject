@@ -1,42 +1,34 @@
 package com.dossantosh.springfirstproject.user.service;
 
 import java.util.LinkedHashSet;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.dossantosh.springfirstproject.objects.preferences.models.Preferences;
-import com.dossantosh.springfirstproject.objects.preferences.service.PreferencesService;
-import com.dossantosh.springfirstproject.objects.token.service.TokenService;
-import com.dossantosh.springfirstproject.permisos.model.Modules;
-import com.dossantosh.springfirstproject.permisos.model.Roles;
-import com.dossantosh.springfirstproject.permisos.model.Submodules;
-import com.dossantosh.springfirstproject.permisos.service.ModuleService;
-import com.dossantosh.springfirstproject.permisos.service.RoleService;
-import com.dossantosh.springfirstproject.permisos.service.SubmoduleService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.user.models.objects.Preferences;
+import com.dossantosh.springfirstproject.user.models.permissions.Modules;
+import com.dossantosh.springfirstproject.user.models.permissions.Roles;
+import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 import com.dossantosh.springfirstproject.user.repository.UserRepository;
+import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
+import com.dossantosh.springfirstproject.user.service.objects.TokenService;
+import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
+import com.dossantosh.springfirstproject.user.service.permissions.RoleService;
+import com.dossantosh.springfirstproject.user.service.permissions.SubmoduleService;
+import com.dossantosh.springfirstproject.user.utils.UserSpecifications;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 import lombok.RequiredArgsConstructor;
 
@@ -63,7 +55,8 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Marca con ID " + id + " no encontrada"));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Marca con ID " + id + " no encontrada"));
     }
 
     public User findByUsername(String username) {
@@ -76,7 +69,7 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
 
-    public LinkedHashSet<User> findAll() {
+    public Set<User> findAll() {
         return new LinkedHashSet<>(userRepository.findAll());
     }
 
@@ -92,62 +85,14 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    @PersistenceContext
-    private EntityManager em;
-
     public Page<User> findByFilters(Long id, String username, String email, int page, int size) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-
-        // Construcción de la consulta principal (para resultados paginados)
-        CriteriaQuery<User> cq = cb.createQuery(User.class);
-        Root<User> userRoot = cq.from(User.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (id != null) {
-            predicates.add(cb.equal(userRoot.get("id"), id));
-        }
-        if (username != null && !username.isBlank()) {
-            predicates.add(cb.like(cb.lower(userRoot.get("username")), "%" + username.toLowerCase() + "%"));
-        }
-        if (email != null && !email.isBlank()) {
-            predicates.add(cb.like(cb.lower(userRoot.get("email")), "%" + email.toLowerCase() + "%"));
-        }
-
-        cq.where(cb.and(predicates.toArray(new Predicate[0])));
-        cq.orderBy(cb.asc(userRoot.get("id")));
-
-        TypedQuery<User> query = em.createQuery(cq);
-        query.setFirstResult(page * size);
-        query.setMaxResults(size);
-        List<User> resultList = query.getResultList();
-
-        // Construcción de la consulta de conteo (para total de registros)
-        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        Root<User> countRoot = countQuery.from(User.class);
-
-        List<Predicate> countPredicates = new ArrayList<>();
-        if (id != null) {
-            countPredicates.add(cb.equal(countRoot.get("id"), id));
-        }
-        if (username != null && !username.isBlank()) {
-            countPredicates.add(cb.like(cb.lower(countRoot.get("username")), "%" + username.toLowerCase() + "%"));
-        }
-        if (email != null && !email.isBlank()) {
-            countPredicates.add(cb.like(cb.lower(countRoot.get("email")), "%" + email.toLowerCase() + "%"));
-        }
-
-        countQuery.select(cb.count(countRoot));
-        countQuery.where(cb.and(countPredicates.toArray(new Predicate[0])));
-        Long total = em.createQuery(countQuery).getSingleResult();
-
-        // --- Construcción del Page ---
         Pageable pageable = PageRequest.of(page, size);
-        return new PageImpl<>(resultList, pageable, total);
+        Specification<User> spec = UserSpecifications.filter(id, username, email);
+        return userRepository.findAll(spec, pageable);
     }
 
     // Usuarios controller
-    public LinkedHashSet<UserAuth> convertirUsuariosAUserAuth(Collection<User> users) {
+    public Set<UserAuth> convertirUsuariosAUserAuth(Collection<User> users) {
         return users.stream().map(u -> {
             UserAuth dto = new UserAuth();
             dto.setId(u.getId());

@@ -9,18 +9,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = {
         "com.dossantosh.springfirstproject.common",
-        "com.dossantosh.springfirstproject.objects",
-        "com.dossantosh.springfirstproject.permisos",
+        "com.dossantosh.springfirstproject.news",
+        "com.dossantosh.springfirstproject.perfume",
+        "com.dossantosh.springfirstproject.preferences",
         "com.dossantosh.springfirstproject.user"
 })
 public class SpringFirstProject {
 
     public static void main(String[] args) {
-		// 1) Cargar .env usando dotenv-java
+        // 1) Cargar .env usando dotenv-java
         Dotenv dotenv = Dotenv.configure()
-                              .ignoreIfMalformed() // ignora si el .env tiene líneas mal formateadas
-                              .ignoreIfMissing()   // no falle si no encuentra .env
-                              .load();
+                .ignoreIfMalformed() // ignora si el .env tiene líneas mal formateadas
+                .ignoreIfMissing() // no falle si no encuentra .env
+                .load();
 
         // 2) Poner cada par clave=valor de .env en System.properties
         dotenv.entries().forEach(entry -> {
@@ -32,7 +33,7 @@ public class SpringFirstProject {
             }
         });
 
-		SpringApplication.run(SpringFirstProject.class, args);
-	}
+        SpringApplication.run(SpringFirstProject.class, args);
+    }
 
 }

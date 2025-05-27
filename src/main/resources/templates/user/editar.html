@@ -22,7 +22,7 @@
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
         <img th:src="@{/images/logo.png}" alt="Logo" height="30" class="me-2">
-        <span class="fw-bold">The Dawn of Man</span>
+        <span class="fw-bold">Seb's Fragances</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navegación">
@@ -32,28 +32,28 @@
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link" th:href="@{/objects/news}">
-              <i class="bi bi-speedometer2 me-1"></i> <label th:text="#{news.tittle}">News</label>
+              <i class="bi bi-speedometer2 me-1"></i> <span th:text="#{news.tittle}">News</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" th:href="@{/objects/perfume}">
               <i class="bi bi-droplet-half me-1"></i>
-              <label>Perfumes</label>
+              <span>Perfumes</span>
             </a>
           </li>
           <li class="nav-item" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/user/users}">
-              <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.tittle}">Usuarios</label>
+              <i class="bi bi-people-fill me-2"></i> <span th:text="#{usuarios.tittle}">Usuarios</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" th:href="@{/user/profile}">
-              <i class="bi bi-person-circle me-1"></i> <label th:text="#{profile.tittle}">Mi Perfil</label>
+              <i class="bi bi-person-circle me-1"></i> <span th:text="#{profile.tittle}">Mi Perfil</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/objects/configuration}">
-              <i class="bi bi-gear me-1"></i> <label th:text="#{configuration.tittle}">Configuration</label>
+            <a class="nav-link" th:href="@{/common/configuration}">
+              <i class="bi bi-gear me-1"></i> <span th:text="#{configuration.tittle}">Configuration</span>
             </a>
           </li>
         </ul>
@@ -65,7 +65,7 @@
           <form th:action="@{/logout}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn btn-outline-light">
-              <i class="bi bi-box-arrow-right me-1"></i> <label th:text="#{salir}">Salir</label>
+              <i class="bi bi-box-arrow-right me-1"></i> <span th:text="#{salir}">Salir</span>
             </button>
           </form>
         </div>
@@ -83,8 +83,8 @@
               th:class="${preferences.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
               <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                 <h2 class="h4 mb-0">
-                  <i class="bi bi-person-circle me-2 text-primary"></i> <label th:text="#{editar.tittle}">Editar
-                    profile</label>
+                  <i class="bi bi-person-circle me-2 text-primary"></i> <span th:text="#{editar.tittle}">Editar
+                    profile</span>
                 </h2>
               </div>
             </div>
@@ -107,8 +107,8 @@
                   <div class="row">
                     <!-- Roles -->
                     <div class="col-md-4 mb-3" th:if="${todosLosRoles != null}">
-                      <label class="form-label"><label th:text="#{editar.roles}">Roles</label> <span
-                          class="text-danger">*</span></label>
+                      <span class="form-label"><span th:text="#{editar.roles}">Roles</span> <span
+                          class="text-danger">*</span></span>
                       <div class="list-group">
                         <label class="list-group-item" th:each="rol : ${todosLosRoles}">
                           <input type="checkbox" class="form-check-input me-1" name="rolesSeleccionados"
@@ -121,8 +121,8 @@
 
                     <!-- Módulos -->
                     <div class="col-md-4 mb-3" th:if="${todosLosmodules != null}">
-                      <label class="form-label"><label th:text="#{editar.modules}">Módulos</label> <span
-                          class="text-danger">*</span></label>
+                      <span class="form-label"><span th:text="#{editar.modules}">Módulos</span> <span
+                          class="text-danger">*</span></span>
                       <div class="list-group">
                         <label class="list-group-item" th:each="modu : ${todosLosmodules}">
                           <input type="checkbox" class="form-check-input me-1" name="modulesSeleccionados"
@@ -135,8 +135,8 @@
 
                     <!-- Submódulos -->
                     <div class="col-md-4 mb-3" th:if="${todosLosSubmodules != null}">
-                      <label class="form-label"><label th:text="#{editar.submodules}">Submódulos</label> <span
-                          class="text-danger">*</span></label>
+                      <span class="form-label"><span th:text="#{editar.submodules}">Submódulos</span> <span
+                          class="text-danger">*</span></span>
                       <div class="list-group">
                         <label class="list-group-item" th:each="sub : ${todosLosSubmodules}">
                           <input type="checkbox" class="form-check-input me-1" name="submodulesSeleccionados"
@@ -168,8 +168,8 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <h5 class="mb-3"><i class="bi bi-speedometer2 me-2"></i><label th:text="#{editar.tittle}">Editar
-              Usuario</label></h5>
+          <h5 class="mb-3"><i class="bi bi-speedometer2 me-2"></i><span th:text="#{editar.tittle}">Editar
+              Usuario</span></h5>
           <p class="small" th:text="#{version}">Versión 1.0.0</p>
         </div>
         <div class="col-md-4">
@@ -187,7 +187,7 @@
             <li class="mb-2"><a th:href="@{/user/profile}" class="text-white-50 text-decoration-none"
                 th:text="#{profile.tittle}">Perfil</a>
             </li>
-            <li class="mb-2"><a th:href="@{/objects/configuration}" class="text-white-50 text-decoration-none"
+            <li class="mb-2"><a th:href="@{/common/configuration}" class="text-white-50 text-decoration-none"
                 th:text="#{configuration.tittle}">Configuración</a>
             </li>
           </ul>
@@ -195,7 +195,7 @@
         <div class="col-md-4">
           <h5 class="mb-3" th:text="#{contacto}">Contacto</h5>
           <ul class="list-unstyled">
-            <li><i class="bi bi-envelope me-2"></i>sebastiandossantosh@gmail.com</li>
+            <li><i class="bi bi-envelope me-2"></i>dossantoshPrueba@gmail.com</li>
             <li><i class="bi bi-telephone me-2"></i>682 169 709</li>
           </ul>
         </div>

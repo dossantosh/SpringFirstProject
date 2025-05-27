@@ -19,7 +19,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" th:href="@{/objects/news}">
                 <img th:src="@{/images/logo.png}" alt="Logo de la aplicación" height="30" class="me-2">
-                <span class="fw-bold">The Dawn of Man</span>
+                <span class="fw-bold">Seb's Fragances</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navegación">
@@ -29,31 +29,31 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/objects/news}">
-                            <i class="bi bi-speedometer2 me-1"></i> <label
-                                th:text="#{news.tittle}">News</label>
+                            <i class="bi bi-speedometer2 me-1"></i> <span
+                                th:text="#{news.tittle}">News</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/objects/perfume}">
                             <i class="bi bi-droplet-half me-1"></i>
-                            <label>Perfumes</label>
+                            <span>Perfumes</span>
                         </a>
                     </li>
                     <li class="nav-item" th:each="mid : ${modulesNecesarios}"
                         th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link" th:href="@{/user/users}">
-                            <i class="bi bi-people-fill me-2"></i> <label th:text="#{usuarios.tittle}">Usuarios</label>
+                            <i class="bi bi-people-fill me-2"></i> <span th:text="#{usuarios.tittle}">Usuarios</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/user/profile}">
-                            <i class="bi bi-person-circle me-1"></i> <label th:text="#{profile.tittle}">Mi Perfil</label>
+                            <i class="bi bi-person-circle me-1"></i> <span th:text="#{profile.tittle}">Mi Perfil</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/objects/configuration}">
-                            <i class="bi bi-gear me-1"></i> <label
-                                th:text="#{configuration.tittle}">Configuration</label>
+                        <a class="nav-link active" th:href="@{/common/configuration}">
+                            <i class="bi bi-gear me-1"></i> <span
+                                th:text="#{configuration.tittle}">Configuration</span>
                         </a>
                     </li>
                 </ul>
@@ -66,7 +66,7 @@
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <button type="submit" class="btn btn-outline-light">
                             <i class="bi bi-box-arrow-right me-1"></i>
-                            <label th:text="#{salir}">Salir</label>
+                            <span th:text="#{salir}">Salir</span>
                         </button>
                     </form>
                 </div>
@@ -84,8 +84,8 @@
                             <div
                                 th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                 <h2 class="h4 mb-0">
-                                    <i class="bi bi-sliders me-2 text-primary"></i><label
-                                        th:text="#{preferences.tittle}">Preferencias</label>
+                                    <i class="bi bi-sliders me-2 text-primary"></i><span
+                                        th:text="#{preferences.tittle}">Preferencias</span>
                                 </h2>
                             </div>
                         </div>

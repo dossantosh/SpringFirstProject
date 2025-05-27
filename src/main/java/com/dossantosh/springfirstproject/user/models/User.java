@@ -3,9 +3,9 @@ package com.dossantosh.springfirstproject.user.models;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.dossantosh.springfirstproject.permisos.model.Modules;
-import com.dossantosh.springfirstproject.permisos.model.Roles;
-import com.dossantosh.springfirstproject.permisos.model.Submodules;
+import com.dossantosh.springfirstproject.user.models.permissions.Modules;
+import com.dossantosh.springfirstproject.user.models.permissions.Roles;
+import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

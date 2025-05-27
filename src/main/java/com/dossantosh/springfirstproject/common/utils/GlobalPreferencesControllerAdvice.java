@@ -1,9 +1,9 @@
 package com.dossantosh.springfirstproject.common.utils;
 
-import com.dossantosh.springfirstproject.objects.preferences.models.Preferences;
-import com.dossantosh.springfirstproject.objects.preferences.service.PreferencesService;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
+import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
