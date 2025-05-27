@@ -6,9 +6,9 @@ INSERT INTO roles (name) VALUES
 ON CONFLICT (name) DO NOTHING;  -- Conflicto en la columna única
 
 -- Módulos
-INSERT INTO modules (name, imagen) VALUES 
-('Admin', 'imagen'), 
-('Usuarios', 'imagen') 
+INSERT INTO modules (name, image) VALUES 
+('Admin', 'image'), 
+('Usuarios', 'image') 
 ON CONFLICT (name) DO NOTHING;
 
 -- Submódulos
@@ -17,11 +17,11 @@ INSERT INTO submodules (name, id_module) VALUES
 ('Usuarios', 2)
 ON CONFLICT (name) DO NOTHING;  -- Asumiendo que esta combinación debe ser única
 
--- Tipos
-INSERT INTO tipos (name) VALUES ('Perfume') ON CONFLICT (name) DO NOTHING;
-INSERT INTO tipos (name) VALUES ('Agua de perfume') ON CONFLICT (name) DO NOTHING;
-INSERT INTO tipos (name) VALUES ('Agua de fragancia') ON CONFLICT (name) DO NOTHING;
-INSERT INTO tipos (name) VALUES ('Agua de colonia') ON CONFLICT (name) DO NOTHING;
+-- Types
+INSERT INTO types (name) VALUES ('Perfume') ON CONFLICT (name) DO NOTHING;
+INSERT INTO types (name) VALUES ('Agua de perfume') ON CONFLICT (name) DO NOTHING;
+INSERT INTO types (name) VALUES ('Agua de fragancia') ON CONFLICT (name) DO NOTHING;
+INSERT INTO types (name) VALUES ('Agua de colonia') ON CONFLICT (name) DO NOTHING;
 
 -- Marcas
 INSERT INTO brands (name) VALUES ('Tom Ford') ON CONFLICT (name) DO NOTHING;

@@ -59,7 +59,6 @@
                                 </div>
                             </div>
 
-                            <!-- Token CSRF (descomenta cuando configures CSRF) -->
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
@@ -69,6 +68,16 @@
                         <div class="text-center mt-3">
                             <p>¿No tienes cuenta? <a th:href="@{/register}"
                                     class="text-decoration-none fw-bold">Regístrate aquí</a></p>
+                        </div>
+
+                        <div class="mt-3 text-center" th:if="${showRecoverPassword}">
+                            <p>
+                                <i class="bi bi-key-fill me-1"></i>
+                                ¿Olvidaste tu contraseña?
+                                <a th:href="@{/forgotPasswordEmail}" class="fw-bold">
+                                    Recupérala aquí
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>

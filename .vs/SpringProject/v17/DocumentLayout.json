@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -20,10 +20,10 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "SecurityConfig.java",
-              "DocumentMoniker": "C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java",
-              "RelativeDocumentMoniker": "src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java",
-              "ToolTip": "C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java",
-              "RelativeToolTip": "src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java",
+              "DocumentMoniker": "C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java",
+              "RelativeDocumentMoniker": "src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java",
+              "ToolTip": "C:\\Users\\Administrador\\OneDrive\\Documents\\GitHub\\SpringProject\\src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java",
+              "RelativeToolTip": "src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java",
               "ViewState": "AgIAABgAAAAAAAAAAAAAABAAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-05-11T17:50:26.648Z",

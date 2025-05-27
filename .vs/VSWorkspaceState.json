@@ -5,11 +5,11 @@
     "\\src\\main",
     "\\src\\main\\java",
     "\\src\\main\\java\\com",
-    "\\src\\main\\java\\com\\example",
-    "\\src\\main\\java\\com\\example\\springfirstproject",
-    "\\src\\main\\java\\com\\example\\springfirstproject\\config",
-    "\\src\\main\\java\\com\\example\\springfirstproject\\controller"
+    "\\src\\main\\java\\com\\dossantosh",
+    "\\src\\main\\java\\com\\dossantosh\\springfirstproject",
+    "\\src\\main\\java\\com\\dossantosh\\springfirstproject\\config",
+    "\\src\\main\\java\\com\\dossantosh\\springfirstproject\\controller"
   ],
-  "SelectedNode": "\\src\\main\\java\\com\\example\\springfirstproject\\config\\SecurityConfig.java",
+  "SelectedNode": "\\src\\main\\java\\com\\dossantosh\\springfirstproject\\config\\SecurityConfig.java",
   "PreviewInSolutionExplorer": false
 }
