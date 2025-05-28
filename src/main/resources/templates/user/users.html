@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
     <!-- Bootstrap CSS (v5.3) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
     <!-- Cargar el CSS según las preferences de tema -->
     <link
         th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}"
@@ -223,28 +224,22 @@
         </div>
 
         <!-- Card: Edición de Usuario Seleccionado -->
-        <div class="row">
+        <div class="row" th:unless="${selectedUser == null}">
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
                         <h2 class="h5 mb-0">
                             <i class="bi bi-pencil me-2 text-primary"></i>
-                            <span th:text="#{usuarios.noUsuarios}">Editar Usuario</span>
+                            <span th:text="#{usuarios.editar}">Editar Usuario</span>
                         </h2>
                     </div>
                     <div class="card-body"
                         th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                         <!-- Mensaje si no hay usuario seleccionado -->
-                        <div th:if="${selectedUser == null}" class="text-center py-5">
-                            <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
-                            <h5 th:text="#{usuarios.noUserSelected}">No hay ningún usuario seleccionado.</h5>
-                            <p th:text="#{usuarios.seleccionaUsu}">Selecciona un usuario de la lista para editar sus
-                                datos.</p>
-                        </div>
                         <div class="card-body">
                             <!-- Formulario de edición -->
-                            <div th:unless="${selectedUser == null}">
+                            <div>
                                 <form th:action="@{/user/users/guardar}" th:object="${selectedUser}" method="post"
                                     class="row gx-3 gy-3" onsubmit="return validarSeleccion()">
                                     <!-- ID (solo lectura) -->

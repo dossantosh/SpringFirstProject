@@ -1,6 +1,6 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
-import com.dossantosh.springfirstproject.common.config.annotation.module.Requieremodule;
+import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
@@ -22,7 +22,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/objects/perfume")
 @RequiredArgsConstructor
-@Requieremodule({ 2L })
+@RequiereModule({ 2L })
 public class PerfumeController {
 
     private final UserAuthService userAuthService;

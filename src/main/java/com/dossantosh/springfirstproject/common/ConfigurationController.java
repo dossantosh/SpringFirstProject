@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.dossantosh.springfirstproject.common.config.annotation.module.Requieremodule;
+import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
-@Requieremodule({ 2L })
+@RequiereModule({ 2L })
 public class ConfigurationController {
 
     private final UserAuthService userAuthService;

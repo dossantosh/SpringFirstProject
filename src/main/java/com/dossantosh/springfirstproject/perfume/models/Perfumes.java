@@ -50,6 +50,9 @@ public class Perfumes {
     @Column
     private Integer fecha;
 
+    @Column(length = 150)
+    private String image;
+
     public Perfumes(String string, Brands hermes, float f, float g, String string2, String string3, int i,
             Types aguaDeColonia) {
     }

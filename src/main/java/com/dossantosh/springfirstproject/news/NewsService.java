@@ -1,13 +1,10 @@
-package com.dossantosh.springfirstproject.news.service;
+package com.dossantosh.springfirstproject.news;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
-
-import com.dossantosh.springfirstproject.news.model.News;
-import com.dossantosh.springfirstproject.news.repository.NewsRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -20,8 +20,6 @@ import com.dossantosh.springfirstproject.perfume.dto.PerfumeDTO;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeSpecifications;
-import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.utils.UserSpecifications;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;

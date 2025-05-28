@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.news.model;
+package com.dossantosh.springfirstproject.news;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

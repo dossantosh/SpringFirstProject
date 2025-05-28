@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.annotation.module;
+package com.dossantosh.springfirstproject.common.config.annotations.submodule;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,20 +16,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Aspect
 @Component
-public class RequieremoduleAspect {
+public class RequiereSubmoduleAspect {
 
     private final UserRepository userRepository;
 
-    @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotation.module.Requieremodule) "
-          + "|| @within(com.dossantosh.springfirstproject.config.annotation.module.Requieremodule)")
+    @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule) "
+          + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
-        //agarra información del método que se quiere ejecutar
         MethodSignature ms = (MethodSignature) pjp.getSignature();
-        //extrae, en este caso, los modules necesarios para ejecutarse
-        Requieremodule ann = ms.getMethod().getAnnotation(Requieremodule.class);
-        //si está vacío, busca la anotación a nivel de clase
+        RequiereSubmodule ann = ms.getMethod().getAnnotation(RequiereSubmodule.class);
         if (ann == null) {
-            ann = pjp.getTarget().getClass().getAnnotation(Requieremodule.class);
+            ann = pjp.getTarget().getClass().getAnnotation(RequiereSubmodule.class);
         }
         long[] required = ann.value();
 
@@ -38,10 +35,10 @@ public class RequieremoduleAspect {
             .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
 
         // Ahora buscamos por ID dentro de cada Module
-        for (long modId : required) {
-            boolean has = user.getModules()
+        for (long subId : required) {
+            boolean has = user.getSubmodules()
                               .stream()
-                              .anyMatch(m -> m.getId() == modId);
+                              .anyMatch(m -> Long.valueOf(subId).equals(m.getId()));
             if (has) {
                 return pjp.proceed();
             }

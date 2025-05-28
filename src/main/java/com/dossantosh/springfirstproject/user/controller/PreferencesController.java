@@ -1,6 +1,6 @@
 package com.dossantosh.springfirstproject.user.controller;
 
-import com.dossantosh.springfirstproject.common.config.annotation.module.Requieremodule;
+import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/objects/preferences")
 @RequiredArgsConstructor
-@Requieremodule({ 2L })
+@RequiereModule({ 2L })
 @Controller
 public class PreferencesController {
 
