@@ -66,6 +66,8 @@ public class ProfileController extends GenericController {
 
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
+        model.addAttribute("activeNavLink", "profile");
+
         User user = userService.findByUsername(auth.getName());
 
         model.addAttribute("user", user);

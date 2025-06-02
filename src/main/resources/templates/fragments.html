@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<body>
+    <!-- Navigation Bar -->
+    <nav th:fragment="navbar(activeLink)" class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/objects/news}">
+                <img th:src="@{/images/logo.png}" alt="Logo" height="30" class="me-2" />
+                <span class="fw-bold">Seb's Fragances</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    <!-- News Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeLink == 'news'} ? 'active' : ''"
+                            th:href="@{/objects/news}">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            <span th:text="#{news.tittle}">News</span>
+                        </a>
+                    </li>
+
+                    <!-- Perfumes Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeLink == 'perfumes'} ? 'active' : ''"
+                            th:href="@{/objects/perfume}">
+                            <i class="bi bi-droplet-half me-1"></i>
+                            <span>Perfumes</span>
+                        </a>
+                    </li>
+
+                    <!-- Users Link -->
+                    <li class="nav-item" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
+                        <a class="nav-link" th:classappend="${activeLink == 'users'} ? 'active' : ''"
+                            th:href="@{/user/users}">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span th:text="#{usuarios.tittle}">Usuarios</span>
+                        </a>
+                    </li>
+
+                    <!-- Profile Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeLink == 'profile'} ? 'active' : ''"
+                            th:href="@{/user/profile}">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span th:text="#{profile.tittle}">Mi Perfil</span>
+                        </a>
+                    </li>
+
+                    <!-- Configuration Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activeLink == 'configuration'} ? 'active' : ''"
+                            th:href="@{/common/configuration}">
+                            <i class="bi bi-gear me-1"></i>
+                            <span th:text="#{configuration.tittle}">Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3 d-none d-lg-block">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span th:text="${username}"></span>
+                    </span>
+                    <form th:action="@{/logout}" method="post" class="d-flex">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-outline-light" aria-label="Cerrar sesión">
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            <span th:text="#{salir}">Salir</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Footer -->
+    <footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-droplet-half me-2"></i>
+                        Perfumes
+                    </h5>
+                    <p class="small">Gestión de tu colección de perfumes.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3" th:text="#{enlaces}">Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a th:href="@{/objects/news}" class="text-white-50 text-decoration-none"
+                                th:text="#{news.tittle}">News</a>
+                        </li>
+                        <li class="mb-2"><a th:href="@{/objects/perfume}"
+                                class="text-white-50 text-decoration-none">Perfumes</a>
+                        </li>
+                        <li class="mb-2">
+                            <a th:href="@{/user/users}" class="text-white-50 text-decoration-none"
+                                th:text="#{usuarios.tittle}">Usuarios</a>
+                        </li>
+                        <li class="mb-2">
+                            <a th:href="@{/user/profile}" class="text-white-50 text-decoration-none"
+                                th:text="#{profile.tittle}">Perfil</a>
+                        </li>
+                        <li class="mb-2">
+                            <a th:href="@{/common/configuration}" class="text-white-50 text-decoration-none"
+                                th:text="#{configuration.tittle}">Configuración</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3" th:text="#{contacto}">Contacto</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i>dossantoshPrueba@gmail.com</li>
+                        <li><i class="bi bi-telephone me-2"></i>682 169 709</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-secondary" />
+            <div class="text-center small">&copy; 2025. Todos los derechos reservados.</div>
+        </div>
+    </footer>
+</body>
+
+</html>

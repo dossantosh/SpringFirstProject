@@ -55,6 +55,8 @@ public class UsuariosController extends GenericController {
         
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
+        model.addAttribute("activeNavLink", "users");
+
         // Convertir cadenas vacías a null
         if (username != null && username.isBlank()) {
             username = null;

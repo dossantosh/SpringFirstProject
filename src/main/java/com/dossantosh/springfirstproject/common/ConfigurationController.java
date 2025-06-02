@@ -38,6 +38,8 @@ public class ConfigurationController extends GenericController {
         
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
+        model.addAttribute("activeNavLink", "configuration");
+
         return "common/configuration";
     }
 }

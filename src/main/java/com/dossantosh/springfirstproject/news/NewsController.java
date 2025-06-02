@@ -45,6 +45,8 @@ public class NewsController extends GenericController {
 
                 addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
+                model.addAttribute("activeNavLink", "news");
+
                 UserAuth userAuth = userAuthService.findByUsername(auth.getName());
 
                 LinkedHashSet<News> setNoticias = new LinkedHashSet<>();

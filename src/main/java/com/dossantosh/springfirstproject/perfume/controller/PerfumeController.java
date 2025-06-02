@@ -60,6 +60,8 @@ public class PerfumeController extends GenericController {
         
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
+        model.addAttribute("activeNavLink", "perfumes");
+
         // convertimos en null a las vacias
         if (name != null && name.isBlank()) {
             name = null;
