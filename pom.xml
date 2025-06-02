@@ -71,7 +71,7 @@
    		<dependency>
         	<groupId>org.springframework.session</groupId>
         	<artifactId>spring-session-core</artifactId>
-    </dependency>
+    	</dependency>
 <!-- Tests-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

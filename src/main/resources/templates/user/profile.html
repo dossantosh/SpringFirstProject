@@ -42,7 +42,7 @@
               <span>Perfumes</span>
             </a>
           </li>
-          <li class="nav-item" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+          <li class="nav-item" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/user/users}">
               <i class="bi bi-people-fill me-2"></i> <span th:text="#{usuarios.tittle}">Usuarios</span>
             </a>
@@ -124,7 +124,7 @@
                       <span th:text="${listaSub}"></span>
                     </p>
                     <!-- Mostrar sección avanzada sólo a ADMIN -->
-                    <div th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+                    <div th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
                       <p class="text-danger"><strong th:text="#{profile.permisos}">Permisos administrativos: Sí</strong>
                       </p>
                     </div>
@@ -171,7 +171,7 @@
             </li>
             <li class="mb-2"><a th:href="@{/objects/perfume}" class="text-white-50 text-decoration-none">Perfumes</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+            <li class="mb-2" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
               <a th:href="@{/user/users}" class="text-white-50 text-decoration-none"
                 th:text="#{usuarios.tittle}">Usuarios</a>
             </li>

@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.controller;
 
+import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
@@ -24,31 +25,42 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import lombok.RequiredArgsConstructor;
-
 @RequestMapping("/objects/preferences")
-@RequiredArgsConstructor
 @RequiereModule({ 2L })
 @Controller
-public class PreferencesController {
-
-    private final UserAuthService userAuthService;
+public class PreferencesController extends GenericController {
 
     private final PreferencesService preferencesService;
-    
+
     private final LocaleResolver localeResolver;
+
+    public PreferencesController(UserAuthService userAuthService, PreferencesService preferencesService,
+            LocaleResolver localeResolver) {
+        super(userAuthService);
+        this.preferencesService = preferencesService;
+        this.localeResolver = localeResolver;
+    }
 
     @GetMapping
     public String mostrarPreferencias(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
+
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
+
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+        
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         UserAuth userAuth = userAuthService.findByUsername(auth.getName());
 
-        model.addAttribute("userAuth", userAuth);
-
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
 
         Preferences preferences = preferencesService.obtenerPreferencias(userAuth.getId());
         model.addAttribute("preferences", preferences != null ? preferences : new Preferences());

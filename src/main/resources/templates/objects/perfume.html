@@ -45,8 +45,7 @@
                             <span th:text="#{perfumes.tittle}">Perfumes</span>
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulesNecesarios}"
-                        th:if="${#sets.contains(userAuth.modules, mid)}">
+                    <li class="nav-item" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link" th:href="@{/user/users}">
                             <i class="bi bi-people-fill me-2"></i>
                             <span th:text="#{usuarios.tittle}">Usuarios</span>
@@ -199,30 +198,28 @@
                             </div>
                             <!-- Paginación -->
                             <div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
-                                <nav>
-                                    <ul class="pagination">
-                                        <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
-                                            <a class="page-link"
-                                                th:href="@{/objects/perfume(page=${currentPage - 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                                <span th:text="#{perfumes.anterior}">Anterior</span>
-                                            </a>
-                                        </li>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
+                                        <a class="page-link"
+                                            th:href="@{/objects/perfume(page=${currentPage - 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
+                                            <span th:text="#{perfumes.anterior}">Anterior</span>
+                                        </a>
+                                    </li>
 
-                                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
-                                            th:classappend="${i == currentPage} ? 'active'">
-                                            <a class="page-link" th:text="${i + 1}"
-                                                th:href="@{/objects/perfume(page=${i}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                            </a>
-                                        </li>
+                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                                        th:classappend="${i == currentPage} ? 'active'">
+                                        <a class="page-link" th:text="${i + 1}"
+                                            th:href="@{/objects/perfume(page=${i}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
+                                        </a>
+                                    </li>
 
-                                        <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-                                            <a class="page-link"
-                                                th:href="@{/objects/perfume(page=${currentPage + 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                                <span th:text="#{perfumes.siguiente}">Siguiente</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                    <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
+                                        <a class="page-link"
+                                            th:href="@{/objects/perfume(page=${currentPage + 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
+                                            <span th:text="#{perfumes.siguiente}">Siguiente</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -231,7 +228,7 @@
         </div>
 
         <!-- Card: Edición de Perfume Seleccionado -->
-        <div class="row mb-4" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+        <div class="row mb-4" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <div class="col-12">
                 <div class="card shadow-sm">
                     <!-- Cabecera -->

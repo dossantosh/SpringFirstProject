@@ -2,6 +2,7 @@ package com.dossantosh.springfirstproject.user.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.UserService;
 
@@ -19,12 +20,15 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/user/users")
-@RequiredArgsConstructor
 @RequiereModule({ 2L })
-public class UsuariosController {
+public class UsuariosController extends GenericController {
 
-    private final UserAuthService userAuthService;
     private final UserService userService;
+
+    public UsuariosController(UserAuthService userAuthService, UserService userService) {
+        super(userAuthService);
+        this.userService = userService;
+    }
 
     @GetMapping
     public String mostrarUsuarios(
@@ -32,11 +36,24 @@ public class UsuariosController {
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "20") int size,
             Model model,
             HttpSession session) {
 
-        addCommonAttributes(model);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
+
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
+
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+        
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         // Convertir cadenas vacías a null
         if (username != null && username.isBlank()) {
@@ -77,7 +94,7 @@ public class UsuariosController {
         if (!userService.existsById(id)) {
             return "redirect:/user/users";
         }
-        userService.findById(id);
+
         session.setAttribute("selectedUser", userService.findById(id));
         return "redirect:/user/users";
     }
@@ -95,20 +112,5 @@ public class UsuariosController {
         // Limpiar el seleccionado en sesión
         session.removeAttribute("selectedUser");
         return "redirect:/user/users";
-    }
-
-    private void addCommonAttributes(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        model.addAttribute("username", auth.getName());
-
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
-
-        model.addAttribute("userAuth", userAuth);
-
-        // Ejemplo de módulo necesario (ajustar según lógica de permisos)
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
     }
 }

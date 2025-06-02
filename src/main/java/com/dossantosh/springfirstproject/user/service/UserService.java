@@ -56,7 +56,7 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Marca con ID " + id + " no encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario con ID " + id + " no encontrado"));
     }
 
     public User findByUsername(String username) {

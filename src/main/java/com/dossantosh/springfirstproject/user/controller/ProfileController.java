@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
@@ -26,16 +27,11 @@ import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
 import com.dossantosh.springfirstproject.user.service.permissions.RoleService;
 import com.dossantosh.springfirstproject.user.service.permissions.SubmoduleService;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 @Controller
 @RequiereModule({ 2L })
-public class ProfileController {
+public class ProfileController extends GenericController {
 
     private final UserService userService;
-
-    private final UserAuthService userAuthService;
 
     private final RoleService roleService;
 
@@ -43,17 +39,32 @@ public class ProfileController {
 
     private final SubmoduleService submoduleService;
 
+    public ProfileController(UserAuthService userAuthService, UserService userService, RoleService roleService,
+            ModuleService moduleService, SubmoduleService submoduleService) {
+        super(userAuthService);
+        this.userService = userService;
+        this.roleService = roleService;
+        this.moduleService = moduleService;
+        this.submoduleService = submoduleService;
+    }
+
     @GetMapping("/user/profile")
     public String showPerfilPanel(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
 
-        model.addAttribute("userAuth", userAuth);
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
 
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         User user = userService.findByUsername(auth.getName());
 
@@ -80,15 +91,21 @@ public class ProfileController {
 
     @GetMapping("/user/editar") // /user/editar
     public String mostrarFormularioEdicion(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
 
-        model.addAttribute("userAuth", userAuth);
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
 
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+        
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 

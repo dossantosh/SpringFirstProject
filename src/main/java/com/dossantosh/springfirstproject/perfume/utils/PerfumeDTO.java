@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.perfume.dto;
+package com.dossantosh.springfirstproject.perfume.utils;
 
 import lombok.Getter;
 import lombok.Setter;

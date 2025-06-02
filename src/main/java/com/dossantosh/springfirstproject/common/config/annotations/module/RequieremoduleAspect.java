@@ -8,8 +8,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.repository.UserRepository;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.user.repository.UserAuthRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,14 +18,14 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class RequieremoduleAspect {
 
-    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
 
     @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.module.Requieremodule) "
           + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.module.Requieremodule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
         //agarra información del método que se quiere ejecutar
         MethodSignature ms = (MethodSignature) pjp.getSignature();
-        //extrae, en este caso, los modules necesarios para ejecutarse
+        //extrae, en este caso, los modulos necesarios para ejecutar el método
         RequiereModule ann = ms.getMethod().getAnnotation(RequiereModule.class);
         //si está vacío, busca la anotación a nivel de clase
         if (ann == null) {
@@ -34,14 +34,14 @@ public class RequieremoduleAspect {
         long[] required = ann.value();
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
+        UserAuth user = userAuthRepository.findByUsername(username)
             .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
 
-        // Ahora buscamos por ID dentro de cada Module
+        // Ahora buscamos por ID dentro de cada Modulo
         for (long modId : required) {
             boolean has = user.getModules()
                               .stream()
-                              .anyMatch(m -> Long.valueOf(modId).equals(m.getId()));
+                              .anyMatch(m -> Long.valueOf(modId).equals(m));
             if (has) {
                 return pjp.proceed();
             }

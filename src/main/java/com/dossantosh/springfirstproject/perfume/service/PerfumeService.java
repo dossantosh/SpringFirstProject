@@ -16,9 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.dossantosh.springfirstproject.perfume.dto.PerfumeDTO;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
+import com.dossantosh.springfirstproject.perfume.utils.PerfumeDTO;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeSpecifications;
 
 import jakarta.persistence.EntityManager;

@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "recaptcha.site-key",
+    "type": "java.lang.String",
+    "description": "The key the user use to connect to v3 recaptcha"
+  },
+  {
+    "name": "recaptcha.secret-key",
+    "type": "java.lang.String",
+    "description": "The secret key the app use to connect to v3 recaptcha"
+  },
+  {
+    "name": "recaptcha.verify-url",
+    "type": "java.lang.String",
+    "description": "The urls site verifys the captcha"
+  },
+  {
+    "name": "recaptcha.score-threshold",
+    "type": "java.lang.String",
+    "description": "The threshold that the user has to overcome"
+  },
+  {
+    "name": "recaptcha.enabled",
+    "type": "java.lang.String",
+    "description": "Is this verification enabled?"
+  }
+]}

@@ -42,7 +42,7 @@
               <span>Perfumes</span>
             </a>
           </li>
-          <li class="nav-item" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+          <li class="nav-item" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
             <a class="nav-link" th:href="@{/user/users}">
               <i class="bi bi-people-fill me-2"></i> <span th:text="#{usuarios.tittle}">Usuarios</span>
             </a>
@@ -103,7 +103,7 @@
                     placeholder="Ej. 'josesito18'" required />
                 </div>
 
-                <div th:each="modu : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, modu)}">
+                <div th:each="modu : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, modu)}">
                   <div class="row">
                     <!-- Roles -->
                     <div class="col-md-4 mb-3" th:if="${todosLosRoles != null}">
@@ -180,7 +180,7 @@
             </li>
             <li class="mb-2"><a th:href="@{/objects/perfume}" class="text-white-50 text-decoration-none">Perfumes</a>
             </li>
-            <li class="mb-2" th:each="mid : ${modulesNecesarios}" th:if="${#sets.contains(userAuth.modules, mid)}">
+            <li class="mb-2" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
               <a th:href="@{/user/users}" class="text-white-50 text-decoration-none"
                 th:text="#{usuarios.tittle}">Usuarios</a>
             </li>

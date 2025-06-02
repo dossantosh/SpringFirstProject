@@ -1,14 +1,14 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
+import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -21,13 +21,18 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/objects/perfume")
-@RequiredArgsConstructor
 @RequiereModule({ 2L })
-public class PerfumeController {
+public class PerfumeController extends GenericController {
 
-    private final UserAuthService userAuthService;
     private final PerfumeService perfumeService;
+
     private final BrandService brandService;
+
+    public PerfumeController(UserAuthService userAuthService, PerfumeService perfumeService, BrandService brandService) {
+        super(userAuthService);
+        this.perfumeService = perfumeService;
+        this.brandService = brandService;
+    }
 
     @GetMapping
     public String mostrarPerfumes(
@@ -40,7 +45,20 @@ public class PerfumeController {
             Model model,
             HttpSession session) {
 
-        addCommonAttributes(model);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
+
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
+
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+        
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         // convertimos en null a las vacias
         if (name != null && name.isBlank()) {
@@ -63,7 +81,8 @@ public class PerfumeController {
         model.addAttribute("hasPrevious", pageResult.hasPrevious());
         model.addAttribute("selectedPerfume", session.getAttribute("selectedPerfume"));
 
-        // model.addAttribute("filters", Map.of("id", id, "name", name, "brand", brand, "season", season));
+        // model.addAttribute("filters", Map.of("id", id, "name", name, "brand", brand,
+        // "season", season));
         Map<String, Object> filters = new HashMap<>();
         filters.put("id", id);
         filters.put("name", name);
@@ -107,23 +126,5 @@ public class PerfumeController {
         session.removeAttribute("selectedPerfume");
 
         return "redirect:/objects/perfume";
-    }
-
-    private void addCommonAttributes(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        model.addAttribute("username", auth.getName());
-
-        if (auth.getName().equals("anonymousUser")) {
-            return;
-        }
-
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
-
-        model.addAttribute("userAuth", userAuth);
-
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
     }
 }

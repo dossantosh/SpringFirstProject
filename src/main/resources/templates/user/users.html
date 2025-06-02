@@ -44,7 +44,7 @@
                             <span>Perfumes</span>
                         </a>
                     </li>
-                    <li class="nav-item" th:each="mid : ${modulesNecesarios}"
+                    <li class="nav-item" th:each="mid : ${lecturaMod}"
                         th:if="${#sets.contains(userAuth.modules, mid)}">
                         <a class="nav-link active" th:href="@{/user/users}">
                             <i class="bi bi-people-fill me-2"></i>

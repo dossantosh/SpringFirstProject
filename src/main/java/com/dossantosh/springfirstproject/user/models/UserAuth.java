@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.models;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name = "user_auth")
-public class UserAuth {
+public class UserAuth implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
     @Column(name = "id_user_auth")

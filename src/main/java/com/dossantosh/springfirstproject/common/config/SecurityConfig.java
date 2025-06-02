@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,13 +31,11 @@ public class SecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .sessionManagement(session -> session
-                                                .sessionFixation(sessionFixation -> sessionFixation
-                                                                .migrateSession() // Invalida la sesión anterior y crea
-                                                                                  // una nueva
-                                                ))
+                                                .sessionFixation(SessionFixationConfigurer::migrateSession)) // Invalida la sesión anterior y crea una nueva
                                 .addFilterBefore(captchaValidationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/login", "forgotPasswordEmail", "/forgotPassword", "/confirm/**", "/token-invalid",
+                                                .requestMatchers("/login", "forgotPasswordEmail", "/forgotPassword",
+                                                                "/confirm/**", "/token-invalid",
                                                                 "/register", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
                                                 .requestMatchers("/common/**", "/objects/**", "/user/**")
@@ -47,14 +46,12 @@ public class SecurityConfig {
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
                                                 .defaultSuccessUrl("/objects/news", true)
-                                                .failureHandler(customFailureHandler)
-                                                .permitAll())
+                                                .failureHandler(customFailureHandler))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/login?logout=true")
                                                 .invalidateHttpSession(true)
-                                                .deleteCookies("JSESSIONID")
-                                                .permitAll())
+                                                .deleteCookies("JSESSIONID"))
                                 .userDetailsService(userDetailsService);
                 return http.build();
         }
@@ -66,6 +63,7 @@ public class SecurityConfig {
                 serializer.setUseSecureCookie(true);
                 serializer.setUseHttpOnlyCookie(true);
                 serializer.setCookiePath("/");
+                serializer.setSameSite("Lax");
                 return serializer;
         }
 

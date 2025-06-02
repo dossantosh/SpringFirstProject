@@ -10,31 +10,33 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 @Controller
 @RequiereModule({ 2L })
-public class ConfigurationController {
+public class ConfigurationController extends GenericController {
 
-    private final UserAuthService userAuthService;
+    public ConfigurationController(UserAuthService userAuthService) {
+        super(userAuthService);
+    }
 
     @GetMapping("/common/configuration")
     public String showAdminPanel(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        model.addAttribute("username", auth.getName());
+        Set<Long> lecturaMod = new HashSet<>();
+        Set<Long> escrituraMod = new HashSet<>();
 
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
+        Set<Long> lecturaSub = new HashSet<>();
+        Set<Long> escrituraSub = new HashSet<>();
 
-        model.addAttribute("userAuth", userAuth);
-
-        Set<Long> lista = new HashSet<>();
-        lista.add(1L);
-        model.addAttribute("modulesNecesarios", lista);
+        lecturaMod.add(2L);
+        escrituraMod.add(2L);
+        lecturaSub.add(2L);
+        escrituraSub.add(2L);
+        
+        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         return "common/configuration";
     }

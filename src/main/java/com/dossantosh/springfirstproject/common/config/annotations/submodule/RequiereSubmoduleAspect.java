@@ -8,8 +8,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.repository.UserRepository;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.user.repository.UserAuthRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class RequiereSubmoduleAspect {
 
-    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
 
     @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule) "
           + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule)")
@@ -31,14 +31,14 @@ public class RequiereSubmoduleAspect {
         long[] required = ann.value();
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
+        UserAuth user = userAuthRepository.findByUsername(username)
             .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
 
         // Ahora buscamos por ID dentro de cada Module
         for (long subId : required) {
             boolean has = user.getSubmodules()
                               .stream()
-                              .anyMatch(m -> Long.valueOf(subId).equals(m.getId()));
+                              .anyMatch(m -> Long.valueOf(subId).equals(m));
             if (has) {
                 return pjp.proceed();
             }

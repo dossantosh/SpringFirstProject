@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.utils;
+package com.dossantosh.springfirstproject.common.Global;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
