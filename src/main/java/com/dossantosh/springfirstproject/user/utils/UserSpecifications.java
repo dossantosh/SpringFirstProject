@@ -21,13 +21,13 @@ public class UserSpecifications {
                 predicates.add(cb.equal(root.get("id"), id));
             }
             if (username != null && !username.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("username")), "%" + username.toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("username")), "%" + username.trim().toLowerCase() + "%"));
             }
             if (email != null && !email.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return predicates.isEmpty() ? null : cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

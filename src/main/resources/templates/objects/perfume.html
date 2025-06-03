@@ -19,7 +19,7 @@
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
-    <div th:replace="fragments :: navbar(${'perfumes'})"></div>
+    <div th:replace="~{fragments :: navbar(${'perfumes'})}"></div>
 
     <!-- Main Content -->
     <main class="container my-4">
@@ -192,6 +192,7 @@
 
                         <!-- Formulario si hay perfume seleccionado -->
                         <div th:unless="${selectedPerfume == null}">
+                            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
                             <form th:action="@{/objects/perfume/guardar}" th:object="${selectedPerfume}" method="post"
                                 class="row gx-4 gy-3">
 
@@ -271,6 +272,11 @@
                                         th:field="*{description}"
                                         placeholder="Descripción detallada del perfume"></textarea>
                                 </div>
+
+                                <!-- Version -->
+                                <input type="hidden" th:field="*{version}" />
+
+                                <input type="hidden" th:field="*{image}" />
 
                                 <!-- Botones -->
                                 <div class="col-12 text-end">
@@ -354,7 +360,7 @@
                                 <label for="perfDescripcion" class="form-label"
                                     th:text="#{perfumes.descripcion}">Descripción</label>
                                 <textarea id="perfDescripcion" rows="3" class="form-control" th:field="*{description}"
-                                    placeholder="Descripción detallada del perfume"></textarea>
+                                    placeholder="Descripción detallada del perfume" readonly></textarea>
                             </div>
 
                             <!-- Botones -->
@@ -377,7 +383,7 @@
     </main>
 
     <!-- Footer -->
-    <div th:replace="fragments :: footer"></div>
+    <div th:replace="~{fragments :: footer}"></div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

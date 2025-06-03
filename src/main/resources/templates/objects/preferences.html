@@ -17,7 +17,7 @@
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
-    <div th:replace="fragments :: navbar(${'configuration'})"></div>
+    <div th:replace="~{fragments :: navbar(${'configuration'})}"></div>
 
     <!-- Main Content -->
     <main class="container my-4">

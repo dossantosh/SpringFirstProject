@@ -28,7 +28,8 @@ public class PerfumeController extends GenericController {
 
     private final BrandService brandService;
 
-    public PerfumeController(UserAuthService userAuthService, PerfumeService perfumeService, BrandService brandService) {
+    public PerfumeController(UserAuthService userAuthService, PerfumeService perfumeService,
+            BrandService brandService) {
         super(userAuthService);
         this.perfumeService = perfumeService;
         this.brandService = brandService;
@@ -53,11 +54,11 @@ public class PerfumeController extends GenericController {
         Set<Long> lecturaSub = new HashSet<>();
         Set<Long> escrituraSub = new HashSet<>();
 
-        lecturaMod.add(2L);
-        escrituraMod.add(2L);
-        lecturaSub.add(2L);
-        escrituraSub.add(2L);
-        
+        lecturaMod.add(1L);
+        escrituraMod.add(1L);
+        lecturaSub.add(1L);
+        escrituraSub.add(1L);
+
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         model.addAttribute("activeNavLink", "perfumes");
@@ -73,7 +74,7 @@ public class PerfumeController extends GenericController {
             season = null;
         }
         // Obtenemos la lista de perfumes
-        Page<Perfumes> pageResult = perfumeService.findByFilters(id, name, season, brand, page, size);
+        Page<Perfumes> pageResult = perfumeService.findByFilters(id, name, season, brand, page, size, "id", "ASC");
 
         model.addAttribute("perfumes", perfumeService.conversorPerfumeDTO(pageResult.getContent()));
 
@@ -108,17 +109,25 @@ public class PerfumeController extends GenericController {
     }
 
     @PostMapping("/guardar")
-    public String guardarPerfume(@ModelAttribute Perfumes perfume, HttpSession session) {
-        if (perfume.getBrand() != null && perfumeService.existsById(perfume.getId())) {
-            Long brandId = perfume.getBrand().getId();
-            perfume.setBrand(brandService.findById(brandId));
+    public String guardarPerfume(@ModelAttribute Perfumes perfume,
+            Model model,
+            HttpSession session) {
+        try {
+            if (perfume.getBrand() != null && perfumeService.existsById(perfume.getId())) {
+                Long brandId = perfume.getBrand().getId();
+                perfume.setBrand(brandService.findById(brandId));
+            }
+
+            perfumeService.save(perfume);
+
+            // Limpiar el seleccionado en sesión para que no reaparezca en el formulario
+            session.removeAttribute("selectedPerfume");
+            return "redirect:/objects/perfume";
+
+        } catch (IllegalStateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/objects/perfume";
         }
-        perfumeService.save(perfume);
-
-        // Limpiar el seleccionado en sesión para que no reaparezca en el formulario
-        session.removeAttribute("selectedPerfume");
-
-        return "redirect:/objects/perfume";
     }
 
     @GetMapping("/cancelar")

@@ -22,16 +22,16 @@ public class PerfumeSpecifications {
                 predicates.add(cb.equal(root.get("id"), id));
             }
             if (name != null && !name.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("username")), "%" + name.toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.trim().toLowerCase() + "%"));
             }
             if (season != null && !season.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("email")), "%" + season.toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("season")), "%" + season.toLowerCase() + "%"));
             }
             if (brandName != null && !brandName.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("email")), "%" + brandName.toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("brandName")), "%" + brandName.toLowerCase() + "%"));
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return predicates.isEmpty() ? null : cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

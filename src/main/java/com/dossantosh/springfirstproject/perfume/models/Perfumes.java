@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,6 +54,10 @@ public class Perfumes {
 
     @Column(length = 150)
     private String image;
+
+    @Version
+    @Column(name = "version")
+    private Integer version;
 
     public Perfumes(String string, Brands hermes, float f, float g, String string2, String string3, int i,
             Types aguaDeColonia) {

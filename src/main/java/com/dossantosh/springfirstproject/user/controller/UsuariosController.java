@@ -1,11 +1,12 @@
 package com.dossantosh.springfirstproject.user.controller;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/user/users")
-@RequiereModule({ 2L })
+@RequiereModule({ 1L })
 public class UsuariosController extends GenericController {
 
     private final UserService userService;
@@ -48,11 +49,11 @@ public class UsuariosController extends GenericController {
         Set<Long> lecturaSub = new HashSet<>();
         Set<Long> escrituraSub = new HashSet<>();
 
-        lecturaMod.add(2L);
-        escrituraMod.add(2L);
-        lecturaSub.add(2L);
-        escrituraSub.add(2L);
-        
+        lecturaMod.add(1L);
+        escrituraMod.add(1L);
+        lecturaSub.add(1L);
+        escrituraSub.add(1L);
+
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         model.addAttribute("activeNavLink", "users");
@@ -66,7 +67,7 @@ public class UsuariosController extends GenericController {
         }
 
         // Obtener página de usuarios filtrados
-        Page<User> pageResult = userService.findByFilters(id, username, email, page, size);
+        Page<User> pageResult = userService.findByFilters(id, username, email, page, size, "id", "ASC");
 
         if (pageResult == null) {
             return "objects/news";
@@ -105,6 +106,8 @@ public class UsuariosController extends GenericController {
     public String guardarUsuario(@ModelAttribute User user, HttpSession session) {
 
         userService.guardarUsuarioConPermisos(user, userService.findById(user.getId()));
+        
+
         session.removeAttribute("selectedUser");
         return "redirect:/user/users";
     }

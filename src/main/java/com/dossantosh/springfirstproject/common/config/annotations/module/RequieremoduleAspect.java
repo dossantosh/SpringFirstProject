@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Aspect
 @Component
-public class RequieremoduleAspect {
+public class RequiereModuleAspect {
 
     private final UserAuthRepository userAuthRepository;
 
-    @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.module.Requieremodule) "
-          + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.module.Requieremodule)")
+    @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule) "
+          + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
         //agarra información del método que se quiere ejecutar
         MethodSignature ms = (MethodSignature) pjp.getSignature();
@@ -36,6 +36,10 @@ public class RequieremoduleAspect {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserAuth user = userAuthRepository.findByUsername(username)
             .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
+
+        if(Boolean.FALSE.equals(user.getEnabled())){
+            throw new AccessDeniedException("No tiene permiso para este módulo");
+        }
 
         // Ahora buscamos por ID dentro de cada Modulo
         for (long modId : required) {

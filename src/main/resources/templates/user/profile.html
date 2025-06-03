@@ -19,7 +19,7 @@
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
   <!-- Navigation Bar -->
-  <div th:replace="fragments :: navbar(${'profile'})"></div>
+  <div th:replace="~{fragments :: navbar(${'profile'})}"></div>
 
   <!-- Main Content -->
   <main class="container my-4">
@@ -63,7 +63,7 @@
                     <p><strong th:text="#{profile.roles}">Roles:</strong>
                       <span th:text="${listaRol}"></span>
                     </p>
-                    <p><strong th:text="#{profile.modules}">modules:</strong>
+                    <p><strong th:text="#{profile.modules}">Modules:</strong>
                       <span th:text="${listaMod}"></span>
                     </p>
                     <p><strong th:text="#{profile.submodules}">Submodules:</strong>
@@ -102,7 +102,7 @@
   </main>
 
   <!-- Footer -->
-  <div th:replace="fragments :: footer"></div>
+  <div th:replace="~{fragments :: footer}"></div>
 
 
   <!-- Bootstrap JS Bundle con Popper -->

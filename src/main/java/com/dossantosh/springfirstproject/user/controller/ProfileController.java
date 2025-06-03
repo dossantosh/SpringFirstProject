@@ -59,10 +59,10 @@ public class ProfileController extends GenericController {
         Set<Long> lecturaSub = new HashSet<>();
         Set<Long> escrituraSub = new HashSet<>();
 
-        lecturaMod.add(2L);
-        escrituraMod.add(2L);
-        lecturaSub.add(2L);
-        escrituraSub.add(2L);
+        lecturaMod.add(1L);
+        escrituraMod.add(1L);
+        lecturaSub.add(1L);
+        escrituraSub.add(1L);
 
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
@@ -102,10 +102,10 @@ public class ProfileController extends GenericController {
         Set<Long> lecturaSub = new HashSet<>();
         Set<Long> escrituraSub = new HashSet<>();
 
-        lecturaMod.add(2L);
-        escrituraMod.add(2L);
-        lecturaSub.add(2L);
-        escrituraSub.add(2L);
+        lecturaMod.add(1L);
+        escrituraMod.add(1L);
+        lecturaSub.add(1L);
+        escrituraSub.add(1L);
         
         addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 

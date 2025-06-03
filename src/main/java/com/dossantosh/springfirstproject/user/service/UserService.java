@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class UserService {
     private final TokenService tokenService;
 
     public User saveUser(User user) {
+
         return userRepository.save(user);
     }
 
@@ -85,9 +87,15 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public Page<User> findByFilters(Long id, String username, String email, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<User> findByFilters(Long id, String username, String email, int page, int size, String sortby,
+            String direction) {
+
+        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortby));
+
         Specification<User> spec = UserSpecifications.filter(id, username, email);
+
         return userRepository.findAll(spec, pageable);
     }
 
@@ -128,6 +136,31 @@ public class UserService {
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             user.setPassword(existingUser.getPassword());
         }
+
+        LinkedHashSet<Long> rolesId = new LinkedHashSet<>();
+        LinkedHashSet<Long> modulesId = new LinkedHashSet<>();
+        LinkedHashSet<Long> submodulesId = new LinkedHashSet<>();
+
+        for (Roles rol : user.getRoles()) {
+            rolesId.add(rol.getId());
+        }
+        for (Modules mid : user.getModules()) {
+            modulesId.add(mid.getId());
+        }
+        for (Submodules sub : user.getSubmodules()) {
+            submodulesId.add(sub.getId());
+        }
+
+        UserAuth userAuth = userAuthService.findByUsername(user.getUsername());
+
+        userAuth.setUsername(user.getUsername());
+        userAuth.setEmail(user.getEmail());
+        userAuth.setEnabled(user.getEnabled());
+        userAuth.setRoles(rolesId);
+        userAuth.setModules(modulesId);
+        userAuth.setSubmodules(submodulesId);
+        userAuthService.saveuserAuth(userAuth);
+
         saveUser(user);
     }
 
@@ -187,6 +220,8 @@ public class UserService {
         UserAuth userAuth = new UserAuth();
 
         userAuth.setUsername(user.getUsername());
+        userAuth.setEmail(user.getEmail());
+        userAuth.setEnabled(user.getEnabled());
         userAuth.setRoles(rolesId);
         userAuth.setModules(modulesId);
         userAuth.setSubmodules(submodulesId);

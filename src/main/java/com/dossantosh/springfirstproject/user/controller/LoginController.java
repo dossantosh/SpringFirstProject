@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dossantosh.springfirstproject.common.config.security.ReCaptchaValidationService;
 import com.dossantosh.springfirstproject.user.models.User;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
+import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.UserService;
 import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 
@@ -29,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
     private final UserService userService;
+
+    private final UserAuthService userAuthService;
 
     private final TokenService tokenService;
 
@@ -90,7 +94,7 @@ public class LoginController {
         return respuesta;
     }
 
-    @GetMapping("/confirm/user")
+    @GetMapping("/confirm")
     @Transactional
     public String confirmRegistration(@RequestParam("token") String getToken) {
         Optional<Token> vToken = tokenService.findByToken(getToken);
@@ -109,6 +113,9 @@ public class LoginController {
         user.setEnabled(true);
         userService.saveUser(user);
         tokenService.deleteByToken(token.getToken());
+
+        UserAuth userAuth = userAuthService.findByUsername(user.getUsername());
+        userAuth.setEnabled(true);
         return "redirect:/confirmacion-exitosa";
     }
 
