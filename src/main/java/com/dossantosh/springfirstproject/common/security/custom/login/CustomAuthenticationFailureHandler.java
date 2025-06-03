@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.security;
+package com.dossantosh.springfirstproject.common.security.custom.login;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

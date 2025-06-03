@@ -1,5 +1,7 @@
 package com.dossantosh.springfirstproject.user.models.objects;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "preferences")
-public class Preferences {
+public class Preferences implements Serializable{
 
     @Id
     @Column(name = "userId", nullable = false, unique = true)

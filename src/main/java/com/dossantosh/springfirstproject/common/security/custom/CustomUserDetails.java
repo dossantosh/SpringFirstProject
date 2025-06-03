@@ -1,7 +1,6 @@
-package com.dossantosh.springfirstproject.common.config.security;
+package com.dossantosh.springfirstproject.common.security.custom;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getRoles()
                    .stream()
                    .map(role -> new SimpleGrantedAuthority(role.getName()))
-                   .collect(Collectors.toList());
+                   .toList();
     }
 
     /**

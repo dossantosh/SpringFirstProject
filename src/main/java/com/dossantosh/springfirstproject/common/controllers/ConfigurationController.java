@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common;
+package com.dossantosh.springfirstproject.common.controllers;
 
 import java.util.HashSet;
 import java.util.Set;

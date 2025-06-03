@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.models.permissions;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -14,7 +15,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name = "roles")
-public class Roles {
+public class Roles implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

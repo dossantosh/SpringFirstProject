@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.perfume.models;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "brands")
-public class Brands {
+public class Brands implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL

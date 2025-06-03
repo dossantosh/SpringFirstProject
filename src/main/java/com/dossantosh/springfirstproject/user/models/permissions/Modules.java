@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.models.permissions;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -19,7 +20,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name="modules")
-public class Modules {
+public class Modules implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
     @Column(name = "id_module")

@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.security;
+package com.dossantosh.springfirstproject.common.security.custom.captcha;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

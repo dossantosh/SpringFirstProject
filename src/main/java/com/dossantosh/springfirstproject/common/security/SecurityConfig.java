@@ -1,7 +1,10 @@
-package com.dossantosh.springfirstproject.common.config;
+package com.dossantosh.springfirstproject.common.security;
+
+import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
@@ -9,12 +12,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
-
-import com.dossantosh.springfirstproject.common.config.security.CaptchaValidationFilter;
-import com.dossantosh.springfirstproject.common.config.security.CustomAuthenticationFailureHandler;
-import com.dossantosh.springfirstproject.common.config.security.UserDetailsServiceImpl;
+import org.springframework.session.web.http.HttpSessionIdResolver;
+import com.dossantosh.springfirstproject.common.security.custom.UserDetailsServiceImpl;
+import com.dossantosh.springfirstproject.common.security.custom.captcha.CaptchaValidationFilter;
+import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationFailureHandler;
+import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,13 +30,14 @@ public class SecurityConfig {
 
         private final UserDetailsServiceImpl userDetailsService;
         private final CaptchaValidationFilter captchaValidationFilter;
-        private final CustomAuthenticationFailureHandler customFailureHandler;
+        private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+        private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .sessionManagement(session -> session
-                                                .sessionFixation(SessionFixationConfigurer::migrateSession)) // Invalida la sesión anterior y crea una nueva
+                                                .sessionFixation(SessionFixationConfigurer::migrateSession))
                                 .addFilterBefore(captchaValidationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/login", "forgotPasswordEmail", "/forgotPassword",
@@ -45,8 +51,8 @@ public class SecurityConfig {
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/objects/news", true)
-                                                .failureHandler(customFailureHandler))
+                                                .successHandler(customAuthenticationSuccessHandler)
+                                                .failureHandler(customAuthenticationFailureHandler))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/login?logout=true")
@@ -72,4 +78,13 @@ public class SecurityConfig {
                 return new BCryptPasswordEncoder();
         }
 
+        @Bean
+        public HttpSessionIdResolver httpSessionIdResolver() {
+                return new CookieHttpSessionIdResolver();
+        }
+
+        @Bean
+        public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+                return new JdbcTemplate(dataSource);
+        }
 }

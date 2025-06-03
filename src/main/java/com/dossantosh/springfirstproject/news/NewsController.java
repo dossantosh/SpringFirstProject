@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;

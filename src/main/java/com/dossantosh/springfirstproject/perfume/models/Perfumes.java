@@ -1,5 +1,7 @@
 package com.dossantosh.springfirstproject.perfume.models;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -20,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "perfumes")
-public class Perfumes {
+public class Perfumes implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL

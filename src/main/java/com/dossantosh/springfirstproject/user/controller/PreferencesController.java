@@ -1,7 +1,7 @@
 package com.dossantosh.springfirstproject.user.controller;
 
-import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;

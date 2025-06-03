@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.security;
+package com.dossantosh.springfirstproject.common.security.custom;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

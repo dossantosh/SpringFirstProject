@@ -1,11 +1,13 @@
 package com.dossantosh.springfirstproject.perfume.utils;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class PerfumeDTO {
+public class PerfumeDTO implements Serializable{
 
     private Long id;
 

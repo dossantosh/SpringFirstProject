@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.security;
+package com.dossantosh.springfirstproject.common.security.custom.captcha;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

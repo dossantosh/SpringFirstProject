@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.models.permissions;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -16,7 +17,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name="submodules")
-public class Submodules {
+public class Submodules implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
     @Column(name="id_submodule")

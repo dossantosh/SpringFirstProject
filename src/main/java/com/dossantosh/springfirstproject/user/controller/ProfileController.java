@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
@@ -121,7 +121,7 @@ public class ProfileController extends GenericController {
         return "user/editar";
     }
 
-    @PostMapping("/user/editar") // /user/editar
+    @PostMapping("/user/editar")
     public String procesarFormularioEdicion(
             @ModelAttribute("user") User userActualizado,
             @RequestParam(value = "rolesSeleccionados", required = false) Set<Long> rolesId,

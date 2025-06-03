@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.utils;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserDTO {
+public class UserDTO implements Serializable{
 
     private Long id;
 

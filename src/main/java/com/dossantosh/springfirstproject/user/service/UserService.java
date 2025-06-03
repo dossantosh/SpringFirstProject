@@ -120,18 +120,7 @@ public class UserService {
     }
 
     // register
-    public void guardarUsuarioConPermisos(User user, User existingUser) {
-        user.setRoles(user.getRoles().stream()
-                .map(r -> roleService.findById(r.getId()))
-                .collect(Collectors.toCollection(LinkedHashSet::new)));
-
-        user.setModules(user.getModules().stream()
-                .map(m -> moduleService.findById(m.getId()))
-                .collect(Collectors.toCollection(LinkedHashSet::new)));
-
-        user.setSubmodules(user.getSubmodules().stream()
-                .map(s -> submoduleService.findById(s.getId()))
-                .collect(Collectors.toCollection(LinkedHashSet::new)));
+    public void guardarUsuario(User user, User existingUser) {
 
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             user.setPassword(existingUser.getPassword());

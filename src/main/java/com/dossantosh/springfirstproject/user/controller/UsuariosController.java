@@ -3,16 +3,15 @@ package com.dossantosh.springfirstproject.user.controller;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.dossantosh.springfirstproject.common.GenericController;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionInvalidationService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.UserService;
@@ -26,9 +25,12 @@ public class UsuariosController extends GenericController {
 
     private final UserService userService;
 
-    public UsuariosController(UserAuthService userAuthService, UserService userService) {
+    private final SessionInvalidationService sessionInvalidationService;
+
+    public UsuariosController(UserAuthService userAuthService, UserService userService, SessionInvalidationService sessionInvalidationService) {
         super(userAuthService);
         this.userService = userService;
+        this.sessionInvalidationService = sessionInvalidationService;
     }
 
     @GetMapping
@@ -105,8 +107,9 @@ public class UsuariosController extends GenericController {
     @PostMapping("/guardar")
     public String guardarUsuario(@ModelAttribute User user, HttpSession session) {
 
-        userService.guardarUsuarioConPermisos(user, userService.findById(user.getId()));
-        
+        userService.guardarUsuario(user, userService.findById(user.getId()));
+
+        sessionInvalidationService.invalidateSessionsByUsername(user.getUsername());
 
         session.removeAttribute("selectedUser");
         return "redirect:/user/users";

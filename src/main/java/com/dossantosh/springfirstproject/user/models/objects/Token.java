@@ -1,5 +1,6 @@
 package com.dossantosh.springfirstproject.user.models.objects;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.dossantosh.springfirstproject.user.models.User;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "token")
-public class Token {
+public class Token implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
