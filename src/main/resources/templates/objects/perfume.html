@@ -167,7 +167,7 @@
         </div>
 
         <!-- Card: Edición de Perfume Seleccionado -->
-        <div class="row mb-4" th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
+        <div class="row mb-4" th:if="${puedeVerMod}">
             <div class="col-12">
                 <div class="card shadow-sm">
                     <!-- Cabecera -->

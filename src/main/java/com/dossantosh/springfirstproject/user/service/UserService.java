@@ -122,6 +122,18 @@ public class UserService {
     // register
     public void guardarUsuario(User user, User existingUser) {
 
+        if (user.getId() == null) {
+            user.setId(existingUser.getId());
+        }
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            user.setEmail(existingUser.getEmail());
+        }
+
+        if (user.getEnabled() == null) {
+            user.setEnabled(existingUser.getEnabled());
+        }
+
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             user.setPassword(existingUser.getPassword());
         }
@@ -148,6 +160,7 @@ public class UserService {
         userAuth.setRoles(rolesId);
         userAuth.setModules(modulesId);
         userAuth.setSubmodules(submodulesId);
+        
         userAuthService.saveuserAuth(userAuth);
 
         saveUser(user);

@@ -38,7 +38,6 @@
             </div>
             <div class="card-body">
               <form th:action="@{/user/editar}" th:object="${user}" method="post" onsubmit="return validarSeleccion()">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                 <!-- Título de error global -->
                 <div id="error-global" class="error-text mb-3"></div>
@@ -50,52 +49,60 @@
                     placeholder="Ej. 'josesito18'" required />
                 </div>
 
-                <div th:each="modu : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, modu)}">
+                <div th:if="${puedeVerMod}">
                   <div class="row">
-                    <!-- Roles -->
-                    <div class="col-md-4 mb-3" th:if="${todosLosRoles != null}">
-                      <span class="form-label"><span th:text="#{editar.roles}">Roles</span> <span
+                    <!--Roles-->
+                    <div class="col-md-4 mb-3" th:if="${allRoles != null}">
+                      <span class="form-label"><span th:text="#{usuarios.roles}">Roles</span> <span
                           class="text-danger">*</span></span>
                       <div class="list-group">
-                        <label class="list-group-item" th:each="rol : ${todosLosRoles}">
-                          <input type="checkbox" class="form-check-input me-1" name="rolesSeleccionados"
+                        <label class="list-group-item" th:each="rol : ${allRoles}">
+                          <input type="checkbox" class="form-check-input me-1" th:id="'rol__' + ${rol.id}" name="roles"
                             th:value="${rol.id}" th:checked="${user.roles.contains(rol)}" />
-                          <span th:text="${rol.name}">Rol</span>
+                          <span th:for="'rol__' + ${rol.id}" th:text="${rol.name}">Rol</span>
                         </label>
                       </div>
                       <div id="error-roles" class="error-text mt-1"></div>
                     </div>
-
                     <!-- Módulos -->
-                    <div class="col-md-4 mb-3" th:if="${todosLosmodules != null}">
-                      <span class="form-label"><span th:text="#{editar.modules}">Módulos</span> <span
-                          class="text-danger">*</span></span>
+                    <div class="col-md-4 mb-3" th:if="${allModules != null}">
+                      <span class="form-label"><span th:text="#{usuarios.modules}">Módulos</span>
+                        <span class="text-danger">*</span></span>
                       <div class="list-group">
-                        <label class="list-group-item" th:each="modu : ${todosLosmodules}">
-                          <input type="checkbox" class="form-check-input me-1" name="modulesSeleccionados"
-                            th:value="${modu.id}" th:checked="${user.modules.contains(modu)}" />
-                          <span th:text="${modu.name}">Módulo</span>
+                        <label class="list-group-item" th:each="mid : ${allModules}">
+                          <input type="checkbox" th:id="'module__' + ${mid.id}" class="form-check-input me-1"
+                            name="modules" th:value="${mid.id}" th:checked="${user.modules.contains(mid)}" />
+                          <span th:for="'module__' + ${mid.id}" th:text="${mid.name}">Módulo</span>
                         </label>
                       </div>
                       <div id="error-modules" class="error-text mt-1"></div>
                     </div>
-
-                    <!-- Submódulos -->
-                    <div class="col-md-4 mb-3" th:if="${todosLosSubmodules != null}">
-                      <span class="form-label"><span th:text="#{editar.submodules}">Submódulos</span> <span
-                          class="text-danger">*</span></span>
+                    <!-- Submodules -->
+                    <div class="col-md-4 mb-3" th:if="${allSubmodules != null}">
+                      <span class="form-label"><span th:text="#{usuarios.submodules}">Submodules</span>
+                        <span class="text-danger">*</span></span>
                       <div class="list-group">
-                        <label class="list-group-item" th:each="sub : ${todosLosSubmodules}">
-                          <input type="checkbox" class="form-check-input me-1" name="submodulesSeleccionados"
-                            th:value="${sub.id}" th:checked="${user.submodules.contains(sub)}" />
-                          <span th:text="${sub.name}">Submódulo</span>
+                        <label class="list-group-item" th:each="sub : ${allSubmodules}">
+                          <input type="checkbox" th:id="'submodule__' + ${sub.id}" class="form-check-input me-1"
+                            name="submodules" th:value="${sub.id}" th:checked="${user.submodules.contains(sub)}" />
+                          <span th:for="'submodule__' + ${sub.id}" th:text="${sub.name}">Submodules</span>
                         </label>
                       </div>
                       <div id="error-submodules" class="error-text mt-1"></div>
                     </div>
                   </div>
                 </div>
-                
+
+                <div th:each="modu : ${lecturaMod}" th:unless="${#sets.contains(userAuth.modules, modu)}">
+                  <input type="hidden" th:field="*{roles}"/>
+                  <input type="hidden" th:field="*{modules}"/>
+                  <input type="hidden" th:field="*{submodules}"/>
+                </div>
+
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{password}" />
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                 <!-- Botones -->
                 <div class="text-center">
                   <a th:href="@{/user/profile}" class="btn btn-secondary me-2" th:text="#{editar.cancelar}">Cancelar</a>

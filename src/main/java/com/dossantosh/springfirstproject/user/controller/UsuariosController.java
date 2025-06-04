@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionInvalidationService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
@@ -27,8 +28,8 @@ public class UsuariosController extends GenericController {
 
     private final SessionInvalidationService sessionInvalidationService;
 
-    public UsuariosController(UserAuthService userAuthService, UserService userService, SessionInvalidationService sessionInvalidationService) {
-        super(userAuthService);
+    public UsuariosController(UserAuthService userAuthService, UserService userService, PermisosUtils permisosUtils, SessionInvalidationService sessionInvalidationService) {
+        super(userAuthService, permisosUtils);
         this.userService = userService;
         this.sessionInvalidationService = sessionInvalidationService;
     }

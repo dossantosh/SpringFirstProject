@@ -23,7 +23,7 @@
 hs_err_pid*
 replay_pid*
 
-# Archivos de entorno
+# Variables de entorno
 .env
 
 # Archivos de compilación

@@ -2,6 +2,7 @@ package com.dossantosh.springfirstproject.perfume.controller;
 
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
@@ -28,9 +29,9 @@ public class PerfumeController extends GenericController {
 
     private final BrandService brandService;
 
-    public PerfumeController(UserAuthService userAuthService, PerfumeService perfumeService,
+    public PerfumeController(UserAuthService userAuthService, PermisosUtils permisosUtils, PerfumeService perfumeService,
             BrandService brandService) {
-        super(userAuthService);
+        super(userAuthService, permisosUtils);
         this.perfumeService = perfumeService;
         this.brandService = brandService;
     }
@@ -84,8 +85,6 @@ public class PerfumeController extends GenericController {
         model.addAttribute("hasPrevious", pageResult.hasPrevious());
         model.addAttribute("selectedPerfume", session.getAttribute("selectedPerfume"));
 
-        // model.addAttribute("filters", Map.of("id", id, "name", name, "brand", brand,
-        // "season", season));
         Map<String, Object> filters = new HashMap<>();
         filters.put("id", id);
         filters.put("name", name);
@@ -100,9 +99,6 @@ public class PerfumeController extends GenericController {
 
     @GetMapping("/seleccionar/{id}")
     public String seleccionarPerfume(@PathVariable Long id, HttpSession session) {
-        if (!perfumeService.existsById(id)) {
-            return "redirect:/objects/perfume";
-        }
 
         session.setAttribute("selectedPerfume", perfumeService.findById(id));
         return "redirect:/objects/perfume";
@@ -120,7 +116,6 @@ public class PerfumeController extends GenericController {
 
             perfumeService.save(perfume);
 
-            // Limpiar el seleccionado en sesión para que no reaparezca en el formulario
             session.removeAttribute("selectedPerfume");
             return "redirect:/objects/perfume";
 

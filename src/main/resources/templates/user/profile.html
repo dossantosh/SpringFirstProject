@@ -70,7 +70,7 @@
                       <span th:text="${listaSub}"></span>
                     </p>
                     <!-- Mostrar sección avanzada sólo a ADMIN -->
-                    <div th:each="mid : ${lecturaMod}" th:if="${#sets.contains(userAuth.modules, mid)}">
+                    <div th:if="${puedeVerMod}">
                       <p class="text-danger"><strong th:text="#{profile.permisos}">Permisos administrativos: Sí</strong>
                       </p>
                     </div>

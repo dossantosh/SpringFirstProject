@@ -16,8 +16,8 @@ import com.dossantosh.springfirstproject.user.service.UserAuthService;
 @RequiereModule({ 2L })
 public class ConfigurationController extends GenericController {
 
-    public ConfigurationController(UserAuthService userAuthService) {
-        super(userAuthService);
+    public ConfigurationController(UserAuthService userAuthService, PermisosUtils permisosUtils) {
+        super(userAuthService, permisosUtils);
     }
 
     @GetMapping("/common/configuration")

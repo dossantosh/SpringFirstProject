@@ -258,6 +258,7 @@
                                     </div>
                                     <!-- No modificables -->
                                     <input type="hidden" th:field="*{password}" />
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                                     <!-- Botones -->
                                     <div class="col-12 text-end">

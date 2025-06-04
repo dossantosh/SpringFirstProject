@@ -17,6 +17,8 @@ public abstract class GenericController {
 
     protected final UserAuthService userAuthService;
 
+    private final PermisosUtils permisosUtils;
+
     protected void addPrincipalAttributes(Authentication user, Model model,
     Set<Long> lecturaMod, Set<Long> escrituraMod, Set<Long> lecturaSub, Set<Long> escrituraSub) {
 
@@ -33,8 +35,6 @@ public abstract class GenericController {
 
         permisos.put("modulos", mod);
         permisos.put("submodulos", sub);
-
-        model.addAttribute("username", user.getName());
 
         UserAuth userAuth = userAuthService.findByUsername(user.getName());
 
@@ -55,6 +55,7 @@ public abstract class GenericController {
                                 valores = tipo.getValue();
 
                                 model.addAttribute("lecturaMod", valores);
+                                model.addAttribute("puedeVerMod", permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
                                 break;
                             default:
                                 break;
@@ -72,6 +73,7 @@ public abstract class GenericController {
                                 valores = tipo.getValue();
 
                                 model.addAttribute("lecturaSub", valores);
+                                model.addAttribute("puedeVerMod", permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
                                 break;
                             default:
                                 break;

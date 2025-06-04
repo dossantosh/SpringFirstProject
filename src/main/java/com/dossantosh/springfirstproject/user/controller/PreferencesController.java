@@ -2,6 +2,7 @@ package com.dossantosh.springfirstproject.user.controller;
 
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
@@ -34,9 +35,9 @@ public class PreferencesController extends GenericController {
 
     private final LocaleResolver localeResolver;
 
-    public PreferencesController(UserAuthService userAuthService, PreferencesService preferencesService,
+    public PreferencesController(UserAuthService userAuthService, PermisosUtils permisosUtils, PreferencesService preferencesService,
             LocaleResolver localeResolver) {
-        super(userAuthService);
+        super(userAuthService, permisosUtils);
         this.preferencesService = preferencesService;
         this.localeResolver = localeResolver;
     }

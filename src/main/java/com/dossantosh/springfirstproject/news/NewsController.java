@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
@@ -22,8 +23,8 @@ public class NewsController extends GenericController {
 
         private final PreferencesService preferencesService;
 
-        public NewsController(UserAuthService userAuthService, PreferencesService preferencesService) {
-                super(userAuthService);
+        public NewsController(UserAuthService userAuthService, PermisosUtils permisosUtils, PreferencesService preferencesService) {
+                super(userAuthService, permisosUtils);
                 this.preferencesService = preferencesService;
         }
 
