@@ -13,7 +13,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "perfumes")
-public class Perfumes implements Serializable{
+public class Perfumes implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
@@ -40,18 +44,25 @@ public class Perfumes implements Serializable{
     @JoinColumn(name = "tipos_id")
     private Types tipo;
 
+    @DecimalMin("10.0")
+    @DecimalMax("1000.0")
     @Column
     private float price;
 
+    @DecimalMin("1.0")
+    @DecimalMax("1000.0")
     @Column
     private float volume;
-
+    
     @Column(length = 50)
     private String season;
 
+    @Size(max = 150)
     @Column(length = 150)
     private String description;
 
+    @Min(1900)
+    @Max(2100)
     @Column
     private Integer fecha;
 

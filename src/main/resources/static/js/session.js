@@ -1,5 +1,5 @@
 let inactivityTimeout;
-const MAX_INACTIVITY_MINUTES = 0.5;
+const MAX_INACTIVITY_MINUTES = 5;
 
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');

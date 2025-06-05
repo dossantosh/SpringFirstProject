@@ -8,13 +8,18 @@ import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -149,10 +154,17 @@ public class PerfumeController extends GenericController {
     }
 
     @PostMapping("/guardar")
-    public String guardarPerfume(@ModelAttribute Perfumes perfume,
+    public String guardarPerfume(@Valid @ModelAttribute Perfumes perfume,
+            BindingResult result,
             RedirectAttributes redirectAttrs,
             HttpSession session) {
         try {
+
+            if (result.hasErrors()) {
+                redirectAttrs.addFlashAttribute("error", "Revisa los campos del formulario.");
+                return "redirect:/objects/perfume";
+            }
+
             if (perfume.getBrand() != null && perfumeService.existsById(perfume.getId())) {
                 Long brandId = perfume.getBrand().getId();
                 perfume.setBrand(brandService.findById(brandId));
@@ -185,4 +197,40 @@ public class PerfumeController extends GenericController {
 
         return "redirect:/objects/perfume";
     }
+
+    @PostMapping("/objects/perfume/liberar")
+    @ResponseBody
+    public ResponseEntity<Void> liberarPerfume(
+            @RequestParam(required = false) Long id,
+            HttpServletRequest request) {
+
+        // Get authentication from security context
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            System.out.println("No authentication found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = auth.getName();
+
+        if (id != null) {
+            perfumeLockManager.releaseLock(id, username);
+            System.out.println("Released lock for ID: " + id + " by user: " + username);
+
+            // Clear session attribute if it matches the released ID
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                Perfumes selected = (Perfumes) session.getAttribute("selectedPerfume");
+                if (selected != null && selected.getId().equals(id)) {
+                    session.removeAttribute("selectedPerfume");
+                }
+            }
+
+            return ResponseEntity.ok().build();
+        }
+
+        System.out.println("No ID provided for release");
+        return ResponseEntity.badRequest().build();
+    }
+
 }

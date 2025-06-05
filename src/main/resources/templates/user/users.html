@@ -27,7 +27,7 @@
                 <div class="card shadow-sm">
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
-                        <h2 class="h5 mb-0">
+                        <h2 class="h4 mb-0">
                             <i class="bi bi-search me-2 text-primary"></i>
                             <span th:text="#{usuarios.buscarUsu}">Buscar Usuarios</span>
                         </h2>
@@ -182,21 +182,21 @@
                                     <!-- ID (solo lectura) -->
                                     <div class="col-md-1">
                                         <label for="userId" class="form-label">ID</label>
-                                        <input type="text" id="userId" class="form-control" th:field="*{id}" readonly />
+                                        <input type="number" id="userId" class="form-control" th:field="*{id}" readonly />
                                     </div>
                                     <!-- Username -->
                                     <div class="col-md-4">
                                         <label for="userUsername" class="form-label"
                                             th:text="#{usuarios.nombre}">Usuario</label>
                                         <input type="text" id="userUsername" class="form-control" th:field="*{username}"
-                                            placeholder="Nombre de usuario" required />
+                                            placeholder="Nombre de usuario" required maxlength="40" />
                                     </div>
                                     <!-- Email -->
                                     <div class="col-md-4">
                                         <label for="userEmail" class="form-label"
                                             th:text="#{usuarios.email}">Email</label>
                                         <input type="email" id="userEmail" class="form-control" th:field="*{email}"
-                                            placeholder="usuario@dominio.com" required />
+                                            placeholder="usuario@dominio.com" required maxlength="50" />
                                     </div>
                                     <!-- Enabled -->
                                     <div class="col-md-3">

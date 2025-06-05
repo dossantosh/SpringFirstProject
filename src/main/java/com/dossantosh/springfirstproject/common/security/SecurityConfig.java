@@ -43,6 +43,7 @@ public class SecurityConfig {
                                                                 "/confirm/**", "/token-invalid",
                                                                 "/register", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
+                                                .requestMatchers("/objects/perfume/liberar").permitAll()
                                                 .requestMatchers("/common/**", "/objects/**", "/user/**")
                                                 .authenticated()
                                                 .requestMatchers("/actuator/**").hasRole("ADMIN")

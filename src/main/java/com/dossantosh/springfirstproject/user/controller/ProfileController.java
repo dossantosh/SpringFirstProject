@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,13 @@ import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 import com.dossantosh.springfirstproject.user.service.UserService;
 
+import jakarta.validation.Valid;
+
 @Controller
 @RequiereModule({ 2L })
 public class ProfileController extends GenericController {
 
     private final UserService userService;
-
 
     public ProfileController(UserAuthService userAuthService, PermisosUtils permisosUtils, UserService userService) {
         super(userAuthService, permisosUtils);
@@ -103,10 +105,17 @@ public class ProfileController extends GenericController {
 
     @PostMapping("/user/editar")
     public String procesarFormularioEdicion(
-            @ModelAttribute("user") User user,
+            @Valid @ModelAttribute("user") User user,
+            BindingResult result,
+            RedirectAttributes redirectAttrs,
             RedirectAttributes flash) {
 
         userService.guardarUsuario(user, userService.findById(user.getId()));
+
+        if (result.hasErrors()) {
+            redirectAttrs.addFlashAttribute("error", "Revisa los campos del formulario.");
+            return "redirect:/objects/perfume";
+        }
 
         flash.addFlashAttribute("success", "Perfil actualizado correctamente");
         return "redirect:/user/profile";

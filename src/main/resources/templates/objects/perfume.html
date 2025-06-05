@@ -27,7 +27,7 @@
                 <div class="card shadow-sm">
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
-                        <h2 class="h5 mb-0">
+                        <h2 class="h4 mb-0">
                             <i class="bi bi-search me-2 text-primary"></i>
                             <span th:text="#{perfumes.subtittle}">Buscar Perfumes</span>
                         </h2>
@@ -45,13 +45,13 @@
                                     <label for="filtersName" class="form-label"
                                         th:text="#{perfumes.nombre}">Nombre</label>
                                     <input type="text" class="form-control" id="filtersName" name="name"
-                                        th:value="${filters.name}" placeholder="Ej. 'Rosas'" />
+                                        th:value="${filters.name}" placeholder="Ej. 'Rosas'" maxlength="40" />
                                 </div>
                                 <div class="col-md-3">
                                     <label for="filtersBrand" class="form-label"
                                         th:text="#{perfumes.marca}">Marca</label>
                                     <input type="text" class="form-control" id="filtersBrand" name="brand"
-                                        th:value="${filters.brand}" placeholder="Ej. 'Dior'" />
+                                        th:value="${filters.brand}" placeholder="Ej. 'Dior'" maxlength="40" />
                                 </div>
                                 <div class="col-md-2">
                                     <label for="filtersSeason" class="form-label"
@@ -173,16 +173,19 @@
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
                         <h2 class="h5 mb-0">
-                            <i class="bi bi-pencil me-2 text-primary"></i>
-                            <span th:text="#{perfumes.editar}">Perfume Bloqueado: Solo vista</span>
+                            <i class="bi bi-lock-fill"></i>
+                            <span th:text="#{perfumes.lockedTittle}">Perfume Bloqueado: Solo vista</span>
                         </h2>
                     </div>
 
                     <!-- Cuerpo -->
-                    <div th:if="${isLockedByAnother}" class="text-center py-5">
-                        <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
-                        <h5 th:text="#{perfumes.locked}">Este perfume está siendo modificado por otro usuario.</h5>
-                        <p th:text="#{perfumes.soloVista}">No puede modificar sus datos.</p>
+                    <div th:if="${isLockedByAnother}"
+                        th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
+                        <div class="text-center py-5">
+                            <i class="bi bi-lock-fill"></i>
+                            <h5 th:text="#{perfumes.locked}">Este perfume está siendo modificado por otro usuario.</h5>
+                            <p th:text="#{perfumes.soloVista}">No puede modificar sus datos.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="card shadow-sm" th:unless="${isLockedByAnother}">
@@ -223,7 +226,7 @@
                                     <label for="perfNombre" class="form-label"
                                         th:text="#{perfumes.nombre}">Nombre</label>
                                     <input type="text" id="perfNombre" class="form-control" th:field="*{name}"
-                                        placeholder="Nombre del perfume" required />
+                                        placeholder="Nombre del perfume" required maxlength="40" />
                                 </div>
 
                                 <!-- Marca -->
@@ -249,7 +252,7 @@
                                 <div class="col-md-1">
                                     <label for="perfFecha" class="form-label" th:text="#{perfumes.fecha}">Año</label>
                                     <input type="number" id="perfFecha" class="form-control" th:field="*{fecha}"
-                                        placeholder="Ej. 2023" required />
+                                        placeholder="Ej. 2023" required min="1900" max="2100" />
                                 </div>
 
                                 <!-- Temporada -->
@@ -268,7 +271,7 @@
                                     <label for="perfVolumen" class="form-label" th:text="#{perfumes.volumen}">Volumen
                                         (ml)</label>
                                     <input type="number" step="0.1" id="perfVolumen" class="form-control"
-                                        th:field="*{volume}" placeholder="Ej. 50" required />
+                                        th:field="*{volume}" placeholder="Ej. 50" required min="10.0" max="1000.0" />
                                 </div>
 
                                 <!-- Precio -->
@@ -276,17 +279,16 @@
                                     <label for="perfPrecio" class="form-label" th:text="#{perfumes.precio}">Precio
                                         (€)</label>
                                     <input type="number" step="0.01" id="perfPrecio" class="form-control"
-                                        th:field="*{price}" placeholder="Ej. 49.90" required />
+                                        th:field="*{price}" placeholder="Ej. 49.90" required min="10.0" max="1000.0" />
                                 </div>
 
                                 <!-- Descripción -->
                                 <div class="col-12">
                                     <label for="perfDescripcion" class="form-label"
-                                        th:text="#{perfumes.descripcion}">Descripción
-                                        (€)</label>
+                                        th:text="#{perfumes.descripcion}">Descripción</label>
                                     <textarea id="perfDescripcion" rows="3" class="form-control"
-                                        th:field="*{description}"
-                                        placeholder="Descripción detallada del perfume"></textarea>
+                                        th:field="*{description}" placeholder="Descripción detallada del perfume"
+                                        maxlength="500"></textarea>
                                 </div>
 
                                 <!-- Version -->
@@ -393,7 +395,7 @@
                                 </a>
                                 <button type="submit" class="btn btn-success">
                                     <i class="bi bi-save2 me-1"></i>
-                                    <span th:text="#{perfumes.guardar}">Guardar Cambios</span>
+                                    <span th:text="#{perfumes.comprar}">Comprar</span>
                                 </button>
                             </div>
                         </form>
@@ -412,9 +414,9 @@
 
     <!-- Inactivity-->
     <script src="/js/session.js"></script>
-    
-    <script>
-        // Restaurar scroll al cargar la página
+
+    <script th:inline="javascript">
+        // Restore scroll position
         window.addEventListener('load', function () {
             const scrollPos = localStorage.getItem('scrollPos');
             if (scrollPos) {
@@ -422,10 +424,65 @@
             }
         });
 
-        // Guardar scroll antes de salir de la página
-        window.addEventListener('beforeunload', function () {
+        // Unified function to release perfume lock
+        function liberarPerfume() {
+            const selectedId = localStorage.getItem("selectedPerfumeId");
+            if (!selectedId) {
+                console.log("No perfume ID to release");
+                return;
+            }
+
+            // Get CSRF token from meta tag
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            // Create form data (works better than JSON for sendBeacon)
+            const formData = new FormData();
+            formData.append('id', selectedId);
+
+            // Use fetch API with keepalive flag for reliability
+            fetch('/objects/perfume/liberar', {
+                method: 'POST',
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                body: formData,
+                keepalive: true // Ensures request completes even if page unloads
+            }).then(response => {
+                if (response.ok) {
+                    localStorage.removeItem("selectedPerfumeId");
+                    console.log("Perfume lock released successfully");
+                } else {
+                    console.error("Failed to release perfume lock");
+                }
+            }).catch(error => {
+                console.error("Error releasing perfume lock:", error);
+            });
+        }
+
+        // Save scroll position and release lock on page exit
+        function handlePageExit() {
             localStorage.setItem('scrollPos', window.scrollY);
+            liberarPerfume();
+        }
+
+        // Register exit events
+        window.addEventListener('beforeunload', handlePageExit);
+        window.addEventListener('pagehide', handlePageExit);
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'hidden') {
+                handlePageExit();
+            }
         });
+
+        // Initialize selected perfume ID
+        const selectedPerfumeId = /*[[${selectedPerfume?.id}]]*/ null;
+        if (selectedPerfumeId) {
+            localStorage.setItem("selectedPerfumeId", selectedPerfumeId);
+            console.log("Perfume ID stored:", selectedPerfumeId);
+        } else {
+            localStorage.removeItem("selectedPerfumeId");
+        }
     </script>
 </body>
 

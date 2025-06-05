@@ -19,6 +19,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -32,11 +33,12 @@ public class User implements Serializable {
     @Column(name = "id_user")
     private Long id;
 
+    @Size(max = 40)
     @Column(unique = true, length = 50)
     private String username;
 
-    @Column(unique = true, length = 50)
     @Email
+    @Column(unique = true, length = 50)
     private String email;
 
     @Column

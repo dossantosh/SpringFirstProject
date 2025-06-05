@@ -40,11 +40,13 @@
                 <!-- Título de error global -->
                 <div id="error-global" class="error-text mb-3"></div>
 
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
                 <!-- Nombre de usuario -->
                 <div class="mb-3">
                   <label for="username" class="form-label" th:text="#{editar.nombre}">Nombre de usuario</label>
                   <input type="text" id="username" th:field="*{username}" class="form-control"
-                    placeholder="Ej. 'josesito18'" required />
+                    placeholder="Ej. 'josesito18'" required maxlength="40" />
                 </div>
 
                 <div th:if="${puedeVerMod}">
