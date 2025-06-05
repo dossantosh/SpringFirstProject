@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PerfumeLockManager {
 
-    private static final long TIMEOUT_MILLIS = 10 * 60 * 1000; // 10 minutos
+    private static final long TIMEOUT_MILLIS =  10 * 60 * 1000; // 10 minutos
 
     private final Map<Long, LockInfo> perfumeLocks = new ConcurrentHashMap<>();
 

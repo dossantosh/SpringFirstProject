@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
@@ -103,13 +104,24 @@ public class PerfumeController extends GenericController {
     }
 
     @GetMapping("/seleccionar/{id}")
-    public String seleccionarPerfume(@PathVariable Long id, HttpSession session) {
+    public String seleccionarPerfume(@PathVariable Long id, RedirectAttributes redirectAttrs, HttpSession session) {
 
         String name = (String) session.getAttribute("username");
 
         if (perfumeLockManager.isLockedByAnother(id, name)) {
+
+            redirectAttrs.addFlashAttribute("isLockedByAnother", true);
+
+            Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
+            if (anterior != null && !anterior.getId().equals(id)) {
+                perfumeLockManager.releaseLock(anterior.getId(), name);
+            }
+
+            session.setAttribute("selectedPerfume", perfumeService.findById(id));
+
             return "redirect:/objects/perfume";
         }
+        redirectAttrs.addFlashAttribute("isLockedByAnother", false);
 
         if (perfumeLockManager.lockedBy(id) != null) {
             return "redirect:/objects/perfume";
@@ -132,7 +144,7 @@ public class PerfumeController extends GenericController {
 
     @PostMapping("/guardar")
     public String guardarPerfume(@ModelAttribute Perfumes perfume,
-            Model model,
+            RedirectAttributes redirectAttrs,
             HttpSession session) {
         try {
             if (perfume.getBrand() != null && perfumeService.existsById(perfume.getId())) {
@@ -151,7 +163,7 @@ public class PerfumeController extends GenericController {
             return "redirect:/objects/perfume";
 
         } catch (IllegalStateException e) {
-            model.addAttribute("error", e.getMessage());
+            redirectAttrs.addFlashAttribute("error", e.getMessage());
             return "redirect:/objects/perfume";
         }
     }

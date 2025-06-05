@@ -169,7 +169,24 @@
         <!-- Card: Edición de Perfume Seleccionado -->
         <div class="row mb-4" th:if="${puedeVerMod}">
             <div class="col-12">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm" th:if="${isLockedByAnother}">
+                    <!-- Cabecera -->
+                    <div
+                        th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
+                        <h2 class="h5 mb-0">
+                            <i class="bi bi-pencil me-2 text-primary"></i>
+                            <span th:text="#{perfumes.editar}">Perfume Bloqueado: Solo vista</span>
+                        </h2>
+                    </div>
+
+                    <!-- Cuerpo -->
+                    <div th:if="${isLockedByAnother}" class="text-center py-5">
+                        <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
+                        <h5 th:text="#{perfumes.locked}">Este perfume está siendo modificado por otro usuario.</h5>
+                        <p th:text="#{perfumes.soloVista}">No puede modificar sus datos.</p>
+                    </div>
+                </div>
+                <div class="card shadow-sm" th:unless="${isLockedByAnother}">
                     <!-- Cabecera -->
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
