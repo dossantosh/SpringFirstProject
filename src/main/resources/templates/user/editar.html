@@ -6,10 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Editar Perfil</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <!-- Insertamos el head común -->
+  <th:block th:insert="~{fragments :: head}"></th:block>
 
   <!-- Cargar el CSS correcto según las preferences -->
   <link
@@ -94,9 +92,9 @@
                 </div>
 
                 <div th:each="modu : ${lecturaMod}" th:unless="${#sets.contains(userAuth.modules, modu)}">
-                  <input type="hidden" th:field="*{roles}"/>
-                  <input type="hidden" th:field="*{modules}"/>
-                  <input type="hidden" th:field="*{submodules}"/>
+                  <input type="hidden" th:field="*{roles}" />
+                  <input type="hidden" th:field="*{modules}" />
+                  <input type="hidden" th:field="*{submodules}" />
                 </div>
 
                 <input type="hidden" th:field="*{id}" />
@@ -122,6 +120,9 @@
 
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Inactivity-->
+  <script src="/js/session.js"></script>
 
   <!-- Validación de selección mínima -->
   <script>

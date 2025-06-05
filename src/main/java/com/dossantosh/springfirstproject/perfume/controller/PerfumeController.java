@@ -6,7 +6,6 @@ import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,6 +31,8 @@ public class PerfumeController extends GenericController {
 
     private final BrandService brandService;
 
+    private static boolean isBloqued = true;
+
     public PerfumeController(UserAuthService userAuthService, PermisosUtils permisosUtils,
             PerfumeService perfumeService,
             BrandService brandService,
@@ -40,6 +41,8 @@ public class PerfumeController extends GenericController {
         this.perfumeService = perfumeService;
         this.brandService = brandService;
         this.perfumeLockManager = perfumeLockManager;
+
+        isBloqued = false;
     }
 
     @GetMapping
@@ -100,6 +103,9 @@ public class PerfumeController extends GenericController {
 
         // model.addAllAttributes(perfumeService.cargarListaInfo());
         perfumeService.cargarListaInfo().forEach(model::addAttribute);
+
+        model.addAttribute("isLockedByAnother", isBloqued);
+
         return "objects/perfume";
     }
 
@@ -109,8 +115,8 @@ public class PerfumeController extends GenericController {
         String name = (String) session.getAttribute("username");
 
         if (perfumeLockManager.isLockedByAnother(id, name)) {
-
-            redirectAttrs.addFlashAttribute("isLockedByAnother", true);
+            isBloqued = true;
+            redirectAttrs.addFlashAttribute("isLockedByAnother", isBloqued);
 
             Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
             if (anterior != null && !anterior.getId().equals(id)) {
@@ -121,7 +127,8 @@ public class PerfumeController extends GenericController {
 
             return "redirect:/objects/perfume";
         }
-        redirectAttrs.addFlashAttribute("isLockedByAnother", false);
+        isBloqued = false;
+        redirectAttrs.addFlashAttribute("isLockedByAnother", isBloqued);
 
         if (perfumeLockManager.lockedBy(id) != null) {
             return "redirect:/objects/perfume";
@@ -136,7 +143,6 @@ public class PerfumeController extends GenericController {
 
         if (perfumeLockManager.tryLock(id, name)) {
             session.setAttribute("selectedPerfume", perfumeService.findById(id));
-            perfumeLockManager.refreshLock(id, name);
         }
 
         return "redirect:/objects/perfume";

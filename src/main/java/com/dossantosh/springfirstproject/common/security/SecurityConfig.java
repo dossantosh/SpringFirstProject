@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
@@ -56,7 +57,31 @@ public class SecurityConfig {
                                                 .logoutSuccessUrl("/login?logout=true")
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("JSESSIONID"))
-                                .userDetailsService(userDetailsService);
+                                .userDetailsService(userDetailsService)
+                                .headers(headers -> headers
+                                                .contentSecurityPolicy(csp -> csp
+                                                                .policyDirectives(
+                                                                                "script-src 'self' https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com 'unsafe-inline' 'unsafe-eval'; "
+                                                                                                +
+                                                                                                "style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+                                                                                                +
+                                                                                                "img-src 'self' data: https://www.google.com https://www.gstatic.com; "
+                                                                                                +
+                                                                                                "font-src 'self' https://cdn.jsdelivr.net; "
+                                                                                                +
+                                                                                                "connect-src 'self'  https://www.google.com https://www.gstatic.com; "
+                                                                                                +
+                                                                                                "frame-src https://www.google.com https://www.gstatic.com; "
+                                                                                                +
+                                                                                                "frame-ancestors 'none';"))
+                                                .frameOptions(frame -> frame.deny()) // evitar iframes
+                                                .httpStrictTransportSecurity(hsts -> hsts
+                                                                .includeSubDomains(true)
+                                                                .maxAgeInSeconds(31536000)) // 1 año de HSTS
+                                                .referrerPolicy(referrer -> referrer.policy(
+                                                                ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)))
+                                // .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+                                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")); // Si tienes APIs sin CSRF
                 return http.build();
         }
 

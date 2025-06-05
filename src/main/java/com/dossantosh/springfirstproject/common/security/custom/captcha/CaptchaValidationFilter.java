@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CaptchaValidationFilter extends OncePerRequestFilter {
 
     private final ReCaptchaValidationService captchaService;
-    
+
     private final AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler(
             "/login?captchaError=true");
 
@@ -38,8 +39,7 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
             if (!valid) {
                 // Si reCAPTCHA no es válido, finalizamos aquí con un fallo de autenticación
                 failureHandler.onAuthenticationFailure(request, response,
-                        new AuthenticationException("Captcha inválido") {
-                        });
+                        new BadCredentialsException("Captcha inválido"));
                 return;
             }
         }

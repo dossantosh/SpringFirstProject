@@ -3,6 +3,7 @@ package com.dossantosh.springfirstproject.user.controller;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dossantosh.springfirstproject.common.security.custom.captcha.ReCaptchaValidationService;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionInvalidationService;
+import com.dossantosh.springfirstproject.perfume.controller.PerfumeLockManager;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
@@ -39,6 +43,10 @@ public class LoginController {
     private final ReCaptchaValidationService reCaptchaValidationService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final SessionInvalidationService invalidationService;
+
+    private final PerfumeLockManager perfumeLockManager;
 
     private static final String FAILURE_COUNT = "LOGIN_FAILURE_COUNT";
 
@@ -216,5 +224,20 @@ public class LoginController {
 
         userService.saveUser(user);
         return LOGIN;
+    }
+
+    @PostMapping("/logout-inactive")
+    @ResponseBody
+    public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        if (username != null) {
+            perfumeLockManager.releaseAllLocksByUser(username);
+
+            invalidationService.invalidateSessionsByUsername(username);
+        }
+
+        session.invalidate();
+        return ResponseEntity.ok().build();
     }
 }
