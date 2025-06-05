@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.Global;
+package com.dossantosh.springfirstproject.common.global;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;

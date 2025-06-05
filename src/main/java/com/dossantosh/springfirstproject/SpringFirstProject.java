@@ -5,10 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
+@EnableJdbcHttpSession
+@EnableWebSecurity
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = {
         "com.dossantosh.springfirstproject.common",
         "com.dossantosh.springfirstproject.news",

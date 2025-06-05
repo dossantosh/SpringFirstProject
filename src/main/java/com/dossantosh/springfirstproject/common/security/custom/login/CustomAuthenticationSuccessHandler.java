@@ -18,6 +18,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         HttpSession session = request.getSession();
+
         session.setAttribute("username", authentication.getName());
         response.sendRedirect("/objects/news");
     }

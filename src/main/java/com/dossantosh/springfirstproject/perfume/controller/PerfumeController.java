@@ -6,7 +6,7 @@ import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
-
+import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,15 +25,20 @@ import java.util.*;
 @RequiereModule({ 2L })
 public class PerfumeController extends GenericController {
 
+    private final PerfumeLockManager perfumeLockManager;
+
     private final PerfumeService perfumeService;
 
     private final BrandService brandService;
 
-    public PerfumeController(UserAuthService userAuthService, PermisosUtils permisosUtils, PerfumeService perfumeService,
-            BrandService brandService) {
+    public PerfumeController(UserAuthService userAuthService, PermisosUtils permisosUtils,
+            PerfumeService perfumeService,
+            BrandService brandService,
+            PerfumeLockManager perfumeLockManager) {
         super(userAuthService, permisosUtils);
         this.perfumeService = perfumeService;
         this.brandService = brandService;
+        this.perfumeLockManager = perfumeLockManager;
     }
 
     @GetMapping
@@ -100,7 +105,28 @@ public class PerfumeController extends GenericController {
     @GetMapping("/seleccionar/{id}")
     public String seleccionarPerfume(@PathVariable Long id, HttpSession session) {
 
-        session.setAttribute("selectedPerfume", perfumeService.findById(id));
+        String name = (String) session.getAttribute("username");
+
+        if (perfumeLockManager.isLockedByAnother(id, name)) {
+            return "redirect:/objects/perfume";
+        }
+
+        if (perfumeLockManager.lockedBy(id) != null) {
+            return "redirect:/objects/perfume";
+        }
+
+        Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
+        if (anterior != null && !anterior.getId().equals(id)) {
+            perfumeLockManager.releaseLock(anterior.getId(), name);
+        }
+
+        session.removeAttribute("selectedPerfume");
+
+        if (perfumeLockManager.tryLock(id, name)) {
+            session.setAttribute("selectedPerfume", perfumeService.findById(id));
+            perfumeLockManager.refreshLock(id, name);
+        }
+
         return "redirect:/objects/perfume";
     }
 
@@ -117,6 +143,11 @@ public class PerfumeController extends GenericController {
             perfumeService.save(perfume);
 
             session.removeAttribute("selectedPerfume");
+
+            String name = (String) session.getAttribute("username");
+
+            perfumeLockManager.releaseLock(perfume.getId(), name);
+
             return "redirect:/objects/perfume";
 
         } catch (IllegalStateException e) {
@@ -125,10 +156,13 @@ public class PerfumeController extends GenericController {
         }
     }
 
-    @GetMapping("/cancelar")
-    public String cancelar(@ModelAttribute Perfumes perfume, HttpSession session) {
+    @GetMapping("/cancelar/{id}")
+    public String cancelar(@PathVariable Long id, HttpSession session) {
 
-        // Limpiar el seleccionado en sesión para que no reaparezca en el formulario
+        String name = (String) session.getAttribute("username");
+
+        perfumeLockManager.releaseLock(id, name);
+
         session.removeAttribute("selectedPerfume");
 
         return "redirect:/objects/perfume";

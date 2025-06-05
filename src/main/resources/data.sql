@@ -29,11 +29,11 @@ INSERT INTO brands (name) VALUES ('Guerlain') ON CONFLICT (name) DO NOTHING;
 INSERT INTO brands (name) VALUES ('Hermes') ON CONFLICT (name) DO NOTHING;
 
 -- Perfumes
-INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id)
-VALUES ('Black Orchid', 1, 150.0, 100.0, 'Invierno', 'Morado', 2006, 'blackOrchid1.jpg', 2) ON CONFLICT (name) DO NOTHING;
+INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id, version)
+VALUES ('Black Orchid', 1, 150.0, 100.0, 'Invierno', 'Morado', 2006, 'tom_ford_black_orchid_edp', 2, 0) ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id)
-VALUES ('Habit Rouge Parfum', 2, 90.0, 100.0, 'Invierno', 'Alcohol', 2024, 'blackOrchid1.jpg',  1) ON CONFLICT (name) DO NOTHING;
+INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id, version)
+VALUES ('Habit Rouge Parfum', 2, 90.0, 100.0, 'Invierno', 'Alcohol', 2024, 'guerlain_habit_rouge_parfum',  1, 0) ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id)
-VALUES ('Terre D''hermes', 3, 90.0, 100.0, 'Verano', 'Marte', 2006, 'blackOrchid1.jpg', 4) ON CONFLICT (name) DO NOTHING;
+INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha, image, tipos_id, version)
+VALUES ('Terre D''hermes', 3, 90.0, 100.0, 'Verano', 'Marte', 2006, 'hermes_terre_de_hermes_parfum', 4, 0) ON CONFLICT (name) DO NOTHING;

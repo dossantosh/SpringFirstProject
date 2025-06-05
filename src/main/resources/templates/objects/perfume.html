@@ -183,7 +183,7 @@
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-body bg-dark text-light' : 'card-body bg-light text-dark'}">
                         <!-- Mensaje si no hay perfume seleccionado -->
-                        <div th:if="${selectedPerfume == null}" class="text-center py-5">
+                        <div th:if="${selectedPerfume  == null}" class="text-center py-5">
                             <i class="bi bi-info-circle fs-1 text-muted mb-3"></i>
                             <h5 th:text="#{perfumes.noPerfumeSelected}">No hay ningún perfume seleccionado.</h5>
                             <p th:text="#{perfumes.seleccionaPerfume}">Selecciona un perfume de la lista para editar sus
@@ -280,7 +280,8 @@
 
                                 <!-- Botones -->
                                 <div class="col-12 text-end">
-                                    <a th:href="@{/objects/perfume/cancelar}" class="btn btn-outline-secondary me-2">
+                                    <a th:href="@{/objects/perfume/cancelar/{id}(id=${selectedPerfume.id})}"
+                                        class="btn btn-outline-secondary me-2">
                                         <i class="bi bi-x-circle me-1"></i>
                                         <span th:text="#{perfumes.cancelar}">Cancelar</span>
                                     </a>
@@ -365,7 +366,8 @@
 
                             <!-- Botones -->
                             <div class="col-12 text-end">
-                                <a th:href="@{/objects/perfume/cancelar}" class="btn btn-outline-secondary me-2">
+                                <a th:href="@{/objects/perfume/cancelar/{id}(id=${selectedPerfume.id})}"
+                                    class="btn btn-outline-secondary me-2">
                                     <i class="bi bi-x-circle me-1"></i>
                                     <span th:text="#{perfumes.cancelar}">Cancelar</span>
                                 </a>
