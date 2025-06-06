@@ -10,9 +10,7 @@
     <th:block th:insert="~{fragments :: head}"></th:block>
 
     <!-- Cargar el CSS según las preferences de tema -->
-    <link
-        th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}"
-        rel="stylesheet" />
+    <!--<link th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}" rel="stylesheet" />-->
 </head>
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
@@ -53,7 +51,7 @@
                                         th:value="${filters.email}" placeholder="Ej. 'correo@dominio.com'" />
                                 </div>
                                 <div class="col-md-2 text-end">
-                                    <button type="submit" class="btn btn-primary w-100">
+                                    <button id="buscarBtn" type="submit" class="btn btn-primary w-100">
                                         <i class="bi bi-search me-1"></i> <span
                                             th:text="#{usuarios.buscar}">Buscar</span>
                                     </button>
@@ -178,31 +176,38 @@
                             <!-- Formulario de edición -->
                             <div>
                                 <form th:action="@{/user/users/guardar}" th:object="${selectedUser}" method="post"
-                                    class="row gx-3 gy-3" onsubmit="return validarSeleccion()">
+                                    class="row gx-3 gy-3" id="userForm" onsubmit="return validarSeleccion()">
                                     <!-- ID (solo lectura) -->
                                     <div class="col-md-1">
-                                        <label for="userId" class="form-label">ID</label>
-                                        <input type="number" id="userId" class="form-control" th:field="*{id}" readonly />
+                                        <label for="Id" class="form-label">ID</label>
+                                        <input type="number" id="Id" class="form-control" th:field="*{id}" readonly />
                                     </div>
                                     <!-- Username -->
                                     <div class="col-md-4">
-                                        <label for="userUsername" class="form-label"
+                                        <label for="username" class="form-label"
                                             th:text="#{usuarios.nombre}">Usuario</label>
-                                        <input type="text" id="userUsername" class="form-control" th:field="*{username}"
-                                            placeholder="Nombre de usuario" required maxlength="40" />
+                                        <input type="text" id="username" class="form-control" th:field="*{username}"
+                                            placeholder="Nombre de usuario" pattern="[a-zA-Z0-9]{4,40}" required min="4"
+                                            maxlength="40" title="4-40 caracteres alfanuméricos" />
+                                        <div class="invalid-feedback" id="usernameFeedback">
+                                            El usuario debe tener entre 4 y 40 caracteres alfanuméricos
+                                        </div>
                                     </div>
                                     <!-- Email -->
                                     <div class="col-md-4">
-                                        <label for="userEmail" class="form-label"
-                                            th:text="#{usuarios.email}">Email</label>
-                                        <input type="email" id="userEmail" class="form-control" th:field="*{email}"
-                                            placeholder="usuario@dominio.com" required maxlength="50" />
+                                        <label for="email" class="form-label">Gmail</label>
+                                        <input type="email" class="form-control" id="email" th:field="*{email}" required
+                                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                            title="Debe ser una dirección de Gmail válida" autocomplete="email">
+                                        <div class="invalid-feedback" id="emailFeedback">
+                                            Ingresa un correo de Gmail válido
+                                        </div>
                                     </div>
                                     <!-- Enabled -->
                                     <div class="col-md-3">
-                                        <label for="userEnabled" class="form-label"
+                                        <label for="enabled" class="form-label"
                                             th:text="#{usuarios.enabled}">Activo</label>
-                                        <select id="userEnabled" class="form-select" th:field="*{enabled}" required>
+                                        <select id="enabled" class="form-select" th:field="*{enabled}" required>
                                             <option th:value="true" th:text="#{usuarios.si}"
                                                 th:selected="${selectedUser.enabled == true}"></option>
                                             <option th:value="false" th:text="#{usuarios.no}"
@@ -288,39 +293,73 @@
     <script src="/js/session.js"></script>
 
     <!-- Validación de selección mínima -->
-    <script>
-        function validarSeleccion() {
-            // Ocultar mensajes de error individuales
-            ['roles', 'modules', 'submodules'].forEach(section => {
-                const el = document.getElementById('error-' + section);
-                if (el) el.style.display = 'none';
-            });
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            // Validación en tiempo real
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const form = document.getElementById('userForm');
 
-            // Definir grupos a validar
-            const grupos = [
-                { name: 'roles', id: 'error-roles', label: 'Debes seleccionar al menos un rol.' },
-                { name: 'modules', id: 'error-modules', label: 'Debes seleccionar al menos un módulo.' },
-                { name: 'submodules', id: 'error-submodules', label: 'Debes seleccionar al menos un submódulo.' }
-            ];
+            if (username) {
+                username.addEventListener('input', validateUsername);
+            }
 
-            let isValid = true;
+            if (email) {
+                email.addEventListener('input', validateEmail);
+            }
 
-            grupos.forEach(grupo => {
-                const checkboxes = Array.from(document.getElementsByName(grupo.name));
-                if (checkboxes.length > 0) {
-                    const algunoSeleccionado = checkboxes.some(cb => cb.checked);
-                    if (!algunoSeleccionado) {
-                        const errElement = document.getElementById(grupo.id);
-                        errElement.textContent = grupo.label;
-                        errElement.style.display = 'block';
-                        isValid = false;
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    if (!validateUsername() || !validateEmail()) {
+                        e.preventDefault();
                     }
-                }
-            });
+                });
+            }
 
-            return isValid; // Devuelve true/false basado solo en las validaciones individuales
+            // Throttling botón buscar (opcional si aplica en esta página)
+            const buscarBtn = document.getElementById('buscarBtn');
+            if (buscarBtn) {
+                buscarBtn.disabled = true;
+                setTimeout(() => {
+                    buscarBtn.disabled = false;
+                }, 350);
+            }
+        });
+
+        function validateUsername() {
+            const username = document.getElementById('username');
+            const feedback = document.getElementById('usernameFeedback');
+            const regex = /^[a-zA-Z0-9]{4,20}$/;
+
+            if (!regex.test(username.value)) {
+                username.classList.add('is-invalid');
+                feedback.style.display = 'block';
+                return false;
+            } else {
+                username.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+                return true;
+            }
+        }
+        function validateEmail() {
+            const email = document.getElementById('email');
+            const feedback = document.getElementById('emailFeedback');
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!regex.test(email.value)) {
+                email.classList.add('is-invalid');
+                email.classList.remove('is-valid');
+                feedback.style.display = 'block';
+                return false;
+            } else {
+                email.classList.remove('is-invalid');
+                email.classList.add('is-valid');
+                feedback.style.display = 'none';
+                return true;
+            }
         }
     </script>
+
 </body>
 
 </html>

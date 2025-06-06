@@ -4,23 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class GenericController {
 
-    protected final UserAuthService userAuthService;
 
     private final PermisosUtils permisosUtils;
 
-    protected void addPrincipalAttributes(Authentication user, Model model,
-    Set<Long> lecturaMod, Set<Long> escrituraMod, Set<Long> lecturaSub, Set<Long> escrituraSub) {
+    protected void addPrincipalAttributes(Model model, HttpSession session,
+            Set<Long> lecturaMod, Set<Long> escrituraMod, Set<Long> lecturaSub, Set<Long> escrituraSub) {
 
         HashMap<String, Set<Long>> mod = new HashMap<>();
         HashMap<String, Set<Long>> sub = new HashMap<>();
@@ -36,7 +34,7 @@ public abstract class GenericController {
         permisos.put("modulos", mod);
         permisos.put("submodulos", sub);
 
-        UserAuth userAuth = userAuthService.findByUsername(user.getName());
+        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
 
         model.addAttribute("userAuth", userAuth);
 
@@ -55,7 +53,8 @@ public abstract class GenericController {
                                 valores = tipo.getValue();
 
                                 model.addAttribute("lecturaMod", valores);
-                                model.addAttribute("puedeVerMod", permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
+                                model.addAttribute("puedeVerMod",
+                                        permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
                                 break;
                             default:
                                 break;
@@ -73,7 +72,8 @@ public abstract class GenericController {
                                 valores = tipo.getValue();
 
                                 model.addAttribute("lecturaSub", valores);
-                                model.addAttribute("puedeVerMod", permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
+                                model.addAttribute("puedeVerMod",
+                                        permisosUtils.contieneAlgunModulo(userAuth.getModules(), valores));
                                 break;
                             default:
                                 break;

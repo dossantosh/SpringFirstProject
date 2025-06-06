@@ -1,10 +1,9 @@
 package com.dossantosh.springfirstproject.user.controller;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,13 +15,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationSuccessHandler;
 import com.dossantosh.springfirstproject.user.models.User;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
+
 import com.dossantosh.springfirstproject.user.service.UserService;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -31,15 +36,16 @@ public class ProfileController extends GenericController {
 
     private final UserService userService;
 
-    public ProfileController(UserAuthService userAuthService, PermisosUtils permisosUtils, UserService userService) {
-        super(userAuthService, permisosUtils);
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    public ProfileController( PermisosUtils permisosUtils, UserService userService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+        super(permisosUtils);
         this.userService = userService;
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
     @GetMapping("/user/profile")
-    public String showPerfilPanel(Model model) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public String showPerfilPanel(Model model, HttpSession session) {
 
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
@@ -52,11 +58,13 @@ public class ProfileController extends GenericController {
         lecturaSub.add(1L);
         escrituraSub.add(1L);
 
-        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         model.addAttribute("activeNavLink", "profile");
 
-        User user = userService.findByUsername(auth.getName());
+        UserAuth userAuth = (UserAuth)model.getAttribute("userAuth");
+
+        User user = userService.findById(userAuth.getId());
 
         model.addAttribute("user", user);
 
@@ -80,9 +88,7 @@ public class ProfileController extends GenericController {
     }
 
     @GetMapping("/user/editar") // /user/editar
-    public String mostrarFormularioEdicion(Model model) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public String mostrarFormularioEdicion(Model model, HttpSession session) {
 
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
@@ -95,9 +101,11 @@ public class ProfileController extends GenericController {
         lecturaSub.add(1L);
         escrituraSub.add(1L);
 
-        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
-        model.addAttribute("user", userService.findByUsername(auth.getName()));
+        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
+
+        model.addAttribute("user", userService.findById(userAuth.getId()));
 
         userService.cargarListasFormulario().forEach(model::addAttribute);
         return "user/editar";
@@ -108,7 +116,9 @@ public class ProfileController extends GenericController {
             @Valid @ModelAttribute("user") User user,
             BindingResult result,
             RedirectAttributes redirectAttrs,
-            RedirectAttributes flash) {
+            RedirectAttributes flash,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
 
         userService.guardarUsuario(user, userService.findById(user.getId()));
 
@@ -118,6 +128,8 @@ public class ProfileController extends GenericController {
         }
 
         flash.addFlashAttribute("success", "Perfil actualizado correctamente");
+
+        customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, null);
         return "redirect:/user/profile";
     }
 }

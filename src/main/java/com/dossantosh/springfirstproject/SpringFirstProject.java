@@ -9,10 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement
-@EnableAspectJAutoProxy
-@EnableJdbcHttpSession
-@EnableWebSecurity
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = {
         "com.dossantosh.springfirstproject.common",
         "com.dossantosh.springfirstproject.news",
@@ -20,6 +16,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "com.dossantosh.springfirstproject.preferences",
         "com.dossantosh.springfirstproject.user"
 })
+@EnableTransactionManagement
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableJdbcHttpSession
+@EnableWebSecurity
 public class SpringFirstProject {
 
     public static void main(String[] args) {

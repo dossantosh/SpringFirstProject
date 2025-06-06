@@ -33,7 +33,8 @@
                         <h2 class="text-center mb-4">Iniciar Sesión</h2>
 
                         <!-- Mensajes de error -->
-                        <div th:if="${param.error}" class="alert alert-danger" th:text="${error}">
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Usuario o contraseña incorrectos.
                         </div>
                         <div th:if="${param.logout}" class="alert alert-success">
                             Has cerrado sesión correctamente
@@ -42,16 +43,16 @@
                         <form th:action="@{/login}" method="post" id="loginForm">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required
-                                    pattern="[a-zA-Z0-9]{4,20}" title="4-20 caracteres alfanuméricos">
+                                <input type="text" class="form-control" id="username" name="username" required minlength="4" maxlength="40"
+                                    pattern="[a-zA-Z0-9]{4,40}" title="4-40 caracteres alfanuméricos">
                                 <div class="invalid-feedback" id="usernameFeedback">
-                                    Usuario debe tener 4-20 caracteres alfanuméricos
+                                    Usuario debe tener 4-40 caracteres alfanuméricos
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña</label>
                                 <input type="password" class="form-control" id="password" name="password" required
-                                    minlength="8" title="Mínimo 8 caracteres con mayúscula, minúscula y número">
+                                    minlength="8" maxlength="80" title="Mínimo 8 caracteres con mayúscula, minúscula y número">
                                 <div class="invalid-feedback" id="passwordFeedback">
                                     Mínimo 8 caracteres con mayúscula, minúscula y número
                                 </div>
@@ -124,7 +125,7 @@
         function validateUsername() {
             const username = document.getElementById('username');
             const feedback = document.getElementById('usernameFeedback');
-            const regex = /^[a-zA-Z0-9]{4,20}$/;
+            const regex = /^[a-zA-Z0-9]{4,40}$/;
 
             if (!regex.test(username.value)) {
                 username.classList.add('is-invalid');
@@ -140,7 +141,7 @@
         function validatePassword() {
             const password = document.getElementById('password');
             const feedback = document.getElementById('passwordFeedback');
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,80}$/;
 
             if (!regex.test(password.value)) {
                 password.classList.add('is-invalid');

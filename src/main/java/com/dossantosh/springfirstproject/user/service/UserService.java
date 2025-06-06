@@ -27,6 +27,7 @@ import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
 import com.dossantosh.springfirstproject.user.service.permissions.RoleService;
 import com.dossantosh.springfirstproject.user.service.permissions.SubmoduleService;
+import com.dossantosh.springfirstproject.user.utils.UserDTO;
 import com.dossantosh.springfirstproject.user.utils.UserSpecifications;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -46,8 +47,6 @@ public class UserService {
     private final SubmoduleService submoduleService;
 
     private final PreferencesService preferencesService;
-
-    private final UserAuthService userAuthService;
 
     private final TokenService tokenService;
 
@@ -100,9 +99,9 @@ public class UserService {
     }
 
     // Usuarios controller
-    public Set<UserAuth> convertirUsuariosAUserAuth(Collection<User> users) {
+    public Set<UserDTO> convertirUsuariosAUserAuth(Collection<User> users) {
         return users.stream().map(u -> {
-            UserAuth dto = new UserAuth();
+            UserDTO dto = new UserDTO();
             dto.setId(u.getId());
             dto.setUsername(u.getUsername());
             dto.setEmail(u.getEmail());
@@ -119,7 +118,6 @@ public class UserService {
         return map;
     }
 
-    // register
     public void guardarUsuario(User user, User existingUser) {
 
         if (user.getId() == null) {
@@ -138,34 +136,18 @@ public class UserService {
             user.setPassword(existingUser.getPassword());
         }
 
-        LinkedHashSet<Long> rolesId = new LinkedHashSet<>();
-        LinkedHashSet<Long> modulesId = new LinkedHashSet<>();
-        LinkedHashSet<Long> submodulesId = new LinkedHashSet<>();
-
-        for (Roles rol : user.getRoles()) {
-            rolesId.add(rol.getId());
-        }
-        for (Modules mid : user.getModules()) {
-            modulesId.add(mid.getId());
-        }
-        for (Submodules sub : user.getSubmodules()) {
-            submodulesId.add(sub.getId());
+        if (user.getRoles() == null || user.getModules() == null || user.getSubmodules() == null) {
+            return;
         }
 
-        UserAuth userAuth = userAuthService.findByUsername(user.getUsername());
-
-        userAuth.setUsername(user.getUsername());
-        userAuth.setEmail(user.getEmail());
-        userAuth.setEnabled(user.getEnabled());
-        userAuth.setRoles(rolesId);
-        userAuth.setModules(modulesId);
-        userAuth.setSubmodules(submodulesId);
-        
-        userAuthService.saveuserAuth(userAuth);
+        if (user.getRoles().isEmpty() || user.getModules().isEmpty() || user.getSubmodules().isEmpty()) {
+            return;
+        }
 
         saveUser(user);
     }
 
+    // register
     public void crearUsuario(User user) {
 
         LinkedHashSet<Roles> roles = new LinkedHashSet<>();
@@ -175,10 +157,6 @@ public class UserService {
         LinkedHashSet<Long> rolesId = new LinkedHashSet<>();
         LinkedHashSet<Long> modulesId = new LinkedHashSet<>();
         LinkedHashSet<Long> submodulesId = new LinkedHashSet<>();
-
-        LinkedHashSet<String> rolesN = new LinkedHashSet<>();
-        LinkedHashSet<String> modulesN = new LinkedHashSet<>();
-        LinkedHashSet<String> submodulesN = new LinkedHashSet<>();
 
         if (user.getUsername().equals("sevas")) {
             rolesId.add(1L);
@@ -190,28 +168,28 @@ public class UserService {
         modulesId.add(2L);
         submodulesId.add(2L);
 
+        Roles role = null;
         for (Long rol : rolesId) {
 
             if (roleService.existById(rol)) {
-                Roles role = roleService.findById(rol);
+                role = roleService.findById(rol);
                 roles.add(role);
-                rolesN.add(role.getName());
             }
         }
+        Modules module = null;
         for (Long moduleId : modulesId) {
 
             if (moduleService.existById(moduleId)) {
-                Modules module = moduleService.findById(moduleId);
+                module = moduleService.findById(moduleId);
                 modules.add(module);
-                modulesN.add(module.getName());
             }
         }
+        Submodules submodule = null;
         for (Long submoduleId : submodulesId) {
 
             if (submoduleService.existById(submoduleId)) {
-                Submodules submodule = submoduleService.findById(submoduleId);
+                submodule = submoduleService.findById(submoduleId);
                 submodules.add(submodule);
-                submodulesN.add(submodule.getName());
             }
         }
 
@@ -219,18 +197,10 @@ public class UserService {
             return;
         }
 
-        UserAuth userAuth = new UserAuth();
-
-        userAuth.setUsername(user.getUsername());
-        userAuth.setEmail(user.getEmail());
-        userAuth.setEnabled(user.getEnabled());
-        userAuth.setRoles(rolesId);
-        userAuth.setModules(modulesId);
-        userAuth.setSubmodules(submodulesId);
-        userAuthService.saveuserAuth(userAuth);
+        saveUser(user);
 
         Preferences preferences = new Preferences();
-        preferences.setUserId(userAuth.getId());
+        preferences.setUserId(user.getId());
         preferences.setTema("auto");
         preferences.setIdioma("es");
         preferences.setEmailNotifications(false);
@@ -243,9 +213,36 @@ public class UserService {
         user.setSubmodules(submodules);
 
         preferencesService.guardarPreferencias(preferences);
-        saveUser(user);
 
         String token = tokenService.createVerificationToken(user);
         tokenService.sendVerificationEmailUser(user.getEmail(), token);
+    }
+
+        // User to UserAuth
+    public UserAuth userToUserAuth(User user) {
+        UserAuth userAuth = new UserAuth();
+
+        Set<Long> roleId = new LinkedHashSet<>();
+        Set<Long> moduId = new LinkedHashSet<>();
+        Set<Long> subId = new LinkedHashSet<>();
+
+        for (Roles role : user.getRoles()) {
+            roleId.add(role.getId());
+        }
+        for (Modules modu : user.getModules()) {
+            moduId.add(modu.getId());
+        }
+        for (Submodules sub : user.getSubmodules()) {
+            subId.add(sub.getId());
+        }
+
+        userAuth.setId(user.getId());
+        userAuth.setUsername(user.getUsername());
+
+        userAuth.setRoles(roleId);
+        userAuth.setModules(moduId);
+        userAuth.setSubmodules(subId);
+
+        return userAuth;
     }
 }

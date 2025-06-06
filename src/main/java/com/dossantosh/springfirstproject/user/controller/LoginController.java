@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dossantosh.springfirstproject.common.security.custom.captcha.ReCaptchaValidationService;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionInvalidationService;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 import com.dossantosh.springfirstproject.perfume.controller.PerfumeLockManager;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
+
 import com.dossantosh.springfirstproject.user.service.UserService;
 import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 
@@ -36,15 +36,13 @@ public class LoginController {
 
     private final UserService userService;
 
-    private final UserAuthService userAuthService;
-
     private final TokenService tokenService;
 
     private final ReCaptchaValidationService reCaptchaValidationService;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final SessionInvalidationService invalidationService;
+    private final SessionService invalidationService;
 
     private final PerfumeLockManager perfumeLockManager;
 
@@ -122,8 +120,6 @@ public class LoginController {
         userService.saveUser(user);
         tokenService.deleteByToken(token.getToken());
 
-        UserAuth userAuth = userAuthService.findByUsername(user.getUsername());
-        userAuth.setEnabled(true);
         return "redirect:/confirmacion-exitosa";
     }
 
@@ -229,12 +225,12 @@ public class LoginController {
     @PostMapping("/logout-inactive")
     @ResponseBody
     public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
-        String username = (String) session.getAttribute("username");
+        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
 
-        if (username != null) {
-            perfumeLockManager.releaseAllLocksByUser(username);
+        if (userAuth != null) {
+            perfumeLockManager.releaseAllLocksByUser(userAuth.getUsername());
 
-            invalidationService.invalidateSessionsByUsername(username);
+            invalidationService.invalidateSessionsById(userAuth.getId());
         }
 
         session.invalidate();

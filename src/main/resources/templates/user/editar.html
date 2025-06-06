@@ -9,10 +9,6 @@
   <!-- Insertamos el head común -->
   <th:block th:insert="~{fragments :: head}"></th:block>
 
-  <!-- Cargar el CSS correcto según las preferences -->
-  <link
-    th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}"
-    rel="stylesheet">
 </head>
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
@@ -45,8 +41,22 @@
                 <!-- Nombre de usuario -->
                 <div class="mb-3">
                   <label for="username" class="form-label" th:text="#{editar.nombre}">Nombre de usuario</label>
-                  <input type="text" id="username" th:field="*{username}" class="form-control"
-                    placeholder="Ej. 'josesito18'" required maxlength="40" />
+                  <input type="text" id="username" th:field="*{username}" pattern="[a-zA-Z0-9]{4,40}"
+                    class="form-control" placeholder="Ej. 'josesito18'" required minlength="4" maxlength="40" />
+                  <div class="invalid-feedback" id="usernameFeedback">
+                    El usuario debe tener entre 4 y 40 caracteres alfanuméricos
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                  <label for="email" class="form-label">Gmail</label>
+                  <input type="email" class="form-control" id="email" th:field="*{email}" required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    title="Debe ser una dirección de Gmail válida" autocomplete="email">
+                  <div class="invalid-feedback" id="emailFeedback">
+                    Ingresa un correo de Gmail válido
+                  </div>
                 </div>
 
                 <div th:if="${puedeVerMod}">
@@ -169,6 +179,51 @@
       }
 
       return isValid;
+    }
+
+    // Validación en tiempo real
+    document.getElementById('username').addEventListener('input', validateUsername);
+    document.getElementById('email').addEventListener('input', validateEmail);
+
+    // Validación al enviar el formulario
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      if (!validateUsername() || !validateEmail()) {
+        e.preventDefault();
+      }
+    });
+
+    function validateUsername() {
+      const username = document.getElementById('username');
+      const feedback = document.getElementById('usernameFeedback');
+      const regex = /^[a-zA-Z0-9]{4,20}$/;
+
+      if (!regex.test(username.value)) {
+        username.classList.add('is-invalid');
+        feedback.style.display = 'block';
+        return false;
+      } else {
+        username.classList.remove('is-invalid');
+        feedback.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateEmail() {
+      const email = document.getElementById('email');
+      const feedback = document.getElementById('emailFeedback');
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      if (!regex.test(email.value)) {
+        email.classList.add('is-invalid');
+        email.classList.remove('is-valid');
+        feedback.style.display = 'block';
+        return false;
+      } else {
+        email.classList.remove('is-invalid');
+        email.classList.add('is-valid');
+        feedback.style.display = 'none';
+        return true;
+      }
     }
   </script>
 

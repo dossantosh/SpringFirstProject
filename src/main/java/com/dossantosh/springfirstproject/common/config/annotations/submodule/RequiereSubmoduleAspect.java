@@ -4,21 +4,22 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.repository.UserAuthRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Aspect
 @Component
 public class RequiereSubmoduleAspect {
-
-    private final UserAuthRepository userAuthRepository;
 
     @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule) "
           + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule)")
@@ -30,13 +31,27 @@ public class RequiereSubmoduleAspect {
         }
         long[] required = ann.value();
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserAuth user = userAuthRepository.findByUsername(username)
-            .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
+        // Obtener HttpSession desde el contexto HTTP actual
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (!(requestAttributes instanceof ServletRequestAttributes)) {
+            throw new IllegalStateException("No hay contexto HTTP disponible");
+        }
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
+        HttpSession session = servletRequestAttributes.getRequest().getSession(false);
+
+        if (session == null) {
+            throw new AccessDeniedException("No hay sesión activa");
+        }
+
+        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+
+        if(Boolean.FALSE.equals(userAuth.getEnabled())){
+            throw new AccessDeniedException("No tiene permiso para este módulo");
+        }
 
         // Ahora buscamos por ID dentro de cada Module
         for (long subId : required) {
-            boolean has = user.getSubmodules()
+            boolean has = userAuth.getSubmodules()
                               .stream()
                               .anyMatch(m -> Long.valueOf(subId).equals(m));
             if (has) {

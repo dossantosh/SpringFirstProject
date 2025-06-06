@@ -5,18 +5,17 @@ import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
+
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +34,17 @@ public class PreferencesController extends GenericController {
 
     private final LocaleResolver localeResolver;
 
-    public PreferencesController(UserAuthService userAuthService, PermisosUtils permisosUtils, PreferencesService preferencesService,
+    public PreferencesController( PermisosUtils permisosUtils, PreferencesService preferencesService,
             LocaleResolver localeResolver) {
-        super(userAuthService, permisosUtils);
+        super(permisosUtils);
         this.preferencesService = preferencesService;
         this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String mostrarPreferencias(Model model) {
+    public String mostrarPreferencias(Model model, HttpSession session) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
 
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
@@ -58,10 +57,7 @@ public class PreferencesController extends GenericController {
         lecturaSub.add(1L);
         escrituraSub.add(1L);
         
-        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
-
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
-
+        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         Preferences preferences = preferencesService.obtenerPreferencias(userAuth.getId());
         model.addAttribute("preferences", preferences != null ? preferences : new Preferences());
@@ -70,12 +66,12 @@ public class PreferencesController extends GenericController {
 
     @PostMapping
     public String guardarPreferencias(@ModelAttribute Preferences preferences,
+            Model model,
             HttpServletRequest request,
             HttpServletResponse response,
             RedirectAttributes redirectAttributes) {
-        // Obtén usuario y asigna
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserAuth userAuth = userAuthService.findByUsername(auth.getName());
+        
+        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
 
         preferences.setUserId(userAuth.getId());
 

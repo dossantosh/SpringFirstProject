@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +12,10 @@ import com.dossantosh.springfirstproject.common.config.annotations.module.Requie
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
+
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequiereModule({ 2L })
@@ -23,15 +23,13 @@ public class NewsController extends GenericController {
 
         private final PreferencesService preferencesService;
 
-        public NewsController(UserAuthService userAuthService, PermisosUtils permisosUtils, PreferencesService preferencesService) {
-                super(userAuthService, permisosUtils);
+        public NewsController( PermisosUtils permisosUtils, PreferencesService preferencesService) {
+                super(permisosUtils);
                 this.preferencesService = preferencesService;
         }
 
         @GetMapping("/objects/news")
-        public String showPrincipal(Model model, News news) {
-
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        public String showPrincipal(Model model, HttpSession session, News news) {
 
                 Set<Long> lecturaMod = new HashSet<>();
                 Set<Long> escrituraMod = new HashSet<>();
@@ -44,11 +42,11 @@ public class NewsController extends GenericController {
                 lecturaSub.add(1L);
                 escrituraSub.add(1L);
 
-                addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+                addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
                 model.addAttribute("activeNavLink", "news");
 
-                UserAuth userAuth = userAuthService.findByUsername(auth.getName());
+                UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
 
                 LinkedHashSet<News> setNoticias = new LinkedHashSet<>();
 

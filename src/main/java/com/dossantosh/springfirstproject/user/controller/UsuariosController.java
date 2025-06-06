@@ -1,10 +1,10 @@
 package com.dossantosh.springfirstproject.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionInvalidationService;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
+
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.service.UserAuthService;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserService;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -26,12 +28,14 @@ public class UsuariosController extends GenericController {
 
     private final UserService userService;
 
-    private final SessionInvalidationService sessionInvalidationService;
+    private final SessionService sessionService;
 
-    public UsuariosController(UserAuthService userAuthService, UserService userService, PermisosUtils permisosUtils, SessionInvalidationService sessionInvalidationService) {
-        super(userAuthService, permisosUtils);
+    public UsuariosController(PermisosUtils permisosUtils, UserService userService,
+            SessionService sessionService) {
+        super(permisosUtils);
         this.userService = userService;
-        this.sessionInvalidationService = sessionInvalidationService;
+        this.sessionService = sessionService;
+        ;
     }
 
     @GetMapping
@@ -44,8 +48,6 @@ public class UsuariosController extends GenericController {
             Model model,
             HttpSession session) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
 
@@ -57,7 +59,7 @@ public class UsuariosController extends GenericController {
         lecturaSub.add(1L);
         escrituraSub.add(1L);
 
-        addPrincipalAttributes(auth, model, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
         model.addAttribute("activeNavLink", "users");
 
@@ -106,11 +108,20 @@ public class UsuariosController extends GenericController {
     }
 
     @PostMapping("/guardar")
-    public String guardarUsuario(@ModelAttribute User user, HttpSession session) {
+    public String guardarUsuario(@ModelAttribute User user, HttpSession session, HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
 
         userService.guardarUsuario(user, userService.findById(user.getId()));
 
-        sessionInvalidationService.invalidateSessionsByUsername(user.getUsername());
+        List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
+
+        if (!primaryIdList.isEmpty()) {
+            String primaryId = primaryIdList.get(0);
+
+            UserAuth userAuth = userService.userToUserAuth(user);
+
+            sessionService.addUserAuthAttributeToSession(primaryId, "userAuth", userAuth);
+        }
 
         session.removeAttribute("selectedUser");
         return "redirect:/user/users";

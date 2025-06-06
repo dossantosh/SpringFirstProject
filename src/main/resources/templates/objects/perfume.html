@@ -10,9 +10,7 @@
     <th:block th:insert="~{fragments :: head}"></th:block>
 
     <!-- Cargar el CSS según las preferences de tema -->
-    <link
-        th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}"
-        rel="stylesheet" />
+    <!--<link th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}" rel="stylesheet" />-->
 </head>
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
@@ -66,9 +64,9 @@
                                 </div>
 
                                 <div class="col-md-2 text-end">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-search me-1"></i> <span
-                                            th:text="#{perfumes.buscar}">Buscar</span>
+                                    <button id="buscarBtn" type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-search me-1"></i>
+                                        <span th:text="#{perfumes.buscar}">Buscar</span>
                                     </button>
                                 </div>
                             </form>
@@ -416,6 +414,18 @@
     <script src="/js/session.js"></script>
 
     <script th:inline="javascript">
+
+        // 1 search per sec
+        document.addEventListener('DOMContentLoaded', function () {
+            const buscarBtn = document.getElementById('buscarBtn');
+
+            buscarBtn.disabled = true;
+            setTimeout(() => {
+                buscarBtn.disabled = false;
+            }, 350);
+
+        });
+
         // Restore scroll position
         window.addEventListener('load', function () {
             const scrollPos = localStorage.getItem('scrollPos');
@@ -423,49 +433,10 @@
                 window.scrollTo(0, parseInt(scrollPos));
             }
         });
-
-        // Unified function to release perfume lock
-        function liberarPerfume() {
-            const selectedId = localStorage.getItem("selectedPerfumeId");
-            if (!selectedId) {
-                console.log("No perfume ID to release");
-                return;
-            }
-
-            // Get CSRF token from meta tag
-            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-
-            // Create form data (works better than JSON for sendBeacon)
-            const formData = new FormData();
-            formData.append('id', selectedId);
-
-            // Use fetch API with keepalive flag for reliability
-            fetch('/objects/perfume/liberar', {
-                method: 'POST',
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                body: formData,
-                keepalive: true // Ensures request completes even if page unloads
-            }).then(response => {
-                if (response.ok) {
-                    localStorage.removeItem("selectedPerfumeId");
-                    console.log("Perfume lock released successfully");
-                } else {
-                    console.error("Failed to release perfume lock");
-                }
-            }).catch(error => {
-                console.error("Error releasing perfume lock:", error);
-            });
-        }
-
         // Save scroll position and release lock on page exit
         function handlePageExit() {
             localStorage.setItem('scrollPos', window.scrollY);
-            liberarPerfume();
         }
-
         // Register exit events
         window.addEventListener('beforeunload', handlePageExit);
         window.addEventListener('pagehide', handlePageExit);
@@ -474,15 +445,6 @@
                 handlePageExit();
             }
         });
-
-        // Initialize selected perfume ID
-        const selectedPerfumeId = /*[[${selectedPerfume?.id}]]*/ null;
-        if (selectedPerfumeId) {
-            localStorage.setItem("selectedPerfumeId", selectedPerfumeId);
-            console.log("Perfume ID stored:", selectedPerfumeId);
-        } else {
-            localStorage.removeItem("selectedPerfumeId");
-        }
     </script>
 </body>
 

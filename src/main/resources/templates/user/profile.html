@@ -8,11 +8,7 @@
 
   <!-- Insertamos el head común -->
   <th:block th:insert="~{fragments :: head}"></th:block>
-
-  <!-- Cargar el CSS correcto según las preferences -->
-  <link
-    th:href="@{'/css/' + (${preferences.tema == 'dark'} ? 'dark.css' : (${preferences.tema == 'light'} ? 'light.css' : 'auto.css'))}"
-    rel="stylesheet">
+  
 </head>
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
