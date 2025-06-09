@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
-import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationSuccessHandler;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
@@ -36,12 +37,12 @@ public class ProfileController extends GenericController {
 
     private final UserService userService;
 
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final SessionService sessionService;
 
-    public ProfileController( PermisosUtils permisosUtils, UserService userService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+    public ProfileController(PermisosUtils permisosUtils, UserService userService, SessionService sessionService) {
         super(permisosUtils);
         this.userService = userService;
-        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+        this.sessionService = sessionService;
     }
 
     @GetMapping("/user/profile")
@@ -62,7 +63,7 @@ public class ProfileController extends GenericController {
 
         model.addAttribute("activeNavLink", "profile");
 
-        UserAuth userAuth = (UserAuth)model.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userService.findById(userAuth.getId());
 
@@ -103,7 +104,7 @@ public class ProfileController extends GenericController {
 
         addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
-        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("user", userService.findById(userAuth.getId()));
 
@@ -129,7 +130,7 @@ public class ProfileController extends GenericController {
 
         flash.addFlashAttribute("success", "Perfil actualizado correctamente");
 
-        customAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, null);
+        sessionService.refreshAuthentication(userService.userToUserAuth(user));
         return "redirect:/user/profile";
     }
 }

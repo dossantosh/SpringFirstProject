@@ -209,9 +209,12 @@
 
                         <!-- Formulario si hay perfume seleccionado -->
                         <div th:unless="${selectedPerfume == null}">
+                            <div id="perfume-editor"
+                                th:data-id="${selectedPerfume != null} ? ${selectedPerfume.id} : null"></div>
+
                             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-                            <form th:action="@{/objects/perfume/guardar}" th:object="${selectedPerfume}" method="post"
-                                class="row gx-4 gy-3">
+                            <form id="formEditarPerfume" th:action="@{/objects/perfume/guardar}"
+                                th:object="${selectedPerfume}" method="post" class="row gx-4 gy-3">
 
                                 <!-- ID -->
                                 <div class="col-md-1">
@@ -414,38 +417,66 @@
     <script src="/js/session.js"></script>
 
     <script th:inline="javascript">
-
-        // 1 search per sec
         document.addEventListener('DOMContentLoaded', function () {
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            // Obtener ID del perfume desde el atributo data-id del contenedor
+            const perfumeId = document.getElementById('perfume-editor')?.dataset.id;
+
+            // Función que refresca el lock
+            function refreshLock() {
+                if (!perfumeId) return;
+                console.log('Refrescando lock para perfume:', perfumeId);
+                fetch(`/objects/perfume/refreshLock/${perfumeId}`, {
+                    method: 'POST',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('No se pudo refrescar el lock');
+                        }
+                    })
+                    .catch(console.error);
+            }
+
+            // 1 search per sec (deshabilita momentáneamente el botón de buscar)
             const buscarBtn = document.getElementById('buscarBtn');
+            if (buscarBtn) {
+                buscarBtn.disabled = true;
+                setTimeout(() => {
+                    buscarBtn.disabled = false;
+                }, 350);
+            }
 
-            buscarBtn.disabled = true;
-            setTimeout(() => {
-                buscarBtn.disabled = false;
-            }, 350);
-
-        });
-
-        // Restore scroll position
-        window.addEventListener('load', function () {
+            // Restaurar posición del scroll
             const scrollPos = localStorage.getItem('scrollPos');
             if (scrollPos) {
                 window.scrollTo(0, parseInt(scrollPos));
             }
-        });
-        // Save scroll position and release lock on page exit
-        function handlePageExit() {
-            localStorage.setItem('scrollPos', window.scrollY);
-        }
-        // Register exit events
-        window.addEventListener('beforeunload', handlePageExit);
-        window.addEventListener('pagehide', handlePageExit);
-        document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'hidden') {
-                handlePageExit();
+
+            // Guardar scroll al salir de la página
+            window.addEventListener('beforeunload', function () {
+                localStorage.setItem('scrollPos', window.scrollY);
+            });
+
+            // Refrescar lock cuando el usuario interactúe con el formulario
+            const form = document.getElementById('formEditarPerfume');
+            if (form) {
+                form.addEventListener('input', refreshLock);
+                form.addEventListener('change', refreshLock);
+                form.addEventListener('keydown', refreshLock);
+                form.addEventListener('focus', refreshLock, true);
             }
+
+            // También lo podés dejar con setInterval si querés doble seguridad:
+            //setInterval(refreshLock, 60000); // cada 60 segundos
         });
     </script>
+
 </body>
 
 </html>

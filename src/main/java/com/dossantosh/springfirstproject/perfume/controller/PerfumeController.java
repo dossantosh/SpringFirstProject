@@ -6,16 +6,13 @@ import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.perfume.utils.PerfumeLockManager;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,23 +28,17 @@ import java.util.*;
 public class PerfumeController extends GenericController {
 
     private final PerfumeLockManager perfumeLockManager;
-
     private final PerfumeService perfumeService;
-
     private final BrandService brandService;
 
-    private static boolean isBloqued = true;
-
     public PerfumeController(PermisosUtils permisosUtils,
-            PerfumeService perfumeService,
-            BrandService brandService,
-            PerfumeLockManager perfumeLockManager) {
+                             PerfumeService perfumeService,
+                             BrandService brandService,
+                             PerfumeLockManager perfumeLockManager) {
         super(permisosUtils);
         this.perfumeService = perfumeService;
         this.brandService = brandService;
         this.perfumeLockManager = perfumeLockManager;
-
-        isBloqued = false;
     }
 
     @GetMapping
@@ -57,13 +48,19 @@ public class PerfumeController extends GenericController {
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String season,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "10") int size,
             Model model,
-            HttpSession session) {
+            HttpSession session
+    ) {
+
+        Boolean isLockedByAnother = (Boolean) model.getAttribute("isLockedByAnother");
+
+        if (isLockedByAnother == null) {
+            isLockedByAnother = false;
+        }
 
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
-
         Set<Long> lecturaSub = new HashSet<>();
         Set<Long> escrituraSub = new HashSet<>();
 
@@ -76,7 +73,6 @@ public class PerfumeController extends GenericController {
 
         model.addAttribute("activeNavLink", "perfumes");
 
-        // convertimos en null a las vacias
         if (name != null && name.isBlank()) {
             name = null;
         }
@@ -86,7 +82,7 @@ public class PerfumeController extends GenericController {
         if (season != null && season.isBlank()) {
             season = null;
         }
-        // Obtenemos la lista de perfumes
+
         Page<Perfumes> pageResult = perfumeService.findByFilters(id, name, season, brand, page, size, "id", "ASC");
 
         model.addAttribute("perfumes", perfumeService.conversorPerfumeDTO(pageResult.getContent()));
@@ -104,47 +100,46 @@ public class PerfumeController extends GenericController {
         filters.put("season", season);
         model.addAttribute("filters", filters);
 
-        // model.addAllAttributes(perfumeService.cargarListaInfo());
         perfumeService.cargarListaInfo().forEach(model::addAttribute);
 
-        model.addAttribute("isLockedByAnother", isBloqued);
+        model.addAttribute("isLockedByAnother", isLockedByAnother);
 
         return "objects/perfume";
     }
 
     @GetMapping("/seleccionar/{id}")
-    public String seleccionarPerfume(@PathVariable Long id, RedirectAttributes redirectAttrs, HttpSession session) {
+    public String seleccionarPerfume(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
-        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (perfumeLockManager.isLockedByAnother(id, userAuth.getUsername())) {
-            isBloqued = true;
-            redirectAttrs.addFlashAttribute("isLockedByAnother", isBloqued);
+        if (perfumeLockManager.isLockedByAnother(id, userName)) {
+            redirectAttrs.addFlashAttribute("isLockedByAnother", true);
 
             Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
             if (anterior != null && !anterior.getId().equals(id)) {
-                perfumeLockManager.releaseLock(anterior.getId(), userAuth.getUsername());
+                perfumeLockManager.releaseLock(anterior.getId(), userName);
             }
 
             session.setAttribute("selectedPerfume", perfumeService.findById(id));
 
             return "redirect:/objects/perfume";
         }
-        isBloqued = false;
-        redirectAttrs.addFlashAttribute("isLockedByAnother", isBloqued);
+
+        redirectAttrs.addFlashAttribute("isLockedByAnother", false);
 
         if (perfumeLockManager.lockedBy(id) != null) {
+            perfumeLockManager.refreshLock(id, userName);
             return "redirect:/objects/perfume";
         }
 
         Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
         if (anterior != null && !anterior.getId().equals(id)) {
-            perfumeLockManager.releaseLock(anterior.getId(), userAuth.getUsername());
+            perfumeLockManager.releaseLock(anterior.getId(), userName);
         }
 
-        session.removeAttribute("selectedPerfume");
+        session.setAttribute("selectedPerfume", null);
 
-        if (perfumeLockManager.tryLock(id, userAuth.getUsername())) {
+        if (perfumeLockManager.tryLock(id, userName)) {
             session.setAttribute("selectedPerfume", perfumeService.findById(id));
         }
 
@@ -153,9 +148,9 @@ public class PerfumeController extends GenericController {
 
     @PostMapping("/guardar")
     public String guardarPerfume(@Valid @ModelAttribute Perfumes perfume,
-            BindingResult result,
-            RedirectAttributes redirectAttrs,
-            HttpSession session) {
+                                BindingResult result,
+                                HttpSession session,
+                                RedirectAttributes redirectAttrs) {
         try {
 
             if (result.hasErrors()) {
@@ -170,12 +165,10 @@ public class PerfumeController extends GenericController {
 
             perfumeService.save(perfume);
 
-            session.removeAttribute("selectedPerfume");
+            session.setAttribute("selectedPerfume", null);
 
-            UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
-
-            perfumeLockManager.releaseLock(perfume.getId(), userAuth.getUsername());
-
+            perfumeLockManager.releaseLock(perfume.getId(), SecurityContextHolder.getContext().getAuthentication().getName());
+            
             return "redirect:/objects/perfume";
 
         } catch (IllegalStateException e) {
@@ -185,47 +178,20 @@ public class PerfumeController extends GenericController {
     }
 
     @GetMapping("/cancelar/{id}")
-    public String cancelar(@PathVariable Long id, HttpSession session) {
+    public String cancelar(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
-        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+        perfumeLockManager.releaseLock(id, SecurityContextHolder.getContext().getAuthentication().getName());
 
-        perfumeLockManager.releaseLock(id, userAuth.getUsername());
-
-        session.removeAttribute("selectedPerfume");
+        session.setAttribute("selectedPerfume", null);
 
         return "redirect:/objects/perfume";
     }
 
-    @PostMapping("/objects/perfume/liberar")
+    @PostMapping(value = "/refreshLock/{id}", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Void> liberarPerfume(
-            @RequestParam(required = false) Long id,
-            HttpServletRequest request) {
+    public ResponseEntity<?> refreshLock(@PathVariable Long id, HttpSession session) {
 
-        // Get authentication from security context
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        String username = auth.getName();
-
-        if (id != null) {
-            perfumeLockManager.releaseLock(id, username);
-
-            // Clear session attribute if it matches the released ID
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                Perfumes selected = (Perfumes) session.getAttribute("selectedPerfume");
-                if (selected != null && selected.getId().equals(id)) {
-                    session.removeAttribute("selectedPerfume");
-                }
-            }
-
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.badRequest().build();
+        perfumeLockManager.refreshLock(id, SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok().build();
     }
-
 }

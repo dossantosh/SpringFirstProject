@@ -16,10 +16,10 @@ import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HttpSessionIdResolver;
-import com.dossantosh.springfirstproject.common.security.custom.UserDetailsServiceImpl;
+
+import com.dossantosh.springfirstproject.common.security.custom.CustomUserDetailsService;
 import com.dossantosh.springfirstproject.common.security.custom.captcha.CaptchaValidationFilter;
 import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationFailureHandler;
-import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,9 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-        private final UserDetailsServiceImpl userDetailsService;
+        private final CustomUserDetailsService customUserDetailsService;
         private final CaptchaValidationFilter captchaValidationFilter;
-        private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
         private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
         @Bean
@@ -51,14 +50,14 @@ public class SecurityConfig {
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .successHandler(customAuthenticationSuccessHandler)
+                                                .defaultSuccessUrl("/objects/news")
                                                 .failureHandler(customAuthenticationFailureHandler))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/login?logout=true")
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("JSESSIONID"))
-                                .userDetailsService(userDetailsService)
+                                .userDetailsService(customUserDetailsService)
                                 .headers(headers -> headers
                                                 .contentSecurityPolicy(csp -> csp
                                                                 .policyDirectives(

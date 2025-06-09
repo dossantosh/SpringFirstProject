@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+
 import org.springframework.stereotype.Service;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
@@ -59,11 +67,57 @@ public class SessionService {
         // Reemplazar en SPRING_SESSION_ATTRIBUTES
         String updateSql = "UPDATE SPRING_SESSION_ATTRIBUTES SET ATTRIBUTE_BYTES = ? WHERE SESSION_PRIMARY_ID = ? AND ATTRIBUTE_NAME = ?";
         int updated = jdbcTemplate.update(updateSql, serializedUserAuth, primaryId, attributeName);
-        
+
         if (updated == 0) {
             String insertSql = "INSERT INTO SPRING_SESSION_ATTRIBUTES (SESSION_PRIMARY_ID, ATTRIBUTE_NAME, ATTRIBUTE_BYTES) VALUES (?, ?, ?)";
             jdbcTemplate.update(insertSql, primaryId, attributeName, serializedUserAuth);
         }
+    }
+
+    public void updateSecurityContextForUser(UserAuth newUserAuth) throws IOException {
+        String username = newUserAuth.getUsername();
+        List<String> primaryIds = findPrimaryIdsByPrincipalName(username);
+
+        if (primaryIds.isEmpty()) {
+            System.out.println("No active sessions found for user: " + username);
+            return;
+        }
+
+        // Crear el nuevo Authentication con los datos actualizados
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                newUserAuth,
+                null,
+                newUserAuth.getAuthorities());
+
+        // Crear nuevo SecurityContext con el auth
+        SecurityContext newContext = new SecurityContextImpl(newAuth);
+        byte[] serializedContext = serialize(newContext);
+
+        // Actualizar o insertar en cada sesión
+        for (String primaryId : primaryIds) {
+            int updated = jdbcTemplate.update(
+                    "UPDATE SPRING_SESSION_ATTRIBUTES SET ATTRIBUTE_BYTES = ? WHERE SESSION_PRIMARY_ID = ? AND ATTRIBUTE_NAME = ?",
+                    serializedContext, primaryId, "SPRING_SECURITY_CONTEXT");
+
+            if (updated == 0) {
+                jdbcTemplate.update(
+                        "INSERT INTO SPRING_SESSION_ATTRIBUTES (SESSION_PRIMARY_ID, ATTRIBUTE_NAME, ATTRIBUTE_BYTES) VALUES (?, ?, ?)",
+                        primaryId, "SPRING_SECURITY_CONTEXT", serializedContext);
+            }
+        }
+    }
+
+    public void refreshAuthentication(UserAuth nuevoUserAuth) throws IOException {
+        Authentication authActual = SecurityContextHolder.getContext().getAuthentication();
+
+        Authentication nuevaAuth = new UsernamePasswordAuthenticationToken(
+                nuevoUserAuth,
+                authActual.getCredentials(),
+                authActual.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(nuevaAuth);
+
+        updateSecurityContextForUser(nuevoUserAuth);
     }
 
     // "encode"

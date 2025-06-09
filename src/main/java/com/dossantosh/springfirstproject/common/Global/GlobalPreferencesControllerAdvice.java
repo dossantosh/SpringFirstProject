@@ -1,6 +1,5 @@
 package com.dossantosh.springfirstproject.common.global;
 
-import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 
@@ -8,8 +7,9 @@ import com.dossantosh.springfirstproject.user.service.objects.PreferencesService
 
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -36,9 +36,9 @@ public class GlobalPreferencesControllerAdvice {
         }
 
         // Cargar preferences del usuario autenticado
-        UserAuth userAuth =  (UserAuth) session.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) auth.getPrincipal();
 
-        Preferences preferences = preferencesService.obtenerPreferencias(userAuth.getId());
+        Preferences preferences = userAuth.getPreferences();
 
         // Si no existen preferences, crearlas
         if (preferences == null) {

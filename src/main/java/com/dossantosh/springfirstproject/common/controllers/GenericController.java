@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
@@ -34,7 +35,7 @@ public abstract class GenericController {
         permisos.put("modulos", mod);
         permisos.put("submodulos", sub);
 
-        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("userAuth", userAuth);
 

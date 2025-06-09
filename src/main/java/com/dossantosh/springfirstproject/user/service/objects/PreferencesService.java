@@ -13,7 +13,7 @@ public class PreferencesService {
 
     private final PreferencesRepository preferencesRepository;
 
-    public Preferences obtenerPreferencias(Long userId) {
+    public Preferences findByUserId(Long userId) {
         // Intentamos obtener las preferences del usuario de la base de datos
         Preferences preferences = preferencesRepository.findByUserId(userId);
         

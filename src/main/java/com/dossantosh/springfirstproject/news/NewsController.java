@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class NewsController extends GenericController {
 
                 model.addAttribute("activeNavLink", "news");
 
-                UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
+                UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
                 LinkedHashSet<News> setNoticias = new LinkedHashSet<>();
 
@@ -54,7 +55,7 @@ public class NewsController extends GenericController {
                 News fechaSalida;
                 News prueba;
 
-                if (preferencesService.obtenerPreferencias(userAuth.getId()).getIdioma().equals("es")) {
+                if (preferencesService.findByUserId(userAuth.getId()).getIdioma().equals("es")) {
                         salida = new News(1L, "Seb's Fragances: disponible en...",
                                         "Ya se puede comprar Seb's Fragances en las plataformas oficiales...",
                                         "13/05/2025", "image");

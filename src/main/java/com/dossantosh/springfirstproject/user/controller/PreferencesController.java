@@ -3,9 +3,10 @@ package com.dossantosh.springfirstproject.user.controller;
 import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
+
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
-
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +36,20 @@ public class PreferencesController extends GenericController {
 
     private final LocaleResolver localeResolver;
 
-    public PreferencesController( PermisosUtils permisosUtils, PreferencesService preferencesService,
-            LocaleResolver localeResolver) {
+    private final SessionService sessionService;
+
+    public PreferencesController(PermisosUtils permisosUtils, PreferencesService preferencesService,
+            LocaleResolver localeResolver, SessionService sessionService) {
         super(permisosUtils);
         this.preferencesService = preferencesService;
         this.localeResolver = localeResolver;
+        this.sessionService = sessionService;
     }
 
     @GetMapping
     public String mostrarPreferencias(Model model, HttpSession session) {
 
-        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Set<Long> lecturaMod = new HashSet<>();
         Set<Long> escrituraMod = new HashSet<>();
@@ -59,7 +64,7 @@ public class PreferencesController extends GenericController {
         
         addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
 
-        Preferences preferences = preferencesService.obtenerPreferencias(userAuth.getId());
+        Preferences preferences = preferencesService.findByUserId(userAuth.getId());
         model.addAttribute("preferences", preferences != null ? preferences : new Preferences());
         return "objects/preferences";
     }
@@ -71,7 +76,7 @@ public class PreferencesController extends GenericController {
             HttpServletResponse response,
             RedirectAttributes redirectAttributes) {
         
-        UserAuth userAuth = (UserAuth) model.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         preferences.setUserId(userAuth.getId());
 
@@ -80,6 +85,9 @@ public class PreferencesController extends GenericController {
             // Aplica inmediatamente el locale elegido
             localeResolver.setLocale(request, response, Locale.forLanguageTag(preferences.getIdioma()));
             redirectAttributes.addFlashAttribute("successMessage", "Preferencias guardadas correctamente.");
+
+            userAuth.setPreferences(preferences);
+            sessionService.refreshAuthentication(userAuth);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Ocurrió un error al guardar las preferences.");
         }

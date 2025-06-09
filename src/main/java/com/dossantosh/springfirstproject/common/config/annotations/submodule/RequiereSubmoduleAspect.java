@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -43,7 +44,7 @@ public class RequiereSubmoduleAspect {
             throw new AccessDeniedException("No hay sesión activa");
         }
 
-        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if(Boolean.FALSE.equals(userAuth.getEnabled())){
             throw new AccessDeniedException("No tiene permiso para este módulo");

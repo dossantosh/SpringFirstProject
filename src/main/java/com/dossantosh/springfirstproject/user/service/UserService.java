@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -99,7 +100,7 @@ public class UserService {
     }
 
     // Usuarios controller
-    public Set<UserDTO> convertirUsuariosAUserAuth(Collection<User> users) {
+    public Set<UserDTO> convertirUsuariosADTO(Collection<User> users) {
         return users.stream().map(u -> {
             UserDTO dto = new UserDTO();
             dto.setId(u.getId());
@@ -218,30 +219,18 @@ public class UserService {
         tokenService.sendVerificationEmailUser(user.getEmail(), token);
     }
 
-        // User to UserAuth
     public UserAuth userToUserAuth(User user) {
+
+        // Convertir User → UserAuth
         UserAuth userAuth = new UserAuth();
-
-        Set<Long> roleId = new LinkedHashSet<>();
-        Set<Long> moduId = new LinkedHashSet<>();
-        Set<Long> subId = new LinkedHashSet<>();
-
-        for (Roles role : user.getRoles()) {
-            roleId.add(role.getId());
-        }
-        for (Modules modu : user.getModules()) {
-            moduId.add(modu.getId());
-        }
-        for (Submodules sub : user.getSubmodules()) {
-            subId.add(sub.getId());
-        }
-
         userAuth.setId(user.getId());
         userAuth.setUsername(user.getUsername());
-
-        userAuth.setRoles(roleId);
-        userAuth.setModules(moduId);
-        userAuth.setSubmodules(subId);
+        userAuth.setPassword(user.getPassword());
+        userAuth.setEnabled(user.getEnabled());
+        userAuth.setPreferences(preferencesService.findByUserId(user.getId()));
+        userAuth.setRoles(user.getRoles().stream().map(r -> r.getId()).collect(Collectors.toSet()));
+        userAuth.setModules(user.getModules().stream().map(m -> m.getId()).collect(Collectors.toSet()));
+        userAuth.setSubmodules(user.getSubmodules().stream().map(s -> s.getId()).collect(Collectors.toSet()));
 
         return userAuth;
     }

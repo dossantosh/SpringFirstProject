@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dossantosh.springfirstproject.common.security.custom.captcha.ReCaptchaValidationService;
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
-import com.dossantosh.springfirstproject.perfume.controller.PerfumeLockManager;
+import com.dossantosh.springfirstproject.perfume.utils.PerfumeLockManager;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
@@ -225,7 +226,7 @@ public class LoginController {
     @PostMapping("/logout-inactive")
     @ResponseBody
     public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
-        UserAuth userAuth = (UserAuth) session.getAttribute("userAuth");
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userAuth != null) {
             perfumeLockManager.releaseAllLocksByUser(userAuth.getUsername());

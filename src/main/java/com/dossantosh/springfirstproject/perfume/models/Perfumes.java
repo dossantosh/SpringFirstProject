@@ -1,7 +1,6 @@
 package com.dossantosh.springfirstproject.perfume.models;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

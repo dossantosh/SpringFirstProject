@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 import java.io.IOException;
@@ -30,12 +31,11 @@ public class UsuariosController extends GenericController {
 
     private final SessionService sessionService;
 
-    public UsuariosController(PermisosUtils permisosUtils, UserService userService,
+    public UsuariosController( PermisosUtils permisosUtils, UserService userService,
             SessionService sessionService) {
         super(permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
-        ;
     }
 
     @GetMapping
@@ -78,7 +78,7 @@ public class UsuariosController extends GenericController {
             return "objects/news";
         }
 
-        model.addAttribute("users", userService.convertirUsuariosAUserAuth(pageResult.getContent()));
+        model.addAttribute("users", userService.convertirUsuariosADTO(pageResult.getContent()));
 
         model.addAttribute("totalPages", pageResult.getTotalPages());
         model.addAttribute("currentPage", page);
@@ -116,13 +116,9 @@ public class UsuariosController extends GenericController {
         List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
 
         if (!primaryIdList.isEmpty()) {
-            String primaryId = primaryIdList.get(0);
 
-            UserAuth userAuth = userService.userToUserAuth(user);
-
-            sessionService.addUserAuthAttributeToSession(primaryId, "userAuth", userAuth);
+            sessionService.updateSecurityContextForUser(userService.userToUserAuth(user));
         }
-
         session.removeAttribute("selectedUser");
         return "redirect:/user/users";
     }
