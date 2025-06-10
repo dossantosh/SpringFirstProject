@@ -46,12 +46,12 @@ public class Perfumes implements Serializable {
     @DecimalMin("10.0")
     @DecimalMax("1000.0")
     @Column
-    private float price;
+    private Float price;
 
     @DecimalMin("1.0")
     @DecimalMax("1000.0")
     @Column
-    private float volume;
+    private Float volume;
     
     @Column(length = 50)
     private String season;
@@ -72,7 +72,7 @@ public class Perfumes implements Serializable {
     @Column(name = "version")
     private Integer version;
 
-    public Perfumes(String string, Brands hermes, float f, float g, String string2, String string3, int i,
+    public Perfumes(String string, Brands hermes, Float f, Float g, String string2, String string3, int i,
             Types aguaDeColonia) {
     }
 }
