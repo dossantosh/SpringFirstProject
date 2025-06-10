@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.config.annotations.submodule;
+package com.dossantosh.springfirstproject.common.security.custom.annotations.module;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,15 +20,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Aspect
 @Component
-public class RequiereSubmoduleAspect {
+public class RequiereModuleAspect {
 
-    @Around("@annotation(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule) "
-          + "|| @within(com.dossantosh.springfirstproject.common.config.annotations.submodule.RequiereSubmodule)")
+    @Around("@annotation(com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule) "
+            + "|| @within(com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
+        
+        // agarra información del método que se quiere ejecutar
         MethodSignature ms = (MethodSignature) pjp.getSignature();
-        RequiereSubmodule ann = ms.getMethod().getAnnotation(RequiereSubmodule.class);
+ 
+        // extrae, en este caso, los modulos necesarios para ejecutar el método
+        RequiereModule ann = ms.getMethod().getAnnotation(RequiereModule.class);
+        // si está vacío, busca la anotación a nivel de clase
         if (ann == null) {
-            ann = pjp.getTarget().getClass().getAnnotation(RequiereSubmodule.class);
+            ann = pjp.getTarget().getClass().getAnnotation(RequiereModule.class);
         }
         long[] required = ann.value();
 
@@ -46,15 +51,16 @@ public class RequiereSubmoduleAspect {
 
         UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(Boolean.FALSE.equals(userAuth.getEnabled())){
+        if (Boolean.FALSE.equals(userAuth.getEnabled())) {
             throw new AccessDeniedException("No tiene permiso para este módulo");
         }
 
-        // Ahora buscamos por ID dentro de cada Module
-        for (long subId : required) {
-            boolean has = userAuth.getSubmodules()
-                              .stream()
-                              .anyMatch(m -> Long.valueOf(subId).equals(m));
+        // Ahora buscamos por ID dentro de cada Modulo
+
+        for (long modId : required) {
+            boolean has = userAuth.getModules()
+                    .stream()
+                    .anyMatch(m -> Long.valueOf(modId).equals(m));
             if (has) {
                 return pjp.proceed();
             }

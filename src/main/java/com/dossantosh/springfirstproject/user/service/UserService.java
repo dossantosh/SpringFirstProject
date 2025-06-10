@@ -160,14 +160,43 @@ public class UserService {
         LinkedHashSet<Long> submodulesId = new LinkedHashSet<>();
 
         if (user.getUsername().equals("sevas")) {
-            rolesId.add(1L);
-            modulesId.add(1L);
-            submodulesId.add(1L);
+
+            rolesId.add(2L);
+
+            modulesId.add(2L);
+            modulesId.add(3L);
+
+            submodulesId.add(2L);
+
+            submodulesId.add(3L);
+            submodulesId.add(4L);
+
+            submodulesId.add(5L);
+            submodulesId.add(6L);
         }
 
-        rolesId.add(2L);
-        modulesId.add(2L);
-        submodulesId.add(2L);
+        if (user.getUsername().equals("dossantosh")) {
+
+            modulesId.add(2L);
+            modulesId.add(3L);
+
+            submodulesId.add(2L);
+
+            submodulesId.add(3L);
+
+            submodulesId.add(5L);
+            submodulesId.add(6L);
+        }
+
+        if (user.getUsername().equals("userprueba")) {
+
+            submodulesId.add(5L);
+
+        }
+
+        rolesId.add(1L);
+        modulesId.add(1L);
+        submodulesId.add(1L);
 
         Roles role = null;
         for (Long rol : rolesId) {
@@ -220,6 +249,30 @@ public class UserService {
     }
 
     public UserAuth userToUserAuth(User user) {
+
+        if (user.getId() == null) {
+            return null;
+        }
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            return null;
+        }
+
+        if (user.getEnabled() == null) {
+            return null;
+        }
+
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            return null;
+        }
+
+        if (user.getRoles() == null || user.getModules() == null || user.getSubmodules() == null) {
+            return null;
+        }
+
+        if (user.getRoles().isEmpty() || user.getModules().isEmpty() || user.getSubmodules().isEmpty()) {
+            return null;
+        }
 
         // Convertir User → UserAuth
         UserAuth userAuth = new UserAuth();

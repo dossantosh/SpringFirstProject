@@ -7,14 +7,14 @@
     <title>Configuración</title>
 
     <!-- Insertamos el head común -->
-    <th:block th:insert="~{fragments :: head}"></th:block>
+    <th:block th:insert="~{fragments :: head}" th:if="${readAll}"></th:block>
 
     
 </head>
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
-    <div th:replace="~{fragments :: navbar(${'configuration'})}"></div>
+    <div th:if="${readAll}" th:replace="~{fragments :: navbar(${'configuration'})}"></div>
 
     <!-- Main Content -->
     <main class="container my-4">
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row mt-4">
+                            <div class="row mt-4" th:if="${readAll}">
                                 <!-- Perfil -->
                                 <div class="col-md-4 mb-4">
                                     <div class="card h-100 border-0 shadow-sm">
@@ -105,7 +105,7 @@
     </main>
 
     <!-- Footer -->
-    <div th:replace="~{fragments :: footer}"></div>
+    <div th:replace="~{fragments :: footer}" th:if="${readAll}"></div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

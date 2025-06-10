@@ -7,7 +7,7 @@
     <title>Panel de Control</title>
 
     <!-- Insertamos el head común -->
-    <th:block th:insert="~{fragments :: head}"></th:block>
+    <th:block th:insert="~{fragments :: head}" th:if="${readAll}"></th:block>
 
     
     
@@ -15,7 +15,7 @@
 
 <body th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
     <!-- Navigation Bar -->
-    <div th:replace="~{fragments :: navbar(${'news'})}"></div>
+    <div th:if="${readAll}" th:replace="~{fragments :: navbar(${'news'})}"></div>
 
     <!-- Main Content -->
     <main class="container my-4">
@@ -165,7 +165,7 @@
     </main>
 
     <!-- Footer -->
-    <div th:replace="~{fragments :: footer}"></div>
+    <div th:replace="~{fragments :: footer}" th:if="${readAll}"></div>
     
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

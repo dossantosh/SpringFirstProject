@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 
 import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
@@ -19,12 +19,12 @@ import com.dossantosh.springfirstproject.user.service.objects.PreferencesService
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequiereModule({ 2L })
+@RequiereModule({ 1L })
 public class NewsController extends GenericController {
 
         private final PreferencesService preferencesService;
 
-        public NewsController( PermisosUtils permisosUtils, PreferencesService preferencesService) {
+        public NewsController(PermisosUtils permisosUtils, PreferencesService preferencesService) {
                 super(permisosUtils);
                 this.preferencesService = preferencesService;
         }
@@ -32,18 +32,23 @@ public class NewsController extends GenericController {
         @GetMapping("/objects/news")
         public String showPrincipal(Model model, HttpSession session, News news) {
 
-                Set<Long> lecturaMod = new HashSet<>();
-                Set<Long> escrituraMod = new HashSet<>();
+                Set<Long> readAll = new HashSet<>();
+                Set<Long> writeAll = new HashSet<>();
 
-                Set<Long> lecturaSub = new HashSet<>();
-                Set<Long> escrituraSub = new HashSet<>();
+                Set<Long> readUsers = new HashSet<>();
+                Set<Long> writeUsers = new HashSet<>();
 
-                lecturaMod.add(1L);
-                escrituraMod.add(1L);
-                lecturaSub.add(1L);
-                escrituraSub.add(1L);
+                Set<Long> readPerfumes = new HashSet<>();
+                Set<Long> writePerfumes = new HashSet<>();
 
-                addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+                readAll.add(1L);
+                writeAll.add(2L);
+                readUsers.add(3L);
+                writeUsers.add(4L);
+                readPerfumes.add(5L);
+                writePerfumes.add(6L);
+
+                addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
                 model.addAttribute("activeNavLink", "news");
 

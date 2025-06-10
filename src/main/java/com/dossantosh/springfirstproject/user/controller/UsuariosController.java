@@ -4,15 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 
 import com.dossantosh.springfirstproject.user.models.User;
@@ -24,14 +23,14 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/user/users")
-@RequiereModule({ 1L })
+@RequiereModule({ 2L })
 public class UsuariosController extends GenericController {
 
     private final UserService userService;
 
     private final SessionService sessionService;
 
-    public UsuariosController( PermisosUtils permisosUtils, UserService userService,
+    public UsuariosController(PermisosUtils permisosUtils, UserService userService,
             SessionService sessionService) {
         super(permisosUtils);
         this.userService = userService;
@@ -48,18 +47,23 @@ public class UsuariosController extends GenericController {
             Model model,
             HttpSession session) {
 
-        Set<Long> lecturaMod = new HashSet<>();
-        Set<Long> escrituraMod = new HashSet<>();
+        Set<Long> readAll = new HashSet<>();
+        Set<Long> writeAll = new HashSet<>();
 
-        Set<Long> lecturaSub = new HashSet<>();
-        Set<Long> escrituraSub = new HashSet<>();
+        Set<Long> readUsers = new HashSet<>();
+        Set<Long> writeUsers = new HashSet<>();
 
-        lecturaMod.add(1L);
-        escrituraMod.add(1L);
-        lecturaSub.add(1L);
-        escrituraSub.add(1L);
+        Set<Long> readPerfumes = new HashSet<>();
+        Set<Long> writePerfumes = new HashSet<>();
 
-        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        readAll.add(1L);
+        writeAll.add(2L);
+        readUsers.add(3L);
+        writeUsers.add(4L);
+        readPerfumes.add(5L);
+        writePerfumes.add(6L);
+
+        addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
         model.addAttribute("activeNavLink", "users");
 

@@ -108,6 +108,11 @@ public class SessionService {
     }
 
     public void refreshAuthentication(UserAuth nuevoUserAuth) throws IOException {
+
+        if(nuevoUserAuth == null){
+            return;
+        }
+        
         Authentication authActual = SecurityContextHolder.getContext().getAuthentication();
 
         Authentication nuevaAuth = new UsernamePasswordAuthenticationToken(

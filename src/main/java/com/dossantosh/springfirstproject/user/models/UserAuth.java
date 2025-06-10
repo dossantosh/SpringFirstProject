@@ -33,7 +33,6 @@ public class UserAuth implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Puedes mapear roles a `GrantedAuthority` así:
         return roles.stream()
                 .map(roleId -> (GrantedAuthority) () -> "ROLE_" + roleId)
                 .collect(Collectors.toSet());

@@ -39,7 +39,7 @@
                     </li>
 
                     <!-- Perfumes Link -->
-                    <li class="nav-item">
+                    <li class="nav-item" th:if="${readPerfumes}">
                         <a class="nav-link" th:classappend="${activeLink == 'perfumes'} ? 'active' : ''"
                             th:href="@{/objects/perfume}">
                             <i class="bi bi-droplet-half me-1"></i>
@@ -48,7 +48,7 @@
                     </li>
 
                     <!-- Users Link -->
-                    <li class="nav-item" th:if="${puedeVerMod}">
+                    <li class="nav-item" th:if="${readUsers}">
                         <a class="nav-link" th:classappend="${activeLink == 'users'} ? 'active' : ''"
                             th:href="@{/user/users}">
                             <i class="bi bi-people-fill me-2"></i>
@@ -110,10 +110,11 @@
                             <a th:href="@{/objects/news}" class="text-white-50 text-decoration-none"
                                 th:text="#{news.tittle}">News</a>
                         </li>
-                        <li class="mb-2"><a th:href="@{/objects/perfume}"
+                        <li class="mb-2" th:if="${readPerfumes}">
+                            <a th:href="@{/objects/perfume}"
                                 class="text-white-50 text-decoration-none">Perfumes</a>
                         </li>
-                        <li class="mb-2">
+                        <li class="mb-2" th:if="${readUsers}">
                             <a th:href="@{/user/users}" class="text-white-50 text-decoration-none"
                                 th:text="#{usuarios.tittle}">Usuarios</a>
                         </li>

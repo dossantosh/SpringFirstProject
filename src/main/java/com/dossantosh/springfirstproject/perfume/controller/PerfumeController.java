@@ -1,12 +1,13 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
-import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeLockManager;
+import com.dossantosh.springfirstproject.user.models.UserAuth;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -24,21 +25,31 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/objects/perfume")
-@RequiereModule({ 2L })
+@RequiereModule({ 3L })
 public class PerfumeController extends GenericController {
 
     private final PerfumeLockManager perfumeLockManager;
+
     private final PerfumeService perfumeService;
+
     private final BrandService brandService;
 
-    public PerfumeController(PermisosUtils permisosUtils,
-                             PerfumeService perfumeService,
-                             BrandService brandService,
-                             PerfumeLockManager perfumeLockManager) {
+    private final PermisosUtils permisosUtils;
+
+    private final Set<Long> writePerfume;
+
+    public PerfumeController(PermisosUtils permisosUtils, PerfumeLockManager perfumeLockManager,
+            PerfumeService perfumeService, BrandService brandService) {
         super(permisosUtils);
+        this.permisosUtils = permisosUtils;
+        this.perfumeLockManager = perfumeLockManager;
         this.perfumeService = perfumeService;
         this.brandService = brandService;
-        this.perfumeLockManager = perfumeLockManager;
+
+        Set<Long> writePerfume = new HashSet<>();
+        writePerfume.add(6L);
+
+        this.writePerfume = writePerfume;
     }
 
     @GetMapping
@@ -50,8 +61,7 @@ public class PerfumeController extends GenericController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Model model,
-            HttpSession session
-    ) {
+            HttpSession session) {
 
         Boolean isLockedByAnother = (Boolean) model.getAttribute("isLockedByAnother");
 
@@ -59,17 +69,23 @@ public class PerfumeController extends GenericController {
             isLockedByAnother = false;
         }
 
-        Set<Long> lecturaMod = new HashSet<>();
-        Set<Long> escrituraMod = new HashSet<>();
-        Set<Long> lecturaSub = new HashSet<>();
-        Set<Long> escrituraSub = new HashSet<>();
+        Set<Long> readAll = new HashSet<>();
+        Set<Long> writeAll = new HashSet<>();
 
-        lecturaMod.add(1L);
-        escrituraMod.add(1L);
-        lecturaSub.add(1L);
-        escrituraSub.add(1L);
+        Set<Long> readUsers = new HashSet<>();
+        Set<Long> writeUsers = new HashSet<>();
 
-        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        Set<Long> readPerfumes = new HashSet<>();
+        Set<Long> writePerfumes = new HashSet<>();
+
+        readAll.add(1L);
+        writeAll.add(2L);
+        readUsers.add(3L);
+        writeUsers.add(4L);
+        readPerfumes.add(5L);
+        writePerfumes.add(6L);
+
+        addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
         model.addAttribute("activeNavLink", "perfumes");
 
@@ -110,14 +126,21 @@ public class PerfumeController extends GenericController {
     @GetMapping("/seleccionar/{id}")
     public String seleccionarPerfume(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (perfumeLockManager.isLockedByAnother(id, userName)) {
+        if (!permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writePerfume)) {
+
+            session.setAttribute("selectedPerfume", perfumeService.findById(id));
+
+            return "redirect:/objects/perfume";
+        }
+
+        if (perfumeLockManager.isLockedByAnother(id, userAuth.getUsername())) {
             redirectAttrs.addFlashAttribute("isLockedByAnother", true);
 
             Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
             if (anterior != null && !anterior.getId().equals(id)) {
-                perfumeLockManager.releaseLock(anterior.getId(), userName);
+                perfumeLockManager.releaseLock(anterior.getId(), userAuth.getUsername());
             }
 
             session.setAttribute("selectedPerfume", perfumeService.findById(id));
@@ -128,18 +151,18 @@ public class PerfumeController extends GenericController {
         redirectAttrs.addFlashAttribute("isLockedByAnother", false);
 
         if (perfumeLockManager.lockedBy(id) != null) {
-            perfumeLockManager.refreshLock(id, userName);
+            perfumeLockManager.refreshLock(id, userAuth.getUsername());
             return "redirect:/objects/perfume";
         }
 
         Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
         if (anterior != null && !anterior.getId().equals(id)) {
-            perfumeLockManager.releaseLock(anterior.getId(), userName);
+            perfumeLockManager.releaseLock(anterior.getId(), userAuth.getUsername());
         }
 
         session.setAttribute("selectedPerfume", null);
 
-        if (perfumeLockManager.tryLock(id, userName)) {
+        if (perfumeLockManager.tryLock(id, userAuth.getUsername())) {
             session.setAttribute("selectedPerfume", perfumeService.findById(id));
         }
 
@@ -148,9 +171,9 @@ public class PerfumeController extends GenericController {
 
     @PostMapping("/guardar")
     public String guardarPerfume(@Valid @ModelAttribute Perfumes perfume,
-                                BindingResult result,
-                                HttpSession session,
-                                RedirectAttributes redirectAttrs) {
+            BindingResult result,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
         try {
 
             if (result.hasErrors()) {
@@ -167,8 +190,9 @@ public class PerfumeController extends GenericController {
 
             session.setAttribute("selectedPerfume", null);
 
-            perfumeLockManager.releaseLock(perfume.getId(), SecurityContextHolder.getContext().getAuthentication().getName());
-            
+            perfumeLockManager.releaseLock(perfume.getId(),
+                    SecurityContextHolder.getContext().getAuthentication().getName());
+
             return "redirect:/objects/perfume";
 
         } catch (IllegalStateException e) {
@@ -180,7 +204,13 @@ public class PerfumeController extends GenericController {
     @GetMapping("/cancelar/{id}")
     public String cancelar(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
-        perfumeLockManager.releaseLock(id, SecurityContextHolder.getContext().getAuthentication().getName());
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writePerfume)) {
+
+            perfumeLockManager.releaseLock(id, SecurityContextHolder.getContext().getAuthentication().getName());
+
+        }
 
         session.setAttribute("selectedPerfume", null);
 

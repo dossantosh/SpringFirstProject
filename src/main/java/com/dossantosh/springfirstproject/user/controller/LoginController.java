@@ -121,7 +121,7 @@ public class LoginController {
         userService.saveUser(user);
         tokenService.deleteByToken(token.getToken());
 
-        return "redirect:/confirmacion-exitosa";
+        return "redirect:/objects/news";
     }
 
     @GetMapping("/login")

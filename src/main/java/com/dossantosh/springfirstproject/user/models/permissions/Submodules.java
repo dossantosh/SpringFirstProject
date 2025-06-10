@@ -3,39 +3,39 @@ package com.dossantosh.springfirstproject.user.models.permissions;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import lombok.*;
 
 @Getter
 @Setter
 @Entity
-@Table(name="submodules")
+@Table(
+    name = "submodules",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "id_module"})
+    }
+)
 public class Submodules implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
-    @Column(name="id_submodule")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_submodule")
     private Long id;
 
-    @Column(unique = true, length = 50)
+    @Column(length = 50)
     private String name;
 
-    @ManyToOne()
-    @JoinColumn(name="id_module")
-    private Modules module; 
+    @ManyToOne
+    @JoinColumn(name = "id_module")
+    private Modules module;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Submodules submodules = (Submodules) o;
-        return Objects.equals(id, submodules.id);
+        Submodules that = (Submodules) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

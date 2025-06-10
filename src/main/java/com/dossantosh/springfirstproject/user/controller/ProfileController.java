@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dossantosh.springfirstproject.common.config.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.controllers.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.UserAuth;
@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
-@RequiereModule({ 2L })
+@RequiereModule({ 1L })
 public class ProfileController extends GenericController {
 
     private final UserService userService;
@@ -48,18 +48,23 @@ public class ProfileController extends GenericController {
     @GetMapping("/user/profile")
     public String showPerfilPanel(Model model, HttpSession session) {
 
-        Set<Long> lecturaMod = new HashSet<>();
-        Set<Long> escrituraMod = new HashSet<>();
+        Set<Long> readAll = new HashSet<>();
+        Set<Long> writeAll = new HashSet<>();
 
-        Set<Long> lecturaSub = new HashSet<>();
-        Set<Long> escrituraSub = new HashSet<>();
+        Set<Long> readUsers = new HashSet<>();
+        Set<Long> writeUsers = new HashSet<>();
 
-        lecturaMod.add(1L);
-        escrituraMod.add(1L);
-        lecturaSub.add(1L);
-        escrituraSub.add(1L);
+        Set<Long> readPerfumes = new HashSet<>();
+        Set<Long> writePerfumes = new HashSet<>();
 
-        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        readAll.add(1L);
+        writeAll.add(2L);
+        readUsers.add(3L);
+        writeUsers.add(4L);
+        readPerfumes.add(5L);
+        writePerfumes.add(6L);
+
+        addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
         model.addAttribute("activeNavLink", "profile");
 
@@ -91,18 +96,23 @@ public class ProfileController extends GenericController {
     @GetMapping("/user/editar") // /user/editar
     public String mostrarFormularioEdicion(Model model, HttpSession session) {
 
-        Set<Long> lecturaMod = new HashSet<>();
-        Set<Long> escrituraMod = new HashSet<>();
+        Set<Long> readAll = new HashSet<>();
+        Set<Long> writeAll = new HashSet<>();
 
-        Set<Long> lecturaSub = new HashSet<>();
-        Set<Long> escrituraSub = new HashSet<>();
+        Set<Long> readUsers = new HashSet<>();
+        Set<Long> writeUsers = new HashSet<>();
 
-        lecturaMod.add(1L);
-        escrituraMod.add(1L);
-        lecturaSub.add(1L);
-        escrituraSub.add(1L);
+        Set<Long> readPerfumes = new HashSet<>();
+        Set<Long> writePerfumes = new HashSet<>();
 
-        addPrincipalAttributes(model, session, lecturaMod, escrituraMod, lecturaSub, escrituraSub);
+        readAll.add(1L);
+        writeAll.add(2L);
+        readUsers.add(3L);
+        writeUsers.add(4L);
+        readPerfumes.add(5L);
+        writePerfumes.add(6L);
+
+        addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
         UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
