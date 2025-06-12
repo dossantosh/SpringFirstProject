@@ -87,14 +87,26 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public Page<User> findByFilters(Long id, String username, String email, int page, int size, String sortby,
+    public Page<User> findByFiltersAdmin(Long id, String username, String email, int page, int size, String sortby,
             String direction) {
 
         Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortby));
 
-        Specification<User> spec = UserSpecifications.filter(id, username, email);
+        Specification<User> spec = UserSpecifications.filterAdmin(id, username, email);
+
+        return userRepository.findAll(spec, pageable);
+    }
+
+    public Page<User> findByFiltersUser(Long id, String username, String email, int page, int size, String sortby,
+            String direction) {
+
+        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortby));
+
+        Specification<User> spec = UserSpecifications.filterUser(id, username, email);
 
         return userRepository.findAll(spec, pageable);
     }
@@ -281,7 +293,8 @@ public class UserService {
         userAuth.setPassword(user.getPassword());
         userAuth.setEnabled(user.getEnabled());
         userAuth.setPreferences(preferencesService.findByUserId(user.getId()));
-        userAuth.setRoles(user.getRoles().stream().map(r -> r.getId()).collect(Collectors.toSet()));
+        userAuth.setRoles(user.getRoles().stream().map(Roles::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
+        userAuth.setRolesId(user.getRoles().stream().map(r -> r.getId()).collect(Collectors.toSet()));
         userAuth.setModules(user.getModules().stream().map(m -> m.getId()).collect(Collectors.toSet()));
         userAuth.setSubmodules(user.getSubmodules().stream().map(s -> s.getId()).collect(Collectors.toSet()));
 

@@ -1,13 +1,20 @@
 package com.dossantosh.springfirstproject;
 
 import io.github.cdimascio.dotenv.Dotenv;
+
 import org.springframework.boot.SpringApplication;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class }, scanBasePackages = {

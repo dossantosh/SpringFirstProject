@@ -2,6 +2,7 @@ package com.dossantosh.springfirstproject.user.models;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.dossantosh.springfirstproject.user.models.objects.Preferences;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserAuth implements UserDetails {
 
     private Long id;
-    
+
     private String username;
 
     private String password;
@@ -27,14 +28,15 @@ public class UserAuth implements UserDetails {
 
     private Preferences preferences;
 
-    private Set<Long> roles = new LinkedHashSet<>();
+    private Set<String> roles = new LinkedHashSet<>();
+    private Set<Long> rolesId = new LinkedHashSet<>();
     private Set<Long> modules = new LinkedHashSet<>();
     private Set<Long> submodules = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(roleId -> (GrantedAuthority) () -> "ROLE_" + roleId)
+                .map(role -> new SimpleGrantedAuthority("" + role))
                 .collect(Collectors.toSet());
     }
 
@@ -45,12 +47,12 @@ public class UserAuth implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; 
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; 
+        return true;
     }
 
     @Override

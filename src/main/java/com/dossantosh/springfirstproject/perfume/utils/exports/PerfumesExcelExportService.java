@@ -1,13 +1,7 @@
-package com.dossantosh.springfirstproject.common.global.excel;
+package com.dossantosh.springfirstproject.perfume.utils.exports;
 
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
-import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.permissions.Modules;
-import com.dossantosh.springfirstproject.user.models.permissions.Roles;
-import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
-import com.dossantosh.springfirstproject.user.repository.UserRepository;
-
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -20,111 +14,15 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ExcelExportService {
-
-    private final UserRepository userRepository;
+public class PerfumesExcelExportService {
 
     private final PerfumeRepository perfumeRepository;
 
     private static final String CONTENTTYPEOPENXMLOFFICEDOCUMENTS = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-    // Users
-    public void exportUsuarios(HttpServletResponse response) throws IOException {
-        List<User> usuarios = userRepository.findAll();
-        String[] columnas = { "ID", "Username", "Email", "Habilitado", "Roles", "Módulos", "Submódulos" };
-
-        response.setContentType(CONTENTTYPEOPENXMLOFFICEDOCUMENTS);
-        response.setHeader("Content-Disposition", "attachment; filename=usuarios.xlsx");
-
-        try (Workbook workbook = new XSSFWorkbook(); ServletOutputStream out = response.getOutputStream()) {
-            Sheet sheet = workbook.createSheet("Usuarios");
-
-            CellStyle headerStyle = crearEstiloEncabezado(workbook);
-            CellStyle cellStyle = crearEstiloCelda(workbook);
-
-            // Crear fila encabezado
-            Row headerRow = sheet.createRow(0);
-            for (int i = 0; i < columnas.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columnas[i]);
-                cell.setCellStyle(headerStyle);
-            }
-
-            // Llenar datos de usuarios
-            int fila = 1;
-            for (User user : usuarios) {
-                Row row = sheet.createRow(fila++);
-
-                crearCelda(row, 0, user.getId(), cellStyle);
-                crearCelda(row, 1, user.getUsername(), cellStyle);
-                crearCelda(row, 2, user.getEmail(), cellStyle);
-                crearCelda(row, 3, user.getEnabled() != null && user.getEnabled() ? "Sí" : "No", cellStyle);
-                crearCelda(row, 4,
-                        user.getRoles().stream().map(Roles::getName).collect(Collectors.joining(", ")), cellStyle);
-                crearCelda(row, 5,
-                        user.getModules().stream().map(Modules::getName).collect(Collectors.joining(", ")), cellStyle);
-                crearCelda(row, 6,
-                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.joining(", ")),
-                        cellStyle);
-            }
-
-            autoSizeColumns(sheet, columnas.length);
-            workbook.write(out);
-        }
-    }
-
-    public void exportarUsuarioPorId(Long id, HttpServletResponse response) throws IOException {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        User user = optionalUser.get();
-
-        String[] campos = { "ID", "Username", "Email", "Activo", "Roles", "Módulos", "Submódulos" };
-        String[] valores = {
-                user.getId().toString(),
-                user.getUsername(),
-                user.getEmail(),
-                (user.getEnabled() != null && user.getEnabled() ? "Sí" : "No"),
-                user.getRoles().stream().map(Roles::getName).collect(Collectors.joining(", ")),
-                user.getModules().stream().map(Modules::getName).collect(Collectors.joining(", ")),
-                user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.joining(", "))
-        };
-
-        response.setContentType(CONTENTTYPEOPENXMLOFFICEDOCUMENTS);
-        response.setHeader("Content-Disposition", "attachment; filename=usuario_" + user.getId() + ".xlsx");
-
-        try (Workbook workbook = new XSSFWorkbook(); ServletOutputStream out = response.getOutputStream()) {
-            Sheet sheet = workbook.createSheet("Usuario");
-
-            CellStyle headerStyle = crearEstiloEncabezado(workbook);
-            CellStyle cellStyle = crearEstiloCelda(workbook);
-
-            Row headerRow = sheet.createRow(0);
-            Row dataRow = sheet.createRow(1);
-
-            for (int i = 0; i < campos.length; i++) {
-                Cell headerCell = headerRow.createCell(i);
-                headerCell.setCellValue(campos[i]);
-                headerCell.setCellStyle(headerStyle);
-
-                Cell dataCell = dataRow.createCell(i);
-                dataCell.setCellValue(valores[i]);
-                dataCell.setCellStyle(cellStyle);
-            }
-
-            autoSizeColumns(sheet, campos.length);
-            workbook.write(out);
-        }
-    }
 
     // Perfumes
     public void exportarTodosLosPerfumes(HttpServletResponse response) throws IOException {
@@ -234,21 +132,23 @@ public class ExcelExportService {
     // Utils
     private void crearCelda(Row row, int colIndex, Object valor, CellStyle style) {
         Cell cell = row.createCell(colIndex);
+
         if (valor == null) {
             cell.setCellValue("");
-        } else if (valor instanceof String) {
-            cell.setCellValue((String) valor);
-        } else if (valor instanceof Integer) {
-            cell.setCellValue((Integer) valor);
-        } else if (valor instanceof Long) {
-            cell.setCellValue(((Long) valor).doubleValue());
-        } else if (valor instanceof Double) {
-            cell.setCellValue((Double) valor);
-        } else if (valor instanceof Boolean) {
-            cell.setCellValue((Boolean) valor);
+        } else if (valor instanceof String s) {
+            cell.setCellValue(s);
+        } else if (valor instanceof Integer i) {
+            cell.setCellValue(i);
+        } else if (valor instanceof Long l) {
+            cell.setCellValue(l.doubleValue());
+        } else if (valor instanceof Double d) {
+            cell.setCellValue(d);
+        } else if (valor instanceof Boolean b) {
+            cell.setCellValue(b);
         } else {
             cell.setCellValue(valor.toString());
         }
+
         cell.setCellStyle(style);
     }
 

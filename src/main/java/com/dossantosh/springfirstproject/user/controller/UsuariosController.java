@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ import com.dossantosh.springfirstproject.common.security.custom.annotations.modu
 import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
 
 import com.dossantosh.springfirstproject.user.models.User;
-
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 import java.io.IOException;
@@ -26,6 +26,8 @@ import java.util.*;
 @RequiereModule({ 2L })
 public class UsuariosController extends GenericController {
 
+    private final PermisosUtils permisosUtils;
+
     private final UserService userService;
 
     private final SessionService sessionService;
@@ -35,6 +37,7 @@ public class UsuariosController extends GenericController {
         super(permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
+        this.permisosUtils = permisosUtils;
     }
 
     @GetMapping
@@ -76,10 +79,19 @@ public class UsuariosController extends GenericController {
         }
 
         // Obtener página de usuarios filtrados
-        Page<User> pageResult = userService.findByFilters(id, username, email, page, size, "id", "ASC");
+        Page<User> pageResult;
 
-        if (pageResult == null) {
-            return "objects/news";
+        if (permisosUtils.isAdmin(SecurityContextHolder.getContext().getAuthentication())) {
+
+            pageResult = userService.findByFiltersAdmin(id, username, email, page, size, "id", "ASC");
+
+        } else {
+
+            pageResult = userService.findByFiltersUser(id, username, email, page, size, "id", "ASC");
+        }
+
+        if (pageResult == null || pageResult.isEmpty() && page > 0) {
+            return "redirect:/user/users";
         }
 
         model.addAttribute("users", userService.convertirUsuariosADTO(pageResult.getContent()));

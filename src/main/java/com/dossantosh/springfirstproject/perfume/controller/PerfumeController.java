@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/objects/perfume")
@@ -120,6 +122,8 @@ public class PerfumeController extends GenericController {
 
         model.addAttribute("isLockedByAnother", isLockedByAnother);
 
+        model.addAttribute("newPerfume", new Perfumes());
+
         return "objects/perfume";
     }
 
@@ -169,7 +173,7 @@ public class PerfumeController extends GenericController {
         return "redirect:/objects/perfume";
     }
 
-    @PostMapping("/guardar")
+    @PutMapping("/guardar")
     public String guardarPerfume(@Valid @ModelAttribute Perfumes perfume,
             BindingResult result,
             HttpSession session,
@@ -181,10 +185,20 @@ public class PerfumeController extends GenericController {
                 return "redirect:/objects/perfume";
             }
 
-            if (perfume.getBrand() != null && perfumeService.existsById(perfume.getId())) {
-                Long brandId = perfume.getBrand().getId();
-                perfume.setBrand(brandService.findById(brandId));
+            if (!perfumeService.existsById(perfume.getId())) {
+                // Si el perfume no existe, no se puede guardar
+                redirectAttrs.addFlashAttribute("error", "No se puede modificar un perfume que no existe.");
+                return "redirect:/objects/perfume";
             }
+
+            if (perfume.getBrand() == null || perfume.getBrand().getId() == null) {
+                // Si no se ha seleccionado una marca, no se puede guardar
+                redirectAttrs.addFlashAttribute("error", "Ha surgido un error con la marca del perfume.");
+                return "redirect:/objects/perfume";
+            }
+
+            Long brandId = perfume.getBrand().getId();
+            perfume.setBrand(brandService.findById(brandId));
 
             perfumeService.save(perfume);
 
@@ -199,6 +213,61 @@ public class PerfumeController extends GenericController {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
             return "redirect:/objects/perfume";
         }
+    }
+
+    @PostMapping("/crear")
+    public String crearPerfume(@Valid @ModelAttribute Perfumes perfume,
+            BindingResult result,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
+        try {
+
+            if (result.hasErrors()) {
+                redirectAttrs.addFlashAttribute("error", "Revisa los campos del formulario.");
+                return "redirect:/objects/perfume";
+            }
+
+            if (perfume.getBrand() == null || perfume.getBrand().getId() == null) {
+                redirectAttrs.addFlashAttribute("error", "No se puede crear un perfume sin una marca.");
+                return "redirect:/objects/perfume";
+            }
+
+            if (perfumeService.existsByName(perfume.getName())) {
+                redirectAttrs.addFlashAttribute("error", "Ya existe un perfume con ese nombre.");
+                return "redirect:/objects/perfume";
+            }
+            perfumeService.save(perfume);
+
+            return "redirect:/objects/perfume";
+
+        } catch (IllegalStateException e) {
+            redirectAttrs.addFlashAttribute("error", e.getMessage());
+            return "redirect:/objects/perfume";
+        }
+    }
+
+    @DeleteMapping("/borrar/{id}")
+    public String borrarPerfume(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
+
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writePerfume)) {
+            redirectAttrs.addFlashAttribute("error", "No tienes permisos para borrar perfumes.");
+            return "redirect:/objects/perfume";
+        }
+
+        if (!perfumeService.existsById(id)) {
+            redirectAttrs.addFlashAttribute("error", "El perfume no existe.");
+            return "redirect:/objects/perfume";
+        }
+
+        perfumeLockManager.releaseLock(id, SecurityContextHolder.getContext().getAuthentication().getName());
+
+        perfumeService.deleteById(id);
+
+        session.setAttribute("selectedPerfume", null);
+
+        return "redirect:/objects/perfume";
     }
 
     @GetMapping("/cancelar/{id}")

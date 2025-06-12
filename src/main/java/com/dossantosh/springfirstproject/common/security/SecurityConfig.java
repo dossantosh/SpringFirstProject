@@ -16,6 +16,7 @@ import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HttpSessionIdResolver;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import com.dossantosh.springfirstproject.common.security.custom.CustomUserDetailsService;
 import com.dossantosh.springfirstproject.common.security.custom.captcha.CaptchaValidationFilter;
@@ -104,6 +105,11 @@ public class SecurityConfig {
         @Bean
         public HttpSessionIdResolver httpSessionIdResolver() {
                 return new CookieHttpSessionIdResolver();
+        }
+
+        @Bean
+        public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+                return new HiddenHttpMethodFilter();
         }
 
         @Bean

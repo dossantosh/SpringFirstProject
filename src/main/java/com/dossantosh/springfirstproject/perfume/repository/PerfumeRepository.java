@@ -11,5 +11,7 @@ import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 @Repository
 public interface PerfumeRepository extends JpaRepository<Perfumes, Long>, JpaSpecificationExecutor<Perfumes> {
         Optional<Perfumes> findByName(String name);
+        boolean existsById(Long id);
+        boolean existsByName(String name);
 
 }

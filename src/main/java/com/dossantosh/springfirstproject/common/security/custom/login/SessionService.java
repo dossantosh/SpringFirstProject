@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.SerializationUtils;
 
 import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.service.UserService;
@@ -91,7 +92,9 @@ public class SessionService {
 
         // Crear nuevo SecurityContext con el auth
         SecurityContext newContext = new SecurityContextImpl(newAuth);
-        byte[] serializedContext = serialize(newContext);
+
+        // Serializar usando Spring utility
+        byte[] serializedContext = SerializationUtils.serialize(newContext);
 
         // Actualizar o insertar en cada sesión
         for (String primaryId : primaryIds) {

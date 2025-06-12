@@ -61,6 +61,18 @@ public class PerfumeService {
         return perfumeRepository.existsById(id);
     }
 
+    public boolean existsByName(String name) {
+        return perfumeRepository.existsByName(name);
+    }
+
+    public boolean deleteById(Long id) {
+        if (!existsById(id)) {
+            throw new EntityNotFoundException("Perfume con ID " + id + " no encontrado");
+        }
+        perfumeRepository.deleteById(id);
+        return !existsById(id);
+    }
+
     public long count() {
         return perfumeRepository.count();
     }
