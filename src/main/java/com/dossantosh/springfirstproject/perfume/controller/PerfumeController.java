@@ -65,27 +65,18 @@ public class PerfumeController extends GenericController {
             Model model,
             HttpSession session) {
 
-        Boolean isLockedByAnother = (Boolean) model.getAttribute("isLockedByAnother");
+        Boolean isLockedByAnother = (Boolean) session.getAttribute("isLockedByAnother");
 
-        if (isLockedByAnother == null) {
-            isLockedByAnother = false;
-        }
+        session.setAttribute("isLockedByAnother", isLockedByAnother);
+        
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
 
-        Set<Long> readAll = new HashSet<>();
-        Set<Long> writeAll = new HashSet<>();
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        Set<Long> readUsers = new HashSet<>();
-        Set<Long> writeUsers = new HashSet<>();
-
-        Set<Long> readPerfumes = new HashSet<>();
-        Set<Long> writePerfumes = new HashSet<>();
-
-        readAll.add(1L);
-        writeAll.add(2L);
-        readUsers.add(3L);
-        writeUsers.add(4L);
-        readPerfumes.add(5L);
-        writePerfumes.add(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
@@ -110,6 +101,7 @@ public class PerfumeController extends GenericController {
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("hasPrevious", pageResult.hasPrevious());
         model.addAttribute("selectedPerfume", session.getAttribute("selectedPerfume"));
+        model.addAttribute("isLockedByAnother", session.getAttribute("isLockedByAnother"));
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("id", id);
@@ -119,8 +111,6 @@ public class PerfumeController extends GenericController {
         model.addAttribute("filters", filters);
 
         perfumeService.cargarListaInfo().forEach(model::addAttribute);
-
-        model.addAttribute("isLockedByAnother", isLockedByAnother);
 
         model.addAttribute("newPerfume", new Perfumes());
 
@@ -140,7 +130,7 @@ public class PerfumeController extends GenericController {
         }
 
         if (perfumeLockManager.isLockedByAnother(id, userAuth.getUsername())) {
-            redirectAttrs.addFlashAttribute("isLockedByAnother", true);
+            session.setAttribute("isLockedByAnother", true);
 
             Perfumes anterior = (Perfumes) session.getAttribute("selectedPerfume");
             if (anterior != null && !anterior.getId().equals(id)) {
@@ -152,7 +142,7 @@ public class PerfumeController extends GenericController {
             return "redirect:/objects/perfume";
         }
 
-        redirectAttrs.addFlashAttribute("isLockedByAnother", false);
+        session.setAttribute("isLockedByAnother", null);
 
         if (perfumeLockManager.lockedBy(id) != null) {
             perfumeLockManager.refreshLock(id, userAuth.getUsername());
@@ -203,6 +193,8 @@ public class PerfumeController extends GenericController {
             perfumeService.save(perfume);
 
             session.setAttribute("selectedPerfume", null);
+
+            session.setAttribute("isLockedByAnother", null);
 
             perfumeLockManager.releaseLock(perfume.getId(),
                     SecurityContextHolder.getContext().getAuthentication().getName());
@@ -267,6 +259,8 @@ public class PerfumeController extends GenericController {
 
         session.setAttribute("selectedPerfume", null);
 
+        session.setAttribute("isLockedByAnother", null);
+
         return "redirect:/objects/perfume";
     }
 
@@ -282,6 +276,8 @@ public class PerfumeController extends GenericController {
         }
 
         session.setAttribute("selectedPerfume", null);
+
+        session.setAttribute("isLockedByAnother", null);
 
         return "redirect:/objects/perfume";
     }

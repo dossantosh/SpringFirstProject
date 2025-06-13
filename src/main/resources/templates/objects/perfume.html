@@ -321,7 +321,7 @@
         <!-- Card: Edición de Perfume Seleccionado -->
         <div class="row mb-4" th:if="${writePerfumes}">
             <div class="col-12" th:unless="${selectedPerfume == null}">
-                <div class="card shadow-sm" th:if="${isLockedByAnother}">
+                <div class="card shadow-sm" th:if="${isLockedByAnother == true}">
                     <!-- Cabecera -->
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
@@ -341,7 +341,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-sm" th:unless="${isLockedByAnother}">
+                <div class="card shadow-sm" th:unless="${isLockedByAnother == true}">
                     <!-- Cabecera -->
                     <div
                         th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">

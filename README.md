@@ -194,13 +194,14 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 
 ## 👤 Author
 
-- dossantosh
+- Sebastián Dos Santos
 
 ---
 
 ## 📬 Contact
 
-- Email: sebas.dosantos@example.com
+- Email: sebastiandossantosh@gmail.com
+- Linkeding: [dossantosh](linkedin.com/in/dossantosh)
 - GitHub: [dossantosh](https://github.com/dossantosh)
 
 ---

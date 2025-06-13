@@ -32,21 +32,14 @@ public class NewsController extends GenericController {
         @GetMapping("/objects/news")
         public String showPrincipal(Model model, HttpSession session, News news) {
 
-                Set<Long> readAll = new HashSet<>();
-                Set<Long> writeAll = new HashSet<>();
+                Set<Long> readAll = Set.of(1L);
+                Set<Long> writeAll = Set.of(2L);
 
-                Set<Long> readUsers = new HashSet<>();
-                Set<Long> writeUsers = new HashSet<>();
+                Set<Long> readUsers = Set.of(3L);
+                Set<Long> writeUsers = Set.of(4L);
 
-                Set<Long> readPerfumes = new HashSet<>();
-                Set<Long> writePerfumes = new HashSet<>();
-
-                readAll.add(1L);
-                writeAll.add(2L);
-                readUsers.add(3L);
-                writeUsers.add(4L);
-                readPerfumes.add(5L);
-                writePerfumes.add(6L);
+                Set<Long> readPerfumes = Set.of(5L);
+                Set<Long> writePerfumes = Set.of(6L);
 
                 addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
