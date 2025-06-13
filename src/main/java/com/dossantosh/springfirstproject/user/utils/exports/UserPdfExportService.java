@@ -98,7 +98,7 @@ public class UserPdfExportService {
         response.setContentType("application/pdf");
         String nombreArchivo = "usuario-" + user.getId() + ".pdf";
         response.setHeader("Content-Disposition", "attachment; filename=" + nombreArchivo);
-
+        
         Document document = new Document(PageSize.A4.rotate());
         PdfWriter.getInstance(document, response.getOutputStream());
 

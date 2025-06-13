@@ -54,7 +54,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label for="filtersSeason" class="form-label"
-                                            th:text="#{perfu.temporada}">Temporada</label>
+                                            th:text="#{perfumes.temporada}">Temporada</label>
                                         <select class="form-select" id="filtersSeason" name="season">
                                             <option th:value="''" th:text="#{perfumes.todas}">Todas</option>
                                             <option th:value="Invierno" th:text="#{perfumes.invierno}"
@@ -603,24 +603,6 @@
             // Obtener ID del perfume desde el atributo data-id del contenedor
             const perfumeId = document.getElementById('perfume-editor')?.dataset.id;
 
-            // Función que refresca el lock
-            function refreshLock() {
-                if (!perfumeId) return;
-                console.log('Refrescando lock para perfume:', perfumeId);
-                fetch(`/objects/perfume/refreshLock/${perfumeId}`, {
-                    method: 'POST',
-                    headers: {
-                        [csrfHeader]: csrfToken
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error('No se pudo refrescar el lock');
-                        }
-                    })
-                    .catch(console.error);
-            }
-
             // 1 search per sec (deshabilita momentáneamente el botón de buscar)
             const buscarBtn = document.getElementById('buscarBtn');
             if (buscarBtn) {
@@ -642,6 +624,33 @@
             });
 
             // Refrescar lock cuando el usuario interactúe con el formulario
+            let lockCooldown = false;
+
+            function refreshLock() {
+                if (lockCooldown || !perfumeId) return;
+
+                console.log('Refrescando lock para perfume:', perfumeId);
+                fetch(`/objects/perfume/refreshLock/${perfumeId}`, {
+                    method: 'POST',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('No se pudo refrescar el lock');
+                        }
+                    })
+                    .catch(console.error);
+
+                // Activar cooldown de 5 segundos (5000 milisegundos)
+                lockCooldown = true;
+                setTimeout(() => {
+                    lockCooldown = false;
+                }, 30000); // <-- cambia este valor a 300000 para 5 minutos
+            }
+
+            // Asociar el refreshLock a eventos del formulario
             const form = document.getElementById('formEditarPerfume');
             if (form) {
                 form.addEventListener('input', refreshLock);
@@ -649,7 +658,6 @@
                 form.addEventListener('keydown', refreshLock);
                 form.addEventListener('focus', refreshLock, true);
             }
-
             // También lo podés dejar con setInterval si querés doble seguridad:
             //setInterval(refreshLock, 60000); // cada 60 segundos
         });

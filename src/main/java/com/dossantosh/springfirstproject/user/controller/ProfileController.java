@@ -25,7 +25,6 @@ import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 
 import com.dossantosh.springfirstproject.user.service.UserService;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -129,7 +128,7 @@ public class ProfileController extends GenericController {
             RedirectAttributes redirectAttrs,
             RedirectAttributes flash,
             HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
+            HttpServletResponse response) throws IOException {
 
         userService.guardarUsuario(user, userService.findById(user.getId()));
 

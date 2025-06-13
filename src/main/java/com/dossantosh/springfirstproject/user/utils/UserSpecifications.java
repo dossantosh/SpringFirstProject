@@ -9,13 +9,15 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 public class UserSpecifications {
+
+    // Private constructor to prevent instantiation
+    private UserSpecifications() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     public static Specification<User> filterAdmin(Long id, String username, String email) {
         return (root, query, cb) -> {

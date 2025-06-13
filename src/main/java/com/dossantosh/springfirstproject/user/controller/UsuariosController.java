@@ -108,7 +108,6 @@ public class UsuariosController extends GenericController {
         filters.put("email", email);
         model.addAttribute("filters", filters);
 
-        // model.addAllAttributes(userService.cargarListasFormulario());
         userService.cargarListasFormulario().forEach(model::addAttribute);
         return "user/users";
     }

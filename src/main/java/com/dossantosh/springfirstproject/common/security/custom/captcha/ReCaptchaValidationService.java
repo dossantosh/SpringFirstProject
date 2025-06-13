@@ -39,8 +39,6 @@ public class ReCaptchaValidationService {
 
             HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
-            // ResponseEntity<Map> responseEntity = restTemplate.postForEntity(verifyUrl, requestEntity, Map.class);
-
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                     verifyUrl,
                     HttpMethod.POST,
@@ -56,8 +54,8 @@ public class ReCaptchaValidationService {
             Double score = 0.0;
             if (response.containsKey("score")) {
                 Object scoreObj = response.get("score");
-                if (scoreObj instanceof Number) {
-                    score = ((Number) scoreObj).doubleValue();
+                if (scoreObj instanceof Number number) {
+                    score = number.doubleValue();
                 }
             }
             return score >= 0.5;
