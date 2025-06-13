@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dossantosh.springfirstproject.user.models.User;
@@ -52,7 +53,6 @@ public class UserService {
     private final TokenService tokenService;
 
     public User saveUser(User user) {
-
         return userRepository.save(user);
     }
 
@@ -239,6 +239,11 @@ public class UserService {
             return;
         }
 
+        user.setEnabled(false);
+        user.setRoles(roles);
+        user.setModules(modules);
+        user.setSubmodules(submodules);
+
         saveUser(user);
 
         Preferences preferences = new Preferences();
@@ -248,11 +253,6 @@ public class UserService {
         preferences.setEmailNotifications(false);
         preferences.setSmsNotifications(false);
         preferencesService.guardarPreferencias(preferences);
-
-        user.setEnabled(false);
-        user.setRoles(roles);
-        user.setModules(modules);
-        user.setSubmodules(submodules);
 
         preferencesService.guardarPreferencias(preferences);
 
@@ -293,7 +293,8 @@ public class UserService {
         userAuth.setPassword(user.getPassword());
         userAuth.setEnabled(user.getEnabled());
         userAuth.setPreferences(preferencesService.findByUserId(user.getId()));
-        userAuth.setRoles(user.getRoles().stream().map(Roles::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
+        userAuth.setRoles(
+                user.getRoles().stream().map(Roles::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
         userAuth.setRolesId(user.getRoles().stream().map(r -> r.getId()).collect(Collectors.toSet()));
         userAuth.setModules(user.getModules().stream().map(m -> m.getId()).collect(Collectors.toSet()));
         userAuth.setSubmodules(user.getSubmodules().stream().map(s -> s.getId()).collect(Collectors.toSet()));

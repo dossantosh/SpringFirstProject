@@ -31,7 +31,7 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
-	<!-- Basic spring dependencies -->
+<!-- Basic spring dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -68,18 +68,18 @@
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
 <!-- Spring Session Core para Cookies -->
-   		<dependency>
-        	<groupId>org.springframework.session</groupId>
-        	<artifactId>spring-session-core</artifactId>
-    	</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+		</dependency>
 <!-- Spring Session JDBC -->
 		<dependency>
-  			<groupId>org.springframework.boot</groupId>
-  			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
-    		<groupId>org.springframework.session</groupId>
-    		<artifactId>spring-session-jdbc</artifactId>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
 		</dependency>
 <!-- Tests-->
 		<dependency>
@@ -88,14 +88,19 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    		<groupId>org.mockito</groupId>
-    		<artifactId>mockito-inline</artifactId>
-    		<version>5.2.0</version>
-    		<scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 <!-- postgreSQL y lombock -->
@@ -121,26 +126,26 @@
 		</dependency>
 <!-- Env -->
 		<dependency>
-  			<groupId>io.github.cdimascio</groupId>
-  			<artifactId>dotenv-java</artifactId>
- 			<version>3.0.0</version>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 <!-- AOP -->
 		<dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-starter-aop</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 <!-- Excel -->
 		<dependency>
-    		<groupId>org.apache.poi</groupId>
-    		<artifactId>poi-ooxml</artifactId>
-    		<version>5.2.3</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.3</version>
 		</dependency>
 <!-- Pdf -->
 		<dependency>
-    		<groupId>com.github.librepdf</groupId>
-    		<artifactId>openpdf</artifactId>
-    		<version>1.3.30</version>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
+			<version>1.3.30</version>
 		</dependency>
 	</dependencies>
 

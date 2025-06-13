@@ -93,10 +93,6 @@ public class LoginController {
             return REGISTER;
         }
 
-        if (!user.getPassword().startsWith("{bcrypt}")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-
         userService.crearUsuario(user);
         return respuesta;
     }
