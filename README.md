@@ -10,31 +10,11 @@ This project serves as a foundation for developing enterprise-grade web applicat
 
 ## ✨ Features
 
-# 👥 User & Security
+### 👥 User & Security
 - Secure user registration and login with CAPTCHA and email token confirmation
 - Role-based access control (RBAC) with modules and submodules
 - Custom permission annotations for fine-grained access control
 - Session management using Spring Session JDBC
-# 🌐 Web & API
-- Thymeleaf-based dynamic HTML views
-- RESTful endpoints using DTOs
-- Internationalization (i18n)
-# 📦 Architecture
-- Modular package structure: `user`, `perfume`, `news`, `common`
-- Optimistic and pessimistic locking for data integrity
-# 📊 Reports & Exports
-- PDF and Excel report generation (OpenPDF, Apache POI)
-# ⚙️ Dev & Ops
-- Dotenv for dynamic configuration via `.env`
-- OpenAPI documentation with SpringDoc
-- Admin-only Actuator monitoring endpoints
-# 👥 User & Security
-- Secure user registration and login with CAPTCHA and email token confirmation
-- Role-based access control (RBAC) with modules and submodules
-- Custom permission annotations for fine-grained access control
-- Session management using Spring Session JDBC
-- All endpoints secured with method-level annotations (`@RequiereModule`)
-- Submodule custom annotations to use with thymeleaf 
 
 ### 🌐 Web & API
 - Thymeleaf-based dynamic HTML views
@@ -53,6 +33,14 @@ This project serves as a foundation for developing enterprise-grade web applicat
 - Dotenv for dynamic configuration via `.env`
 - OpenAPI documentation with SpringDoc
 - Admin-only Actuator monitoring endpoints
+
+### 👥 User & Security
+- Secure user registration and login with CAPTCHA and email token confirmation
+- Role-based access control (RBAC) with modules and submodules
+- Custom permission annotations for fine-grained access control
+- Session management using Spring Session JDBC
+- All endpoints secured with method-level annotations (`@RequiereModule`)
+- Submodule custom annotations to use with thymeleaf
 
 ---
 
