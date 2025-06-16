@@ -1,19 +1,16 @@
-package com.dossantosh.springfirstproject.user.controller;
+package com.dossantosh.springfirstproject.pref;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.SessionService;
 import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
-
-import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.models.objects.Preferences;
-import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -38,9 +35,10 @@ public class PreferencesController extends GenericController {
 
     private final SessionService sessionService;
 
-    public PreferencesController(PermisosUtils permisosUtils, PreferencesService preferencesService,
+    public PreferencesController(UserContextService userContextService, PermisosUtils permisosUtils,
+            PreferencesService preferencesService,
             LocaleResolver localeResolver, SessionService sessionService) {
-        super(permisosUtils);
+        super(userContextService, permisosUtils);
         this.preferencesService = preferencesService;
         this.localeResolver = localeResolver;
         this.sessionService = sessionService;

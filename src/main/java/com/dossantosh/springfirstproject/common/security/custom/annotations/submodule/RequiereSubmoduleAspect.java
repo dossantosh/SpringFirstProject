@@ -6,13 +6,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,10 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class RequiereSubmoduleAspect {
 
+    private final UserContextService userContextService;
+
     @Around("@annotation(com.dossantosh.springfirstproject.common.security.custom.annotations.submodule.RequiereSubmodule) "
-          + "|| @within(com.dossantosh.springfirstproject.common.security.custom.annotations.submodule.RequiereSubmodule)")
+            + "|| @within(com.dossantosh.springfirstproject.common.security.custom.annotations.submodule.RequiereSubmodule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature ms = (MethodSignature) pjp.getSignature();
         RequiereSubmodule ann = ms.getMethod().getAnnotation(RequiereSubmodule.class);
@@ -44,17 +46,15 @@ public class RequiereSubmoduleAspect {
             throw new AccessDeniedException("No hay sesión activa");
         }
 
-        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(Boolean.FALSE.equals(userAuth.getEnabled())){
+        if (Boolean.FALSE.equals(userContextService.getEnabled())) {
             throw new AccessDeniedException("No tiene permiso para este módulo");
         }
 
         // Ahora buscamos por ID dentro de cada Module
-        for (long subId : required) {
-            boolean has = userAuth.getSubmodules()
-                              .stream()
-                              .anyMatch(m -> Long.valueOf(subId).equals(m));
+        for (long modId : required) {
+            boolean has = userContextService.getModules()
+                    .stream()
+                    .anyMatch(m -> Long.valueOf(modId).equals(m));
             if (has) {
                 return pjp.proceed();
             }

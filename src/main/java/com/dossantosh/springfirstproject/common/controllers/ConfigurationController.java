@@ -1,6 +1,5 @@
 package com.dossantosh.springfirstproject.common.controllers;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpSession;
 @RequiereModule({ 1L })
 public class ConfigurationController extends GenericController {
 
-    public ConfigurationController(PermisosUtils permisosUtils) {
-        super(permisosUtils);
+    public ConfigurationController(UserContextService userContextService, PermisosUtils permisosUtils) {
+        super(userContextService, permisosUtils);
     }
 
     @GetMapping("/common/configuration")

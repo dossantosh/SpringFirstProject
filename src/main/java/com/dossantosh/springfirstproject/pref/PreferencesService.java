@@ -1,9 +1,6 @@
-package com.dossantosh.springfirstproject.user.service.objects;
+package com.dossantosh.springfirstproject.pref;
 
 import org.springframework.stereotype.Service;
-
-import com.dossantosh.springfirstproject.user.models.objects.Preferences;
-import com.dossantosh.springfirstproject.user.repository.objects.PreferencesRepository;
 
 import lombok.RequiredArgsConstructor;
 

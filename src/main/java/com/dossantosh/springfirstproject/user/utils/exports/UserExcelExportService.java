@@ -4,7 +4,7 @@ import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
-import com.dossantosh.springfirstproject.user.repository.UserRepository;
+import com.dossantosh.springfirstproject.user.service.UserService;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,8 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -26,13 +25,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserExcelExportService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private static final String CONTENTTYPEOPENXMLOFFICEDOCUMENTS = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     // Users
     public void exportUsuarios(HttpServletResponse response) throws IOException {
-        List<User> usuarios = userRepository.findAll();
+        Set<User> usuarios = userService.findAll();
         String[] columnas = { "ID", "Username", "Email", "Habilitado", "Roles", "Módulos", "Submódulos" };
 
         response.setContentType(CONTENTTYPEOPENXMLOFFICEDOCUMENTS);
@@ -76,13 +75,11 @@ public class UserExcelExportService {
     }
 
     public void exportarUsuarioPorId(Long id, HttpServletResponse response) throws IOException {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) {
+        User user = userService.findById(id);
+        if (user == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-
-        User user = optionalUser.get();
 
         String[] campos = { "ID", "Username", "Email", "Activo", "Roles", "Módulos", "Submódulos" };
         String[] valores = {

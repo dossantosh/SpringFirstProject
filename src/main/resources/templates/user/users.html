@@ -407,6 +407,17 @@
                 return true;
             }
         }
+
+        // Restaurar posición del scroll
+        const scrollPos = localStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+        }
+
+        // Guardar scroll al salir de la página
+        window.addEventListener('beforeunload', function () {
+            localStorage.setItem('scrollPos', window.scrollY);
+        });
     </script>
 
 </body>

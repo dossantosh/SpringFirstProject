@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.user.models.objects;
+package com.dossantosh.springfirstproject.pref;
 
 import java.io.Serializable;
 

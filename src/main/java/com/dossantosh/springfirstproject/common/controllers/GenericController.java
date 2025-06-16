@@ -2,50 +2,49 @@ package com.dossantosh.springfirstproject.common.controllers;
 
 import java.util.Set;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class GenericController {
 
-    private final PermisosUtils permisosUtils;
+    protected final UserContextService userContextService;
+
+    protected final PermisosUtils permisosUtils;
 
     protected void addPrincipalAttributes(Model model,
             Set<Long> readAll, Set<Long> writeAll, Set<Long> readUsers, Set<Long> writeUsers, Set<Long> readPerfumes,
             Set<Long> writePerfumes) {
 
-        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        model.addAttribute("userAuth", userAuth);
+        model.addAttribute("userAuth", userContextService);
 
         if (readAll != null) {
             model.addAttribute("readAll",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), readAll));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), readAll));
         }
         if (writeAll != null) {
             model.addAttribute("writeAll",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writeAll));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writeAll));
         }
         if (readUsers != null) {
             model.addAttribute("readUsers",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), readUsers));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), readUsers));
         }
         if (writeUsers != null) {
             model.addAttribute("writeUsers",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writeUsers));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writeUsers));
         }
         if (readPerfumes != null) {
             model.addAttribute("readPerfumes",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), readPerfumes));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), readPerfumes));
         }
         if (writePerfumes != null) {
             model.addAttribute("writePerfumes",
-                    permisosUtils.contieneAlgunSubmodulo(userAuth.getSubmodules(), writePerfumes));
+                    permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writePerfumes));
         }
     }
 }

@@ -11,25 +11,25 @@ import lombok.RequiredArgsConstructor;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
-import com.dossantosh.springfirstproject.user.repository.UserRepository;
+import com.dossantosh.springfirstproject.user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class UserPdfExportService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     // Users
     public void exportarTodosLosUsuarios(HttpServletResponse response) throws IOException {
-        List<User> usuarios = userRepository.findAll();
+        
+        Set<User> usuarios = userService.findAll();
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=usuarios.pdf");
@@ -86,14 +86,12 @@ public class UserPdfExportService {
     }
 
     public void exportarUsuario(Long id, HttpServletResponse response) throws IOException {
-        Optional<User> userOpt = userRepository.findById(id);
+        User user = userService.findById(id);
 
-        if (!userOpt.isPresent()) {
+        if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Usuario no encontrado");
             return;
         }
-
-        User user = userOpt.get();
 
         response.setContentType("application/pdf");
         String nombreArchivo = "usuario-" + user.getId() + ".pdf";

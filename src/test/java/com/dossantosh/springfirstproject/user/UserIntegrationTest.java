@@ -2,7 +2,6 @@ package com.dossantosh.springfirstproject.user;
 
 import com.dossantosh.springfirstproject.user.models.User;
 
-
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.security.custom.login;
+package com.dossantosh.springfirstproject.common.security.custom;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.SerializationUtils;
 
-import com.dossantosh.springfirstproject.user.models.UserAuth;
+import com.dossantosh.springfirstproject.common.global.UserLoggedOutEvent;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 @Service
@@ -31,6 +34,11 @@ public class SessionService {
     public SessionService(JdbcTemplate jdbcTemplate, UserService userService) {
         this.jdbcTemplate = jdbcTemplate;
         this.userService = userService;
+    }
+
+    @EventListener
+    public void handleUserLoggedOut(UserLoggedOutEvent event) {
+        invalidateSessionsById(event.getUserId());
     }
 
     public void invalidateSessionsById(Long id) {
@@ -75,12 +83,11 @@ public class SessionService {
         }
     }
 
-    public void updateSecurityContextForUser(UserAuth newUserAuth) throws IOException {
+    public void updateSecurityContextForUser(UserAuth newUserAuth) {
         String username = newUserAuth.getUsername();
         List<String> primaryIds = findPrimaryIdsByPrincipalName(username);
 
         if (primaryIds.isEmpty()) {
-            System.out.println("No active sessions found for user: " + username);
             return;
         }
 
@@ -110,12 +117,12 @@ public class SessionService {
         }
     }
 
-    public void refreshAuthentication(UserAuth nuevoUserAuth) throws IOException {
+    public void refreshAuthentication(UserAuth nuevoUserAuth) {
 
-        if(nuevoUserAuth == null){
+        if (nuevoUserAuth == null) {
             return;
         }
-        
+
         Authentication authActual = SecurityContextHolder.getContext().getAuthentication();
 
         Authentication nuevaAuth = new UsernamePasswordAuthenticationToken(

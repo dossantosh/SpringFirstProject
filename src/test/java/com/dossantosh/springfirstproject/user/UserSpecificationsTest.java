@@ -18,7 +18,7 @@ class UserSpecificationsTest {
 
     @Autowired
     private UserRepository userRepository;
-
+    
     @Test
     @DisplayName("Should filter users by username")
     void filterByUsername() {

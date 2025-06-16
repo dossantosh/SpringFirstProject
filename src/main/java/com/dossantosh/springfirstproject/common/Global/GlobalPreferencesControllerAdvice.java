@@ -1,9 +1,9 @@
 package com.dossantosh.springfirstproject.common.global;
 
-import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.models.objects.Preferences;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 
-import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
+import com.dossantosh.springfirstproject.pref.Preferences;
+import com.dossantosh.springfirstproject.pref.PreferencesService;
 
 import jakarta.servlet.http.HttpSession;
 

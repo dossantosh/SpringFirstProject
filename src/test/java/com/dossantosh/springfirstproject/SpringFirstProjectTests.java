@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+
 import io.github.cdimascio.dotenv.Dotenv;
 
-@SpringBootTest
 @ActiveProfiles("test")
 class SpringFirstProjectTests {
 

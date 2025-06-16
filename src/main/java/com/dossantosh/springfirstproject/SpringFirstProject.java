@@ -21,8 +21,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "com.dossantosh.springfirstproject.common",
         "com.dossantosh.springfirstproject.news",
         "com.dossantosh.springfirstproject.perfume",
+        "com.dossantosh.springfirstproject.pref",
         "com.dossantosh.springfirstproject.preferences",
-        "com.dossantosh.springfirstproject.user"
+        "com.dossantosh.springfirstproject.user",
 })
 @EnableTransactionManagement
 @EnableScheduling

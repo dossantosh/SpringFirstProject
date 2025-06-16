@@ -1,10 +1,10 @@
 package com.dossantosh.springfirstproject.user;
 
+import com.dossantosh.springfirstproject.pref.PreferencesService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.repository.UserRepository;
 import com.dossantosh.springfirstproject.user.service.UserService;
-import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
 import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
 import com.dossantosh.springfirstproject.user.service.permissions.RoleService;

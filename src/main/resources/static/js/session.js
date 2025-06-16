@@ -1,5 +1,5 @@
 let inactivityTimeout;
-const MAX_INACTIVITY_MINUTES = 5;
+const MAX_INACTIVITY_MINUTES = 5; // Tiempo máximo de inactividad en minutos
 
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
@@ -8,7 +8,6 @@ const resetTimer = () => {
     clearTimeout(inactivityTimeout);
     inactivityTimeout = setTimeout(logoutUser, MAX_INACTIVITY_MINUTES * 60 * 1000);
 };
-
 
 const logoutUser = () => {
     fetch('/logout-inactive', {

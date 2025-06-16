@@ -1,11 +1,11 @@
-package com.dossantosh.springfirstproject.user.models;
+package com.dossantosh.springfirstproject.common.security.custom.auth;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.dossantosh.springfirstproject.user.models.objects.Preferences;
+import com.dossantosh.springfirstproject.pref.Preferences;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

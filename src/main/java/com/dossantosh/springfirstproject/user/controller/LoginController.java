@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.springframework.context.ApplicationEventPublisher;
+
+import com.dossantosh.springfirstproject.common.global.UserLoggedOutEvent;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.common.security.custom.captcha.ReCaptchaValidationService;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
-import com.dossantosh.springfirstproject.perfume.utils.PerfumeLockManager;
+
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
 
 import com.dossantosh.springfirstproject.user.service.UserService;
@@ -43,9 +45,7 @@ public class LoginController {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final SessionService invalidationService;
-
-    private final PerfumeLockManager perfumeLockManager;
+    private final ApplicationEventPublisher eventPublisher;
 
     private static final String FAILURE_COUNT = "LOGIN_FAILURE_COUNT";
 
@@ -222,12 +222,13 @@ public class LoginController {
     @PostMapping("/logout-inactive")
     @ResponseBody
     public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
+        
         UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userAuth != null) {
-            perfumeLockManager.releaseAllLocksByUser(userAuth.getUsername());
 
-            invalidationService.invalidateSessionsById(userAuth.getId());
+            eventPublisher.publishEvent(new UserLoggedOutEvent(userAuth.getId(), userAuth.getUsername()));
+
         }
 
         session.invalidate();

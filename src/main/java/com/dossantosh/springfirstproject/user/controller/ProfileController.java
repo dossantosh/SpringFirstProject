@@ -1,7 +1,7 @@
 package com.dossantosh.springfirstproject.user.controller;
 
 import java.io.IOException;
-import java.util.HashSet;
+
 import java.util.Set;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,19 +15,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.SessionService;
 import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
-
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import jakarta.validation.Valid;
 
 @Controller
@@ -38,8 +40,9 @@ public class ProfileController extends GenericController {
 
     private final SessionService sessionService;
 
-    public ProfileController(PermisosUtils permisosUtils, UserService userService, SessionService sessionService) {
-        super(permisosUtils);
+    public ProfileController(UserContextService userContextService, PermisosUtils permisosUtils,
+            UserService userService, SessionService sessionService) {
+        super(userContextService, permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
     }

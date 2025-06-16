@@ -14,17 +14,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+import com.dossantosh.springfirstproject.pref.Preferences;
+import com.dossantosh.springfirstproject.pref.PreferencesService;
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.UserAuth;
-import com.dossantosh.springfirstproject.user.models.objects.Preferences;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 import com.dossantosh.springfirstproject.user.repository.UserRepository;
-import com.dossantosh.springfirstproject.user.service.objects.PreferencesService;
 import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
 import com.dossantosh.springfirstproject.user.service.permissions.RoleService;
@@ -252,7 +252,6 @@ public class UserService {
         preferences.setIdioma("es");
         preferences.setEmailNotifications(false);
         preferences.setSmsNotifications(false);
-        preferencesService.guardarPreferencias(preferences);
 
         preferencesService.guardarPreferencias(preferences);
 

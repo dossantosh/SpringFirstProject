@@ -1,6 +1,9 @@
-package com.dossantosh.springfirstproject.perfume.utils;
+package com.dossantosh.springfirstproject.perfume.utils.lock;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import com.dossantosh.springfirstproject.common.global.UserLoggedOutEvent;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,6 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PerfumeLockManager {
 
     private final Map<Long, LockInfo> perfumeLocks = new ConcurrentHashMap<>();
+
+    @EventListener
+    public void handleUserLoggedOut(UserLoggedOutEvent event) {
+        releaseAllLocksByUser(event.getUsername());
+    }
 
     public boolean tryLock(Long perfumeId, String username) {
         LockInfo existing = perfumeLocks.get(perfumeId);
@@ -54,13 +62,7 @@ public class PerfumeLockManager {
         if (lock != null) {
             if (lock.username.equals(username)) {
                 lock.refresh();
-                System.out.println("Refrescado lock del perfume " + perfumeId + " por " + username);
-            } else {
-                System.out.println("El usuario " + username + " NO es dueño del lock del perfume " + perfumeId
-                        + ", lo tiene " + lock.username);
             }
-        } else {
-            System.out.println("No hay lock activo para perfume " + perfumeId);
         }
     }
 

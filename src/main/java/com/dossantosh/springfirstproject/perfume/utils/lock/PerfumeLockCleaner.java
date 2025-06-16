@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.perfume.utils;
+package com.dossantosh.springfirstproject.perfume.utils.lock;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ public class PerfumeLockCleaner {
         this.lockManager = lockManager;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = (long) (2 * 60 * 1000))
     public void cleanOldLocks() {
         long now = System.currentTimeMillis();
-        long expirationTime = (long) (5 * 60 * 1000L);
+        long expirationTime = (long) (4 * 60 * 1000L);
 
         Iterator<Map.Entry<Long, PerfumeLockManager.LockInfo>> it = lockManager.getPerfumeLocks().entrySet().iterator();
 
@@ -27,13 +27,7 @@ public class PerfumeLockCleaner {
             long lastAccess = entry.getValue().lastAccessTime;
             long diff = now - lastAccess;
 
-            System.out.println("Checking perfume ID: " + entry.getKey()
-                    + " | lastAccess: " + lastAccess
-                    + " | now: " + now
-                    + " | diff: " + diff + "ms");
-
             if (diff > expirationTime) {
-                System.out.println("Removing expired lock for perfume ID: " + entry.getKey());
                 it.remove();
             }
         }

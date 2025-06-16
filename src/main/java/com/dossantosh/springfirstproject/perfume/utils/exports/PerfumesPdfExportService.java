@@ -11,20 +11,19 @@ import lombok.RequiredArgsConstructor;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
-import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
+import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
 
 @Service
 @RequiredArgsConstructor
 public class PerfumesPdfExportService {
 
-    private final PerfumeRepository perfumeRepository;
+    private final PerfumeService perfumeService;
     // Perfumes
     public void exportarTodosLosPerfumes(HttpServletResponse response) throws IOException {
-        List<Perfumes> perfumes = perfumeRepository.findAll();
+        Set<Perfumes> perfumes = perfumeService.findAll();
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=perfumes.pdf");
@@ -77,14 +76,12 @@ public class PerfumesPdfExportService {
     }
 
     public void exportarPerfume(Long id, HttpServletResponse response) throws IOException {
-        Optional<Perfumes> perfumeOpt = perfumeRepository.findById(id);
+        Perfumes perfume = perfumeService.findById(id);
 
-        if (!perfumeOpt.isPresent()) {
+        if (perfume == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Perfume no encontrado");
             return;
         }
-
-        Perfumes perfume = perfumeOpt.get();
 
         response.setContentType("application/pdf");
         String nombreArchivo = "perfume-" + perfume.getId() + ".pdf";

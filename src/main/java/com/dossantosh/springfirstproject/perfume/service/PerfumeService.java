@@ -47,6 +47,10 @@ public class PerfumeService {
         }
     }
 
+    public Set<Perfumes> findAll() {
+        return new LinkedHashSet<>(perfumeRepository.findAll());
+    }
+
     public Perfumes findById(Long id) {
         return perfumeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Perfume con ID " + id + " no encontrado"));

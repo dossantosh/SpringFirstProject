@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.custom.SessionService;
 import com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule;
-import com.dossantosh.springfirstproject.common.security.custom.login.SessionService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
 
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserService;
@@ -26,18 +27,16 @@ import java.util.*;
 @RequiereModule({ 2L })
 public class UsuariosController extends GenericController {
 
-    private final PermisosUtils permisosUtils;
-
     private final UserService userService;
 
     private final SessionService sessionService;
 
-    public UsuariosController(PermisosUtils permisosUtils, UserService userService,
+    public UsuariosController(UserContextService userContextService, PermisosUtils permisosUtils,
+            UserService userService,
             SessionService sessionService) {
-        super(permisosUtils);
+        super(userContextService, permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
-        this.permisosUtils = permisosUtils;
     }
 
     @GetMapping

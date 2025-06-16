@@ -1,7 +1,8 @@
 package com.dossantosh.springfirstproject.perfume.utils.exports;
 
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
-import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
+import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -12,21 +13,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class PerfumesExcelExportService {
 
-    private final PerfumeRepository perfumeRepository;
+    private final PerfumeService perfumeService;
 
     private static final String CONTENTTYPEOPENXMLOFFICEDOCUMENTS = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     // Perfumes
     public void exportarTodosLosPerfumes(HttpServletResponse response) throws IOException {
-        List<Perfumes> perfumes = perfumeRepository.findAll();
+        Set<Perfumes> perfumes = perfumeService.findAll();
 
         String[] columnas = { "ID", "Nombre", "Marca", "Tipo", "Precio", "Volumen", "Temporada", "Descripción", "Año" };
 
@@ -69,25 +70,23 @@ public class PerfumesExcelExportService {
     }
 
     public void exportarPerfumePorId(Long id, HttpServletResponse response) throws IOException {
-        Optional<Perfumes> optionalPerfume = perfumeRepository.findById(id);
-        if (optionalPerfume.isEmpty()) {
+        Perfumes perfume = perfumeService.findById(id);
+        if (perfume == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        Perfumes p = optionalPerfume.get();
-
         String[] columnas = { "ID", "Nombre", "Marca", "Tipo", "Precio", "Volumen", "Temporada", "Descripción", "Año" };
         String[] valores = {
-                String.valueOf(p.getId()),
-                p.getName(),
-                p.getBrand() != null ? p.getBrand().getName() : "Sin marca",
-                p.getTipo() != null ? p.getTipo().getName() : "Sin tipo",
-                String.valueOf(p.getPrice()),
-                String.valueOf(p.getVolume()),
-                p.getSeason(),
-                p.getDescription(),
-                p.getFecha() != null ? String.valueOf(p.getFecha()) : "0"
+                String.valueOf(perfume.getId()),
+                perfume.getName(),
+                perfume.getBrand() != null ? perfume.getBrand().getName() : "Sin marca",
+                perfume.getTipo() != null ? perfume.getTipo().getName() : "Sin tipo",
+                String.valueOf(perfume.getPrice()),
+                String.valueOf(perfume.getVolume()),
+                perfume.getSeason(),
+                perfume.getDescription(),
+                perfume.getFecha() != null ? String.valueOf(perfume.getFecha()) : "0"
         };
 
         response.setContentType(CONTENTTYPEOPENXMLOFFICEDOCUMENTS);
@@ -112,15 +111,19 @@ public class PerfumesExcelExportService {
                 Cell dataCell = dataRow.createCell(i);
 
                 // Selección del estilo según tipo de dato
-                if (i == 4) { // Precio
-                    dataCell.setCellValue(Double.parseDouble(valores[i]));
-                    dataCell.setCellStyle(priceCellStyle);
-                } else if (i == 0 || i == 5 || i == 8) { // ID, volumen, año
-                    dataCell.setCellValue(Integer.parseInt(valores[i]));
-                    dataCell.setCellStyle(numberCellStyle);
-                } else {
-                    dataCell.setCellValue(valores[i]);
-                    dataCell.setCellStyle(textCellStyle);
+                switch (i) {
+                  case 4 -> { // Precio
+                      dataCell.setCellValue(Double.parseDouble(valores[i]));
+                      dataCell.setCellStyle(priceCellStyle);
+                  }
+                  case 0, 5, 8 -> { // ID, volumen, año
+                      dataCell.setCellValue(Integer.parseInt(valores[i]));
+                      dataCell.setCellStyle(numberCellStyle);
+                  }
+                  default -> {
+                      dataCell.setCellValue(valores[i]);
+                      dataCell.setCellStyle(textCellStyle);
+                  }
                 }
             }
 

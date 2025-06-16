@@ -18,7 +18,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
-import com.dossantosh.springfirstproject.common.security.custom.CustomUserDetailsService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.CustomUserDetailsService;
 import com.dossantosh.springfirstproject.common.security.custom.captcha.CaptchaValidationFilter;
 import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationFailureHandler;
 
