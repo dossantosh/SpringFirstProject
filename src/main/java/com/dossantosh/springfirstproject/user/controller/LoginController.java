@@ -93,6 +93,10 @@ public class LoginController {
             return REGISTER;
         }
 
+        if (!user.getPassword().startsWith("{bcrypt}")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         userService.crearUsuario(user);
         return respuesta;
     }
@@ -222,7 +226,7 @@ public class LoginController {
     @PostMapping("/logout-inactive")
     @ResponseBody
     public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
-        
+
         UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userAuth != null) {

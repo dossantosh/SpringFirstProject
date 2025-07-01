@@ -213,9 +213,13 @@ public class UserService {
         Roles role = null;
         for (Long rol : rolesId) {
 
+            if(!roleService.existById(rol)){
+                System.out.println("Role with ID " + rol + " does not exist");
+            }
             if (roleService.existById(rol)) {
                 role = roleService.findById(rol);
                 roles.add(role);
+                System.out.println("Role: " + role);
             }
         }
         Modules module = null;
@@ -234,6 +238,10 @@ public class UserService {
                 submodules.add(submodule);
             }
         }
+
+        System.out.println("Roles: " + roles);
+        System.out.println("Modules: " + modules);
+        System.out.println("Submodules: " + submodules);
 
         if (roles.isEmpty() || modules.isEmpty() || submodules.isEmpty()) {
             return;

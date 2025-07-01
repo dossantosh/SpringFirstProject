@@ -41,5 +41,5 @@ INSERT INTO perfumes (name, brand_id, price, volume, season, description, fecha,
 VALUES 
 ('Black Orchid', 1, 150.0, 100.0, 'Invierno', 'Morado', 2006, 'tom_ford_black_orchid_edp', 2, 0),
 ('Habit Rouge Parfum', 2, 90.0, 100.0, 'Invierno', 'Alcohol', 2024, 'guerlain_habit_rouge_parfum',  1, 0),
-("Terre d'Hermes", 3, 90.0, 100.0, 'Verano', 'Marte', 2006, 'hermes_terre_de_hermes_parfum', 4, 0)
+('Terre d''Hermes', 3, 90.0, 100.0, 'Verano', 'Marte', 2006, 'hermes_terre_de_hermes_parfum', 4, 0)
 ON CONFLICT (name) DO NOTHING;

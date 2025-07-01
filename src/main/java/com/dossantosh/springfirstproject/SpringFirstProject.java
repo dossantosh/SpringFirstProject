@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableJdbcHttpSession
+//@EnableJdbcHttpSession
 @EnableWebSecurity
 public class SpringFirstProject {
 
