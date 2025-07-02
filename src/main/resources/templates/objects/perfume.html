@@ -177,22 +177,19 @@
 
         <!-- Exportar -->
         <div class="mb-4" th:if="${writePerfumes}">
-            <div
-                th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
-                <div class="col-12 text-end">
+            <div class="col-12 text-end">
 
-                    <a th:href="@{/objects/perfume/export/pdf}" class="btn btn-danger  px-4 me-2"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
-                        <i class="bi bi-file-earmark-pdf-fill me-1"></i>
-                        <span th:text="#{export.allpdf}">Exportar a PDF</span>
-                    </a>
+                <a th:href="@{/objects/perfume/export/pdf}" class="btn btn-danger  px-4 me-2" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Exportar a PDF">
+                    <i class="bi bi-file-earmark-pdf-fill me-1"></i>
+                    <span th:text="#{export.allpdf}">Exportar Todos a PDF</span>
+                </a>
 
-                    <a th:href="@{/objects/perfume/export/excel}" class="btn btn-success  px-4 me-2"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
-                        <i class="bi bi-file-earmark-excel-fill me-1"></i>
-                        <span th:text="#{export.allexcel}">Exportar a Excel</span>
-                    </a>
-                </div>
+                <a th:href="@{/objects/perfume/export/excel}" class="btn btn-success  px-4 me-2"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
+                    <i class="bi bi-file-earmark-excel-fill me-1"></i>
+                    <span th:text="#{export.allexcel}">Exportar Todos a Excel</span>
+                </a>
             </div>
         </div>
 

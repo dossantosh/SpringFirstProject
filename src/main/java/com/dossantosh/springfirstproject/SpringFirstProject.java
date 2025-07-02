@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+//import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 

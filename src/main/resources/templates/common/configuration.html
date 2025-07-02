@@ -24,14 +24,12 @@
                     <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                         <div
                             th:class="${preferences.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
-                            <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                                 <h2 class="h4 mb-0">
                                     <i class="bi bi-gear me-2 text-primary"></i><span
                                         th:text="#{configuration.tittle}">Configutacion</span>
                                 </h2>
-                            </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                             <div class="row mt-4" th:if="${readAll}">
                                 <!-- Perfil -->
                                 <div class="col-md-4 mb-4">
