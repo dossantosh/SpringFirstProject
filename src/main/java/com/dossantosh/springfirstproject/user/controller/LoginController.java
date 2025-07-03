@@ -97,7 +97,7 @@ public class LoginController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        userService.crearUsuario(user);
+        userService.createUser(user);
         return respuesta;
     }
 

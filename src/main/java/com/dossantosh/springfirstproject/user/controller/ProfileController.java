@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
-import com.dossantosh.springfirstproject.common.security.custom.SessionService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.custom.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
@@ -118,7 +118,7 @@ public class ProfileController extends GenericController {
             HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
-        userService.guardarUsuario(user, userService.findById(user.getId()));
+        userService.modifyUser(user, userService.findById(user.getId()));
 
         if (result.hasErrors()) {
             redirectAttrs.addFlashAttribute("error", "Revisa los campos del formulario.");

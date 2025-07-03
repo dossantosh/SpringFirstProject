@@ -131,7 +131,7 @@ public class UserService {
         return map;
     }
 
-    public void guardarUsuario(User user, User existingUser) {
+    public void modifyUser(User user, User existingUser) {
 
         if (user.getId() == null) {
             user.setId(existingUser.getId());
@@ -161,7 +161,7 @@ public class UserService {
     }
 
     // register
-    public void crearUsuario(User user) {
+    public void createUser(User user) {
 
         LinkedHashSet<Roles> roles = new LinkedHashSet<>();
         LinkedHashSet<Modules> modules = new LinkedHashSet<>();
@@ -238,10 +238,6 @@ public class UserService {
                 submodules.add(submodule);
             }
         }
-
-        System.out.println("Roles: " + roles);
-        System.out.println("Modules: " + modules);
-        System.out.println("Submodules: " + submodules);
 
         if (roles.isEmpty() || modules.isEmpty() || submodules.isEmpty()) {
             return;

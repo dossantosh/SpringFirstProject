@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.security.custom.module;
+package com.dossantosh.springfirstproject.common.security.module;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

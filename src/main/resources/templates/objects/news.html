@@ -25,10 +25,10 @@
                     <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
                         <div
                             th:class="${preferences.tema == 'dark' ? 'card-header bg-dark gray border-bottom' : 'card-header bg-white border-bottom'}">
-                                <h2 class="h4 mb-0">
-                                    <i class="bi bi-house-door me-2 text-primary"></i>
-                                    <span th:text="#{news.tittle}"> Panel News</span>
-                                </h2>
+                            <h2 class="h4 mb-0">
+                                <i class="bi bi-house-door me-2 text-primary"></i>
+                                <span th:text="#{news.tittle}"> Panel News</span>
+                            </h2>
                         </div>
                         <div class="card-body">
 
@@ -126,28 +126,26 @@
                         <div class="card-body">
                             <div class="row mt-4" th:if="${not #lists.isEmpty(news)}">
                                 <div th:each="noticia : ${news}" class="col-md-4 mb-4">
-                                    <div class="card h-100 border-0 shadow-sm" th:class="${preferences.tema == 'dark'} 
-                                    ? 'card-header bg-dark gray border-bottom'
-                                    : 'card-header bg-white border-bottom'">
-                                            <img th:src="${noticia.image}" class="card-img-top" alt="Noticia" />
+                                    <div class="card h-100 border-0 shadow-sm"
+                                        th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                        <img th:src="${noticia.image}" class="card-img-top" alt="Noticia" />
 
-                                            <div class="card-body">
-                                                <h3 class="h5 card-title" th:text="${noticia.tittle}">Título aquí</h3>
-                                                <p class="card-text" th:text="${noticia.summary}">Resumen aquí</p>
+                                        <div class="card-body">
+                                            <h3 class="h5 card-title" th:text="${noticia.tittle}">Título aquí</h3>
+                                            <p class="card-text" th:text="${noticia.summary}">Resumen aquí</p>
 
-                                                <a th:href="@{/news/{id}(id=${noticia.id})}"
-                                                    class="btn btn-outline-primary btn-sm">
-                                                    <span th:text="#{news.news.boton}">Leer más</span>
-                                                    <i class="bi bi-arrow-right ms-1"></i>
-                                                </a>
-                                            </div>
+                                            <a th:href="@{/news/{id}(id=${noticia.id})}"
+                                                class="btn btn-outline-primary btn-sm">
+                                                <span th:text="#{news.news.boton}">Leer más</span>
+                                                <i class="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
 
-                                            <div th:class="${preferences.tema == 'dark'} 
-                                    ? 'card-header bg-dark gray border-bottom'
-                                    : 'card-header bg-white border-bottom'">
-                                                    <i class="bi bi-calendar-event me-1"></i>
-                                                    <span th:text="${noticia.date}">dd/mm/YYYY</span>
-                                                </div>
+                                        <div
+                                            th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            <span th:text="${noticia.date}">dd/mm/YYYY</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.security.custom;
+package com.dossantosh.springfirstproject.common.security.others;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

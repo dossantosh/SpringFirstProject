@@ -11,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
-import com.dossantosh.springfirstproject.common.security.custom.SessionService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.custom.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
+import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserService;
 
@@ -117,7 +117,7 @@ public class UsuariosController extends GenericController {
     public String guardarUsuario(@ModelAttribute User user, HttpSession session, HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
-        userService.guardarUsuario(user, userService.findById(user.getId()));
+        userService.modifyUser(user, userService.findById(user.getId()));
 
         List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
 

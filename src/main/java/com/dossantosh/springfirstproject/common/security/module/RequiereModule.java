@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.security.custom.module;
+package com.dossantosh.springfirstproject.common.security.module;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

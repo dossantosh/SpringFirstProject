@@ -4,8 +4,8 @@ import java.util.Set;
 
 import org.springframework.ui.Model;
 
-import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 
 import lombok.RequiredArgsConstructor;
 

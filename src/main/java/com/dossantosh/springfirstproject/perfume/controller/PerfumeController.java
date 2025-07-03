@@ -1,9 +1,10 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.custom.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
+import com.dossantosh.springfirstproject.perfume.models.Brands;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
@@ -110,6 +111,8 @@ public class PerfumeController extends GenericController {
 
         model.addAttribute("newPerfume", new Perfumes());
 
+        model.addAttribute("newBrand", new Brands());
+
         return "objects/perfume";
     }
 
@@ -201,7 +204,29 @@ public class PerfumeController extends GenericController {
         }
     }
 
-    @PostMapping("/crear")
+    @PostMapping("/brand/create")
+    public String guardarMarca(@Valid @ModelAttribute Brands newBrand,
+            BindingResult result,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
+        try {
+
+            if (result.hasErrors()) {
+                redirectAttrs.addFlashAttribute("errorMarca", "Revisa los campos del formulario.");
+                return "redirect:/objects/perfume";
+            }
+
+            brandService.save(newBrand);
+            return "redirect:/objects/perfume";
+
+        } catch (IllegalStateException e) {
+            redirectAttrs.addFlashAttribute("errorMarca", e.getMessage());
+            return "redirect:/objects/perfume";
+        }
+    }
+
+
+    @PostMapping("/create")
     public String crearPerfume(@Valid @ModelAttribute Perfumes perfume,
             BindingResult result,
             HttpSession session,
