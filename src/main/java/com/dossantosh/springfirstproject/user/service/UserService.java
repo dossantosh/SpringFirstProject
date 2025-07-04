@@ -12,11 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
 
+import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.pref.Preferences;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
@@ -52,6 +53,8 @@ public class UserService {
 
     private final TokenService tokenService;
 
+    private final AuditService auditService;
+
     public User saveUser(User user) {
         return userRepository.save(user);
     }
@@ -85,6 +88,26 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public void deleteById(Long id) {
+        if (!existsById(id)) {
+            throw new EntityNotFoundException("Usuario con ID " + id + " no encontrado");
+        }
+        userRepository.deleteById(id);
+
+        User user = findById(id);
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "USER_DELETED",
+                Map.of("id", user.getId(),
+                        "username", user.getUsername(),
+                        "email", user.getEmail(),
+                        "enabled", user.getEnabled(),
+                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
+                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "submodules",
+                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
     }
 
     public Page<User> findByFiltersAdmin(Long id, String username, String email, int page, int size, String sortby,
@@ -156,8 +179,19 @@ public class UserService {
         if (user.getRoles().isEmpty() || user.getModules().isEmpty() || user.getSubmodules().isEmpty()) {
             return;
         }
-
         saveUser(user);
+
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "USER_MODIFIED",
+                Map.of("id", user.getId(),
+                        "username", user.getUsername(),
+                        "email", user.getEmail(),
+                        "enabled", user.getEnabled(),
+                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
+                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "submodules",
+                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
     }
 
     // register
@@ -213,13 +247,9 @@ public class UserService {
         Roles role = null;
         for (Long rol : rolesId) {
 
-            if(!roleService.existById(rol)){
-                System.out.println("Role with ID " + rol + " does not exist");
-            }
             if (roleService.existById(rol)) {
                 role = roleService.findById(rol);
                 roles.add(role);
-                System.out.println("Role: " + role);
             }
         }
         Modules module = null;
@@ -261,6 +291,18 @@ public class UserService {
 
         String token = tokenService.createVerificationToken(user);
         tokenService.sendVerificationEmailUser(user.getEmail(), token);
+
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "USER_CREATED",
+                Map.of("id", user.getId(),
+                        "username", user.getUsername(),
+                        "email", user.getEmail(),
+                        "enabled", user.getEnabled(),
+                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
+                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "submodules",
+                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
     }
 
     public UserAuth userToUserAuth(User user) {

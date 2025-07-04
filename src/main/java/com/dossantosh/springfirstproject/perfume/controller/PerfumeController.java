@@ -17,7 +17,6 @@ import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -187,7 +186,7 @@ public class PerfumeController extends GenericController {
             Long brandId = perfume.getBrand().getId();
             perfume.setBrand(brandService.findById(brandId));
 
-            perfumeService.save(perfume);
+            perfumeService.modifyPerfumes(perfume);
 
             session.setAttribute("selectedPerfume", null);
 
@@ -247,7 +246,8 @@ public class PerfumeController extends GenericController {
                 redirectAttrs.addFlashAttribute("error", "Ya existe un perfume con ese nombre.");
                 return "redirect:/objects/perfume";
             }
-            perfumeService.save(perfume);
+
+            perfumeService.createPerfume(perfume);
 
             return "redirect:/objects/perfume";
 
@@ -257,7 +257,7 @@ public class PerfumeController extends GenericController {
         }
     }
 
-    @DeleteMapping("/borrar/{id}")
+    @DeleteMapping("/delete/{id}")
     public String borrarPerfume(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
         if (!permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writePerfume)) {

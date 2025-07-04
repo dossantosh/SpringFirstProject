@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
@@ -30,12 +31,19 @@ public class UsuariosController extends GenericController {
 
     private final SessionService sessionService;
 
+    private final Set<Long> writeUsers;
+
     public UsuariosController(UserContextService userContextService, PermisosUtils permisosUtils,
             UserService userService,
             SessionService sessionService) {
         super(userContextService, permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
+
+        Set<Long> writeUsersTemp = new HashSet<>();
+        writeUsersTemp.add(4L);
+
+        this.writeUsers = writeUsersTemp;
     }
 
     @GetMapping
@@ -133,6 +141,28 @@ public class UsuariosController extends GenericController {
     public String cancelarEdicion(HttpSession session) {
         // Limpiar el seleccionado en sesión
         session.removeAttribute("selectedUser");
+        return "redirect:/user/users";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String borrarUsuario(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
+
+        if (!permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writeUsers)) {
+            redirectAttrs.addFlashAttribute("error", "No tienes permisos para borrar usuarios.");
+            return "redirect:/user/users";
+        }
+
+        if (!userService.existsById(id)) {
+            redirectAttrs.addFlashAttribute("error", "El usuario no existe.");
+            return "redirect:/user/users";
+        }
+
+        userService.deleteById(id);
+
+        session.setAttribute("selectedUser", null);
+
+        
+
         return "redirect:/user/users";
     }
 }

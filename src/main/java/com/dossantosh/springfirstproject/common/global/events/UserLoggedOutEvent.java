@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.global;
+package com.dossantosh.springfirstproject.common.global.events;
 
 import lombok.RequiredArgsConstructor;
 

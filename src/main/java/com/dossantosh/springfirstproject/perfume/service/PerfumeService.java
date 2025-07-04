@@ -13,13 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeDTO;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeSpecifications;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -34,6 +35,8 @@ public class PerfumeService {
     private final BrandService brandService;
 
     private final TypesService tipoService;
+
+    private final AuditService auditService;
 
     @PersistenceContext
     private EntityManager em;
@@ -69,12 +72,55 @@ public class PerfumeService {
         return perfumeRepository.existsByName(name);
     }
 
-    public boolean deleteById(Long id) {
+    public void createPerfume(Perfumes newPerfume) {
+
+        save(newPerfume);
+
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "PERFUME_CREATE",
+                Map.of("id", newPerfume.getId(),
+                        "name", newPerfume.getName(),
+                        "season", newPerfume.getSeason(),
+                        "description", newPerfume.getDescription(),
+                        "fecha", newPerfume.getFecha(),
+                        "tipo", newPerfume.getTipo().getName(),
+                        "brandName", newPerfume.getBrand() != null ? newPerfume.getBrand().getName() : "Sin marca"));
+    }
+
+    public void modifyPerfumes(Perfumes updatedPerfume) {
+
+        save(updatedPerfume);
+
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "PERFUME_MODIFY",
+                Map.of("id", updatedPerfume.getId(),
+                        "name", updatedPerfume.getName(),
+                        "season", updatedPerfume.getSeason(),
+                        "description", updatedPerfume.getDescription(),
+                        "fecha", updatedPerfume.getFecha(),
+                        "tipo", updatedPerfume.getTipo().getName(),
+                        "brandName", updatedPerfume.getBrand() != null ? updatedPerfume.getBrand().getName() : "Sin marca"));
+    }
+
+    public void deleteById(Long id) {
         if (!existsById(id)) {
             throw new EntityNotFoundException("Perfume con ID " + id + " no encontrado");
         }
         perfumeRepository.deleteById(id);
-        return !existsById(id);
+
+        Perfumes perfume = findById(id);
+        auditService.logCustomEvent(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                "PERFUME_DELETE",
+                Map.of("id", perfume.getId(),
+                        "name", perfume.getName(),
+                        "season", perfume.getSeason(),
+                        "description", perfume.getDescription(),
+                        "fecha", perfume.getFecha(),
+                        "tipo", perfume.getTipo().getName(),
+                        "brandName", perfume.getBrand() != null ? perfume.getBrand().getName() : "Sin marca"));
     }
 
     public long count() {

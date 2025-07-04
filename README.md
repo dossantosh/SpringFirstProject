@@ -2,9 +2,9 @@
 
 ## 📌 Project Overview
 
-A web application for user management, news, and perfume catalog, built with Spring Boot, Thymeleaf, and PostgreSQL. This project showcases secure authentication, session management, and modular architecture, supporting both server-side rendering and RESTful APIs for modern frontends. 
+A web application for user management, news, and perfume catalog, built with Spring Boot, Thymeleaf, and PostgreSQL. This project showcases secure authentication, session management and modular architecture, supporting both server-side rendering and RESTful APIs.
 
-This project serves as a foundation for developing enterprise-grade web applications, focusing on security and fine-grained user role/permission separation, Controlled via custom permission roles, modules, and submodules through custom annotations and JDBC session management.
+Serves as a foundation for developing enterprise-grade web applications, focusing on security and fine-grained user role/permission separation, Controlled via custom permission roles (modules and submodules) through custom annotations controlled with Aspects(AOP) and JDBC session management.
 
 ---
 
@@ -12,9 +12,11 @@ This project serves as a foundation for developing enterprise-grade web applicat
 
 ### 👥 User & Security
 - Secure user registration and login with CAPTCHA and email token confirmation
-- Role-based access control (RBAC) with modules and submodules
+- Role-based access control (RBAC) using Aspects and Sessions 
 - Custom permission annotations for fine-grained access control
 - Session management using Spring Session JDBC
+- All endpoints secured with method-level annotations (`@RequiereModule`)
+- Submodule custom annotations to use with thymeleaf
 
 ### 🌐 Web & API
 - Thymeleaf-based dynamic HTML views
@@ -23,8 +25,8 @@ This project serves as a foundation for developing enterprise-grade web applicat
 - Responsive UI with Bootstrap 5
 
 ### 📦 Architecture
-- Modular package structure: `user`, `perfume`, `news`, `common`
-- Optimistic and pessimistic locking for data integrity
+- Modular package structure: `user`, `pref`, `perfume`, `news` and `common` we ensure modularity by using interfaces and events to connect the different modules.
+- Optimistic and pessimistic locking for data integrity with Scheduling to reduce waiting times
 
 ### 📊 Reports & Exports
 - PDF and Excel report generation (OpenPDF, Apache POI)
@@ -33,14 +35,6 @@ This project serves as a foundation for developing enterprise-grade web applicat
 - Dotenv for dynamic configuration via `.env`
 - OpenAPI documentation with SpringDoc
 - Admin-only Actuator monitoring endpoints
-
-### 👥 User & Security
-- Secure user registration and login with CAPTCHA and email token confirmation
-- Role-based access control (RBAC) with modules and submodules
-- Custom permission annotations for fine-grained access control
-- Session management using Spring Session JDBC
-- All endpoints secured with method-level annotations (`@RequiereModule`)
-- Submodule custom annotations to use with thymeleaf
 
 ---
 
@@ -51,8 +45,8 @@ com.dossantosh.springfirstproject
 ├── common             # Shared components and utilities
 │   ├── config           # Language Localization
 │   ├── controllers      # Generic Controller
-│   ├── global           # Global exception handling + global preferences
-│   └── security         # Security and filters + Session management + Custom annotations
+│   ├── global           # Global exception handling + preferences + Log Out event
+│   └── security         # Custom spring security and filters + Session management + Authentication +  Custom roles and annotations
 ├── news               # News management module
 ├── perfume            # Product management module
 │   ├── controllers      # Web controllers
@@ -60,6 +54,7 @@ com.dossantosh.springfirstproject
 │   ├── repositories     # Data repositories
 │   ├── services         # Business logic
 │   └── utils            # Utility classes: pessimistic locking, JPA specifications, Excel/PDF exports
+├── preferences        # Preferences management module
 ├── user               # User management module
 │   ├── models           # Domain entities
 │   ├── repositories     # Data repositories
@@ -72,23 +67,27 @@ com.dossantosh.springfirstproject
 
 ## 🛠️ Tech Stack
 
-| Stack                | Description                  |
-|----------------------|------------------------------|
-| **Java 21**          | Language level               |
-| **Spring Boot 3.4.6**| Framework core               |
-| **Spring Web**       | REST endpoints, MVC          |
-| **Spring Data JPA**  | ORM with Hibernate           |
-| **Spring Security**  | Authentication & Authorization|
-| **Thymeleaf**        | Server-side rendering        |
-| **Spring Session JDBC** | Persistent session storage |
-| **PostgreSQL**       | Primary relational database  |
-| **Lombok**           | Boilerplate reduction        |
-| **AOP (AspectJ)**    | Logging, profiling           |
-| **Dotenv**           | Externalized configuration   |
-| **OpenAPI (SpringDoc)** | API documentation         |
-| **Apache POI**       | Excel export                 |
-| **OpenPDF**          | PDF export                   |
-| **JUnit / Mockito**  | Testing                      |
+| Stack                     | Description                   |
+|---------------------------|-------------------------------|
+| **Java 21**               | Language level                |
+| **Spring Boot 3.4.6**     | Framework core                |
+| **Spring Web**            | REST endpoints, MVC           |
+| **Spring Data JPA**       | ORM with Hibernate            |
+| **Spring Security**       | Authentication & Authorization|
+| **Spring Security extras**| Thymeleaf Authorization       |
+| **Thymeleaf**             | Server-side rendering         |
+| **Spring Session Core**   | Modify Cookies                |
+| **Spring Session JDBC**   | Persistent session storage    |
+| **PostgreSQL**            | Primary relational database   |
+| **Lombok**                | Boilerplate reduction         |
+| **AOP (AspectJ)**         | Logging, profiling            |
+| **Spring Starter Mail**   | Mail verification             |
+| **Dotenv**                | Externalized configuration    |
+| **OpenAPI (SpringDoc)**   | API documentation             |
+| **Apache POI**            | Excel export                  |
+| **OpenPDF**               | PDF export                    |
+| **JUnit / Mockito**       | Testing                       |
+| **H2**                    | In memory database to tets    |
 
 ---
 
@@ -126,6 +125,8 @@ Key settings in `src/main/resources/application.properties`:
 
 - Database, JPA, and session configuration
 - Thymeleaf and static resources
+- Sessions management
+- Sql initializer
 - Actuator and management endpoints
 - Email and i18n
 - Captcha and security
@@ -165,11 +166,17 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 
 ## 🔒 Security
 
+- UserAuth as UserDetails to improve efficiency
+- UserContextService as interface to protect UserAuth and ensure module "independence"
 - Passwords are hashed with BCrypt
-- Session management via Spring Session JDBC
 - CSRF protection enabled
-- Role-based access for all endpoints
-- Custom permission checks via annotations and utility classes which allows me to secure controllers
+- Captcha Validation (anti bots)
+- Controllers security with AOPs aspects
+- Submodule thymeleaf custom annotations
+- Content Security Policy
+- iFrames protections
+- Strict Https
+- Referrer protection
 
 ---
 
@@ -197,4 +204,4 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 ## 🙏 Acknowledgements
 
 - Senior internship mentorship
-- Helpful insights from Reddit discussions
+- Helpful insights from articles and online discussions

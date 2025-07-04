@@ -1,12 +1,18 @@
 package com.dossantosh.springfirstproject.common.security;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
+import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -43,7 +49,6 @@ public class SecurityConfig {
                                                                 "/confirm/**", "/token-invalid",
                                                                 "/register", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
-                                                .requestMatchers("/objects/perfume/liberar").permitAll()
                                                 .requestMatchers("/common/**", "/objects/**", "/user/**")
                                                 .authenticated()
                                                 .requestMatchers("/actuator/**").hasRole("ADMIN")
@@ -115,5 +120,12 @@ public class SecurityConfig {
         @Bean
         public JdbcTemplate jdbcTemplate(DataSource dataSource) {
                 return new JdbcTemplate(dataSource);
+        }
+
+        @Bean
+        public AuditorAware<String> auditorProvider() {
+                return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                                .filter(Authentication::isAuthenticated)
+                                .map(Authentication::getName);
         }
 }

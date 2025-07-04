@@ -30,6 +30,8 @@ public class Perfumes implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
+    @Min(1)
+    @Max(999999999)
     @Column
     private Long id;
 

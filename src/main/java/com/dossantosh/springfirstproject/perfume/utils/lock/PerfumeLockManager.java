@@ -3,7 +3,7 @@ package com.dossantosh.springfirstproject.perfume.utils.lock;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.dossantosh.springfirstproject.common.global.UserLoggedOutEvent;
+import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

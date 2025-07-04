@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.SerializationUtils;
 
-import com.dossantosh.springfirstproject.common.global.UserLoggedOutEvent;
+import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 
 import com.dossantosh.springfirstproject.user.service.UserService;
