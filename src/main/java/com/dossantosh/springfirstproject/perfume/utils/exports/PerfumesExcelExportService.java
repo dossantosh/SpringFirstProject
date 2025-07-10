@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +27,7 @@ public class PerfumesExcelExportService {
 
     // Perfumes
     public void exportarTodosLosPerfumes(HttpServletResponse response) throws IOException {
-        Set<Perfumes> perfumes = perfumeService.findAll();
+        List<Perfumes> perfumes = perfumeService.findAll();
 
         String[] columnas = { "ID", "Nombre", "Marca", "Tipo", "Precio", "Volumen", "Temporada", "Descripción", "Año" };
 
@@ -112,18 +112,18 @@ public class PerfumesExcelExportService {
 
                 // Selección del estilo según tipo de dato
                 switch (i) {
-                  case 4 -> { // Precio
-                      dataCell.setCellValue(Double.parseDouble(valores[i]));
-                      dataCell.setCellStyle(priceCellStyle);
-                  }
-                  case 0, 5, 8 -> { // ID, volumen, año
-                      dataCell.setCellValue(Integer.parseInt(valores[i]));
-                      dataCell.setCellStyle(numberCellStyle);
-                  }
-                  default -> {
-                      dataCell.setCellValue(valores[i]);
-                      dataCell.setCellStyle(textCellStyle);
-                  }
+                    case 4 -> { // Precio
+                        dataCell.setCellValue(Double.parseDouble(valores[i]));
+                        dataCell.setCellStyle(priceCellStyle);
+                    }
+                    case 0, 5, 8 -> { // ID, volumen, año
+                        dataCell.setCellValue(Integer.parseInt(valores[i]));
+                        dataCell.setCellStyle(numberCellStyle);
+                    }
+                    default -> {
+                        dataCell.setCellValue(valores[i]);
+                        dataCell.setCellStyle(textCellStyle);
+                    }
                 }
             }
 

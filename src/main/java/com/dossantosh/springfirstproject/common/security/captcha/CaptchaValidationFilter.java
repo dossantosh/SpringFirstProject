@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.security.custom.captcha;
+package com.dossantosh.springfirstproject.common.security.captcha;
 
 import java.io.IOException;
 

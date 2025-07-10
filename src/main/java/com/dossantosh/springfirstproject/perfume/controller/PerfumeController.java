@@ -2,7 +2,7 @@ package com.dossantosh.springfirstproject.perfume.controller;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Brands;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/objects/perfume")
-@RequiereModule({ 3L })
+@RequireModule({ 3L })
 public class PerfumeController extends GenericController {
 
     private final PerfumeLockManager perfumeLockManager;
@@ -34,7 +34,7 @@ public class PerfumeController extends GenericController {
 
     private final BrandService brandService;
 
-    private final Set<Long> writePerfume;
+    private final List<Long> writePerfume;
 
     public PerfumeController(UserContextService userContextService, PermisosUtils permisosUtils,
             PerfumeLockManager perfumeLockManager,
@@ -44,7 +44,7 @@ public class PerfumeController extends GenericController {
         this.perfumeService = perfumeService;
         this.brandService = brandService;
 
-        Set<Long> writePerfumeTemp = new HashSet<>();
+        List<Long> writePerfumeTemp = new ArrayList<>();
         writePerfumeTemp.add(6L);
 
         this.writePerfume = writePerfumeTemp;
@@ -65,14 +65,14 @@ public class PerfumeController extends GenericController {
 
         session.setAttribute("isLockedByAnother", isLockedByAnother);
 
-        Set<Long> readAll = Set.of(1L);
-        Set<Long> writeAll = Set.of(2L);
+        List<Long> readAll = List.of(1L);
+        List<Long> writeAll = List.of(2L);
 
-        Set<Long> readUsers = Set.of(3L);
-        Set<Long> writeUsers = Set.of(4L);
+        List<Long> readUsers = List.of(3L);
+        List<Long> writeUsers = List.of(4L);
 
-        Set<Long> readPerfumes = Set.of(5L);
-        Set<Long> writePerfumes = Set.of(6L);
+        List<Long> readPerfumes = List.of(5L);
+        List<Long> writePerfumes = List.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
@@ -223,7 +223,6 @@ public class PerfumeController extends GenericController {
             return "redirect:/objects/perfume";
         }
     }
-
 
     @PostMapping("/create")
     public String crearPerfume(@Valid @ModelAttribute Perfumes perfume,

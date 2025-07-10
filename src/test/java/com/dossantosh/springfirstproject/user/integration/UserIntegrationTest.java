@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.user;
+package com.dossantosh.springfirstproject.user.integration;
 
 import com.dossantosh.springfirstproject.user.models.User;
 

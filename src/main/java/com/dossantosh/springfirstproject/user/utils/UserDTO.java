@@ -1,8 +1,10 @@
 package com.dossantosh.springfirstproject.user.utils;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +14,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserDTO implements Serializable{
+public class UserDTO implements Serializable {
 
     private Long id;
 
@@ -29,9 +31,9 @@ public class UserDTO implements Serializable{
     @Size(max = 100, message = "La contraseña no debe superar 100 caracteres")
     private String password;
 
-    private Set<String> rolesIds = new LinkedHashSet<>();
+    private List<String> rolesIds = new ArrayList<>();
 
-    private Set<String> modulesIds = new LinkedHashSet<>();
+    private List<String> modulesIds = new ArrayList<>();
 
-    private Set<String> submodulesIds = new LinkedHashSet<>();
+    private List<String> submodulesIds = new ArrayList<>();
 }

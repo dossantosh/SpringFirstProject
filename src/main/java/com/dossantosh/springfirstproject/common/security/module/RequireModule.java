@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequiereModule {
+public @interface RequireModule {
     /**
      * Lista de permisos requeridos para acceder al recurso
      * 
-     * @return Array de Longs con los nombres de los permisos
+     * @return Array de Longs con los ids de los permisos
      */
 
     long[] value();

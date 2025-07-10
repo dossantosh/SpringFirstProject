@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.dossantosh.springfirstproject.pref.Preferences;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -28,16 +28,17 @@ public class UserAuth implements UserDetails {
 
     private Preferences preferences;
 
-    private Set<String> roles = new LinkedHashSet<>();
-    private Set<Long> rolesId = new LinkedHashSet<>();
-    private Set<Long> modules = new LinkedHashSet<>();
-    private Set<Long> submodules = new LinkedHashSet<>();
+    private List<String> roles = new ArrayList<>();
+
+    private List<Long> modules = new ArrayList<>();
+    
+    private List<Long> submodules = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority("" + role))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

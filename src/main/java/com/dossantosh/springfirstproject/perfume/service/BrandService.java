@@ -1,7 +1,7 @@
 package com.dossantosh.springfirstproject.perfume.service;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -22,22 +22,24 @@ public class BrandService {
     }
 
     public Brands findById(Long id) {
-        return brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Marca con ID " + id + " no encontrada"));
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Marca con ID " + id + " no encontrada"));
     }
 
     public Brands findByName(String name) {
-        return brandRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Marca con nombre " + name + " no encontrada"));
+        return brandRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Marca con nombre " + name + " no encontrada"));
     }
 
-    public Set<Brands> findAll() {
-        return new LinkedHashSet<>(brandRepository.findAll());
+    public List<Brands> findAll() {
+        return new ArrayList<>(brandRepository.findAll());
     }
 
-    public boolean existsById(Long id){
+    public boolean existsById(Long id) {
         return brandRepository.existsById(id);
     }
 
-    public long count(){
+    public long count() {
         return brandRepository.count();
     }
 }

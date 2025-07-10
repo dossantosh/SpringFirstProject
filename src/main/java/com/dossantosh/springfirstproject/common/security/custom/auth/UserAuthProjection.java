@@ -2,12 +2,14 @@ package com.dossantosh.springfirstproject.common.security.custom.auth;
 
 import java.util.List;
 
-public interface UserContextService {
+public interface UserAuthProjection {
     Long getId();
 
     String getUsername();
 
-    boolean getEnabled();
+    String getPassword();
+
+    Boolean getEnabled();
 
     List<String> getRoles();
 

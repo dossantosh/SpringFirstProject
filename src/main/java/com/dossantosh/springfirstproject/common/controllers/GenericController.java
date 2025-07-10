@@ -1,6 +1,6 @@
 package com.dossantosh.springfirstproject.common.controllers;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.ui.Model;
 
@@ -17,8 +17,9 @@ public abstract class GenericController {
     protected final PermisosUtils permisosUtils;
 
     protected void addPrincipalAttributes(Model model,
-            Set<Long> readAll, Set<Long> writeAll, Set<Long> readUsers, Set<Long> writeUsers, Set<Long> readPerfumes,
-            Set<Long> writePerfumes) {
+            List<Long> readAll, List<Long> writeAll, List<Long> readUsers, List<Long> writeUsers,
+            List<Long> readPerfumes,
+            List<Long> writePerfumes) {
 
         model.addAttribute("userAuth", userContextService);
 

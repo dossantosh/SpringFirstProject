@@ -10,8 +10,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 @ActiveProfiles("test")
 class SpringFirstProjectTests {
-
-    // BLOQUE ESTÁTICO: se ejecuta cuando se carga la clase, antes de SpringBootTest
+    
     static {
         Dotenv dotenv = Dotenv.configure()
                 .ignoreIfMalformed()

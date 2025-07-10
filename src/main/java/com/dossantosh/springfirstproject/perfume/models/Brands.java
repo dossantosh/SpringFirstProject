@@ -1,8 +1,9 @@
 package com.dossantosh.springfirstproject.perfume.models;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "brands")
-public class Brands implements Serializable{
+public class Brands implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
@@ -32,8 +33,8 @@ public class Brands implements Serializable{
     @Column(unique = true, length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Perfumes> perfumes = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Perfumes> perfumes = new ArrayList<>();
 
     public Brands(String string) {
     }

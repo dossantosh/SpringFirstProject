@@ -1,7 +1,8 @@
 package com.dossantosh.springfirstproject.user.service.permissions;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,12 @@ public class SubmoduleService {
                 .orElseThrow(() -> new EntityNotFoundException("Módulo con ID " + id + " no encontrado"));
     }
 
-    public Set<Submodules> findAllById(Set<Long> listaId) {
-        return new HashSet<>(submoduleRepository.findAllById(listaId));
+    public List<Submodules> findAllById(List<Long> listaId) {
+        return new ArrayList<>(submoduleRepository.findAllById(listaId));
     }
 
-    public Set<Submodules> findAll() {
-        return new HashSet<>(submoduleRepository.findAll());
+    public List<Submodules> findAll() {
+        return new ArrayList<>(submoduleRepository.findAll());
     }
 
     public Submodules save(Submodules submodule) {

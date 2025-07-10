@@ -1,8 +1,11 @@
 package com.dossantosh.springfirstproject.user.models;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.annotations.BatchSize;
 
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
@@ -51,15 +54,18 @@ public class User implements Serializable {
     @Column(length = 100)
     private String password;
 
+    @BatchSize(size = 10)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id_role"))
-    private Set<Roles> roles = new LinkedHashSet<>();
+    private List<Roles> roles = new ArrayList<>();
 
+    @BatchSize(size = 10)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_modules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id_module"))
-    private Set<Modules> modules = new LinkedHashSet<>();
+    private List<Modules> modules = new ArrayList<>();
 
+    @BatchSize(size = 10)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_submodules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_submodule", referencedColumnName = "id_submodule"))
-    private Set<Submodules> submodules = new LinkedHashSet<>();
+    private List<Submodules> submodules = new ArrayList<>();
 }

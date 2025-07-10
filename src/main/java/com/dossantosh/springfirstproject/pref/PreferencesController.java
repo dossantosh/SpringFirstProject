@@ -3,7 +3,7 @@ package com.dossantosh.springfirstproject.pref;
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.others.SessionService;
 
@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Locale;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequestMapping("/objects/preferences")
-@RequiereModule({ 1L })
+@RequireModule({ 1L })
 @Controller
 public class PreferencesController extends GenericController {
 
@@ -49,14 +49,14 @@ public class PreferencesController extends GenericController {
 
         UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Set<Long> readAll = Set.of(1L);
-        Set<Long> writeAll = Set.of(2L);
+        List<Long> readAll = List.of(1L);
+        List<Long> writeAll = List.of(2L);
 
-        Set<Long> readUsers = Set.of(3L);
-        Set<Long> writeUsers = Set.of(4L);
+        List<Long> readUsers = List.of(3L);
+        List<Long> writeUsers = List.of(4L);
 
-        Set<Long> readPerfumes = Set.of(5L);
-        Set<Long> writePerfumes = Set.of(6L);
+        List<Long> readPerfumes = List.of(5L);
+        List<Long> writePerfumes = List.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 

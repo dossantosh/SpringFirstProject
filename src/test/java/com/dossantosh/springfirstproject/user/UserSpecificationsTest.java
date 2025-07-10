@@ -5,14 +5,18 @@ import com.dossantosh.springfirstproject.user.repository.UserRepository;
 import com.dossantosh.springfirstproject.user.utils.UserSpecifications;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
+
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(SpringExtension.class)  // Asegura que Spring y JUnit 5 trabajen juntos
 @DataJpaTest
 class UserSpecificationsTest {
 

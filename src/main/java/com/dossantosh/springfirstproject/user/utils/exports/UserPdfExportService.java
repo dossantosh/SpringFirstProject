@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.dossantosh.springfirstproject.user.models.User;
@@ -28,8 +28,8 @@ public class UserPdfExportService {
 
     // Users
     public void exportarTodosLosUsuarios(HttpServletResponse response) throws IOException {
-        
-        Set<User> usuarios = userService.findAll();
+
+        List<User> usuarios = userService.findAll();
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=usuarios.pdf");
@@ -96,7 +96,7 @@ public class UserPdfExportService {
         response.setContentType("application/pdf");
         String nombreArchivo = "usuario-" + user.getId() + ".pdf";
         response.setHeader("Content-Disposition", "attachment; filename=" + nombreArchivo);
-        
+
         Document document = new Document(PageSize.A4.rotate());
         PdfWriter.getInstance(document, response.getOutputStream());
 

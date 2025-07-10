@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class UserContextServiceImpl implements UserContextService {
@@ -25,17 +25,17 @@ public class UserContextServiceImpl implements UserContextService {
     }
 
     @Override
-    public Set<Long> getRolesId() {
-        return getUserAuth().getRolesId();
+    public List<String> getRoles() {
+        return getUserAuth().getRoles();
     }
 
     @Override
-    public Set<Long> getModules() {
+    public List<Long> getModules() {
         return getUserAuth().getModules();
     }
 
     @Override
-    public Set<Long> getSubmodules() {
+    public List<Long> getSubmodules() {
         return getUserAuth().getSubmodules();
     }
 

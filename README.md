@@ -2,9 +2,9 @@
 
 ## 📌 Project Overview
 
-A web application for user management, news, and perfume catalog, built with Spring Boot, Thymeleaf, and PostgreSQL. This project showcases secure authentication, session management and modular architecture, supporting both server-side rendering and RESTful APIs.
+A web application for user management, news, and a perfume catalog, built with Spring Boot, Thymeleaf, and PostgreSQL. It demonstrates secure authentication, session management, and a modular architecture, supporting both server-side rendering and RESTful APIs.
 
-Serves as a foundation for developing enterprise-grade web applications, focusing on security and fine-grained user role/permission separation, Controlled via custom permission roles (modules and submodules) through custom annotations controlled with Aspects(AOP) and JDBC session management.
+Designed as a foundation for enterprise-grade web applications, it emphasizes security with fine-grained user role and permission separation managed via custom annotations, AOP, and JDBC session handling. The system ensures real-time data consistency and concurrency to prevent reader-writer conflicts, while providing comprehensive user monitoring and auditing capabilities.
 
 ---
 
@@ -15,7 +15,7 @@ Serves as a foundation for developing enterprise-grade web applications, focusin
 - Role-based access control (RBAC) using Aspects and Sessions 
 - Custom permission annotations for fine-grained access control
 - Session management using Spring Session JDBC
-- All endpoints secured with method-level annotations (`@RequiereModule`)
+- All endpoints secured with method-level annotations (`@RequireModule`)
 - Submodule custom annotations to use with thymeleaf
 
 ### 🌐 Web & API
@@ -80,14 +80,14 @@ com.dossantosh.springfirstproject
 | **Spring Session JDBC**   | Persistent session storage    |
 | **PostgreSQL**            | Primary relational database   |
 | **Lombok**                | Boilerplate reduction         |
-| **AOP (AspectJ)**         | Logging, profiling            |
+| **AOP (Spring AOP)**      | Logging, profiling            |
 | **Spring Starter Mail**   | Mail verification             |
 | **Dotenv**                | Externalized configuration    |
 | **OpenAPI (SpringDoc)**   | API documentation             |
 | **Apache POI**            | Excel export                  |
 | **OpenPDF**               | PDF export                    |
 | **JUnit / Mockito**       | Testing                       |
-| **H2**                    | In memory database to tets    |
+| **H2**                    | In memory database to tests   |
 
 ---
 
@@ -196,7 +196,7 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 ## 📬 Contact
 
 - Email: sebastiandossantosh@gmail.com
-- Linkeding: [dossantosh](linkedin.com/in/dossantosh)
+- LinkedIn: [dossantosh](linkedin.com/in/dossantosh)
 - GitHub: [dossantosh](https://github.com/dossantosh)
 
 ---

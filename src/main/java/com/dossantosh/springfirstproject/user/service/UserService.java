@@ -1,10 +1,11 @@
 package com.dossantosh.springfirstproject.user.service;
 
-import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -12,15 +13,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuthProjection;
+import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+
 import com.dossantosh.springfirstproject.pref.Preferences;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
+
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
@@ -55,6 +62,8 @@ public class UserService {
 
     private final AuditService auditService;
 
+    private final UserContextService userContextService;
+
     public User saveUser(User user) {
         return userRepository.save(user);
     }
@@ -62,6 +71,10 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario con ID " + id + " no encontrado"));
+    }
+
+    public UserAuthProjection findUserAuthByUsername(String username) {
+        return userRepository.findUserAuthByUsername(username);
     }
 
     public User findByUsername(String username) {
@@ -74,8 +87,8 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
 
-    public Set<User> findAll() {
-        return new LinkedHashSet<>(userRepository.findAll());
+    public List<User> findAll() {
+        return new ArrayList<>(userRepository.findAll());
     }
 
     public boolean existsById(Long id) {
@@ -104,10 +117,10 @@ public class UserService {
                         "username", user.getUsername(),
                         "email", user.getEmail(),
                         "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
-                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
+                        "modules", user.getModules().stream().map(Modules::getName).toList(),
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
+                        user.getSubmodules().stream().map(Submodules::getName).toList()));
     }
 
     public Page<User> findByFiltersAdmin(Long id, String username, String email, int page, int size, String sortby,
@@ -135,7 +148,7 @@ public class UserService {
     }
 
     // Usuarios controller
-    public Set<UserDTO> convertirUsuariosADTO(Collection<User> users) {
+    public List<UserDTO> convertirUsuariosADTO(Collection<User> users) {
         return users.stream().map(u -> {
             UserDTO dto = new UserDTO();
             dto.setId(u.getId());
@@ -143,14 +156,14 @@ public class UserService {
             dto.setEmail(u.getEmail());
             dto.setEnabled(u.getEnabled());
             return dto;
-        }).collect(Collectors.toCollection(LinkedHashSet::new));
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Map<String, Set<?>> cargarListasFormulario() {
-        Map<String, Set<?>> map = new HashMap<>();
-        map.put("allRoles", new LinkedHashSet<>(roleService.findAll()));
-        map.put("allModules", new LinkedHashSet<>(moduleService.findAll()));
-        map.put("allSubmodules", new LinkedHashSet<>(submoduleService.findAll()));
+    public Map<String, List<?>> cargarListasFormulario() {
+        Map<String, List<?>> map = new HashMap<>();
+        map.put("allRoles", new ArrayList<>(roleService.findAll()));
+        map.put("allModules", new ArrayList<>(moduleService.findAll()));
+        map.put("allSubmodules", new ArrayList<>(submoduleService.findAll()));
         return map;
     }
 
@@ -188,22 +201,22 @@ public class UserService {
                         "username", user.getUsername(),
                         "email", user.getEmail(),
                         "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
-                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
+                        "modules", user.getModules().stream().map(Modules::getName).toList(),
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
+                        user.getSubmodules().stream().map(Submodules::getName).toList()));
     }
 
     // register
     public void createUser(User user) {
 
-        LinkedHashSet<Roles> roles = new LinkedHashSet<>();
-        LinkedHashSet<Modules> modules = new LinkedHashSet<>();
-        LinkedHashSet<Submodules> submodules = new LinkedHashSet<>();
+        List<Roles> roles = new ArrayList<>();
+        List<Modules> modules = new ArrayList<>();
+        List<Submodules> submodules = new ArrayList<>();
 
-        LinkedHashSet<Long> rolesId = new LinkedHashSet<>();
-        LinkedHashSet<Long> modulesId = new LinkedHashSet<>();
-        LinkedHashSet<Long> submodulesId = new LinkedHashSet<>();
+        List<Long> rolesId = new ArrayList<>();
+        List<Long> modulesId = new ArrayList<>();
+        List<Long> submodulesId = new ArrayList<>();
 
         if (user.getUsername().equals("sevas")) {
 
@@ -293,18 +306,19 @@ public class UserService {
         tokenService.sendVerificationEmailUser(user.getEmail(), token);
 
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "USER_CREATED",
                 Map.of("id", user.getId(),
                         "username", user.getUsername(),
                         "email", user.getEmail(),
                         "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()),
-                        "modules", user.getModules().stream().map(Modules::getName).collect(Collectors.toSet()),
+                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
+                        "modules", user.getModules().stream().map(Modules::getName).toList(),
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).collect(Collectors.toSet())));
+                        user.getSubmodules().stream().map(Submodules::getName).toList()));
     }
 
+    @Transactional(readOnly = true)
     public UserAuth userToUserAuth(User user) {
 
         if (user.getId() == null) {
@@ -339,10 +353,28 @@ public class UserService {
         userAuth.setEnabled(user.getEnabled());
         userAuth.setPreferences(preferencesService.findByUserId(user.getId()));
         userAuth.setRoles(
-                user.getRoles().stream().map(Roles::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
-        userAuth.setRolesId(user.getRoles().stream().map(r -> r.getId()).collect(Collectors.toSet()));
-        userAuth.setModules(user.getModules().stream().map(m -> m.getId()).collect(Collectors.toSet()));
-        userAuth.setSubmodules(user.getSubmodules().stream().map(s -> s.getId()).collect(Collectors.toSet()));
+                user.getRoles().stream().map(Roles::getName).toList());
+        userAuth.setModules(user.getModules().stream().map(Modules::getId).toList());
+        userAuth.setSubmodules(user.getSubmodules().stream().map(Submodules::getId).toList());
+
+        return userAuth;
+    }
+
+    public UserAuth mapToUserAuth(UserAuthProjection projection) {
+
+        if (projection == null) {
+            return null;
+        }
+
+        UserAuth userAuth = new UserAuth();
+        userAuth.setId(projection.getId());
+        userAuth.setUsername(projection.getUsername());
+        userAuth.setPassword(projection.getPassword());
+        userAuth.setEnabled(projection.getEnabled());
+        userAuth.setRoles(projection.getRoles());
+        userAuth.setModules(projection.getModules());
+        userAuth.setSubmodules(projection.getSubmodules());
+        userAuth.setPreferences(preferencesService.findByUserId(projection.getId())); // si quieres cargar preferencias
 
         return userAuth;
     }

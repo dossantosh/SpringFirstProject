@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
@@ -24,14 +24,14 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/user/users")
-@RequiereModule({ 2L })
+@RequireModule({ 2L })
 public class UsuariosController extends GenericController {
 
     private final UserService userService;
 
     private final SessionService sessionService;
 
-    private final Set<Long> writeUsers;
+    private final List<Long> writeUsers;
 
     public UsuariosController(UserContextService userContextService, PermisosUtils permisosUtils,
             UserService userService,
@@ -40,7 +40,7 @@ public class UsuariosController extends GenericController {
         this.userService = userService;
         this.sessionService = sessionService;
 
-        Set<Long> writeUsersTemp = new HashSet<>();
+        List<Long> writeUsersTemp = new ArrayList<>();
         writeUsersTemp.add(4L);
 
         this.writeUsers = writeUsersTemp;
@@ -56,14 +56,14 @@ public class UsuariosController extends GenericController {
             Model model,
             HttpSession session) {
 
-        Set<Long> readAll = Set.of(1L);
-        Set<Long> writeAll = Set.of(2L);
+        List<Long> readAll = List.of(1L);
+        List<Long> writeAll = List.of(2L);
 
-        Set<Long> readUsers = Set.of(3L);
-        Set<Long> writeUsers = Set.of(4L);
+        List<Long> readUsers = List.of(3L);
+        List<Long> writeUsers = List.of(4L);
 
-        Set<Long> readPerfumes = Set.of(5L);
-        Set<Long> writePerfumes = Set.of(6L);
+        List<Long> readPerfumes = List.of(5L);
+        List<Long> writePerfumes = List.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
@@ -160,8 +160,6 @@ public class UsuariosController extends GenericController {
         userService.deleteById(id);
 
         session.setAttribute("selectedUser", null);
-
-        
 
         return "redirect:/user/users";
     }

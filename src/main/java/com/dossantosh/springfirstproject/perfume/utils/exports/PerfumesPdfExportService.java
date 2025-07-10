@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
@@ -21,9 +21,10 @@ import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
 public class PerfumesPdfExportService {
 
     private final PerfumeService perfumeService;
+
     // Perfumes
     public void exportarTodosLosPerfumes(HttpServletResponse response) throws IOException {
-        Set<Perfumes> perfumes = perfumeService.findAll();
+        List<Perfumes> perfumes = perfumeService.findAll();
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=perfumes.pdf");

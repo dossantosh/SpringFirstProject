@@ -22,7 +22,7 @@ public class PerfumeSpecifications {
                 predicates.add(cb.equal(root.get("id"), id));
             }
             if (name != null && !name.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.trim().toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("brandName")), brandName.toLowerCase() + "%"));
             }
             if (season != null && !season.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("season")), "%" + season.toLowerCase() + "%"));

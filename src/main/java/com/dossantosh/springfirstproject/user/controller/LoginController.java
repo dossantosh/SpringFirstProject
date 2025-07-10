@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.context.ApplicationEventPublisher;
 
 import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
+import com.dossantosh.springfirstproject.common.security.captcha.ReCaptchaValidationService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
-import com.dossantosh.springfirstproject.common.security.custom.captcha.ReCaptchaValidationService;
-
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
 
@@ -29,7 +28,7 @@ import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

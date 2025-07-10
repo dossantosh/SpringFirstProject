@@ -1,10 +1,11 @@
 package com.dossantosh.springfirstproject.perfume.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -50,8 +51,8 @@ public class PerfumeService {
         }
     }
 
-    public Set<Perfumes> findAll() {
-        return new LinkedHashSet<>(perfumeRepository.findAll());
+    public List<Perfumes> findAll() {
+        return new ArrayList<>(perfumeRepository.findAll());
     }
 
     public Perfumes findById(Long id) {
@@ -101,7 +102,8 @@ public class PerfumeService {
                         "description", updatedPerfume.getDescription(),
                         "fecha", updatedPerfume.getFecha(),
                         "tipo", updatedPerfume.getTipo().getName(),
-                        "brandName", updatedPerfume.getBrand() != null ? updatedPerfume.getBrand().getName() : "Sin marca"));
+                        "brandName",
+                        updatedPerfume.getBrand() != null ? updatedPerfume.getBrand().getName() : "Sin marca"));
     }
 
     public void deleteById(Long id) {
@@ -139,7 +141,7 @@ public class PerfumeService {
         return perfumeRepository.findAll(spec, pageable);
     }
 
-    public Set<PerfumeDTO> conversorPerfumeDTO(Collection<Perfumes> perfumes) {
+    public List<PerfumeDTO> conversorPerfumeDTO(Collection<Perfumes> perfumes) {
         return perfumes.stream().map(p -> {
             PerfumeDTO dto = new PerfumeDTO();
             dto.setId(p.getId());
@@ -150,13 +152,13 @@ public class PerfumeService {
             dto.setTipo(p.getTipo().getName());
             dto.setBrandName(p.getBrand() != null ? p.getBrand().getName() : "Sin marca");
             return dto;
-        }).collect(Collectors.toCollection(LinkedHashSet::new));
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Map<String, Set<Object>> cargarListaInfo() {
-        Map<String, Set<Object>> map = new HashMap<>();
-        map.put("brands", new LinkedHashSet<>(brandService.findAll()));
-        map.put("tipos", new LinkedHashSet<>(tipoService.findAll()));
+    public Map<String, List<Object>> cargarListaInfo() {
+        Map<String, List<Object>> map = new HashMap<>();
+        map.put("brands", new ArrayList<>(brandService.findAll()));
+        map.put("tipos", new ArrayList<>(tipoService.findAll()));
         return map;
     }
 }

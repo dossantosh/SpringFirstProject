@@ -4,7 +4,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 
 import org.springframework.stereotype.Component;
@@ -19,23 +21,30 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Aspect
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
-public class RequiereModuleAspect {
+public class RequireModuleAspect {
 
     private final UserContextService userContextService;
 
-    @Around("@annotation(com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule) "
-            + "|| @within(com.dossantosh.springfirstproject.common.security.custom.annotations.module.RequiereModule)")
+    @Around("@annotation(com.dossantosh.springfirstproject.common.security.module.RequireModule) "
+            + "|| @within(com.dossantosh.springfirstproject.common.security.module.RequireModule)")
     public Object checkModules(ProceedingJoinPoint pjp) throws Throwable {
 
         // agarra información del método que se quiere ejecutar
         MethodSignature ms = (MethodSignature) pjp.getSignature();
 
         // extrae, en este caso, los modulos necesarios para ejecutar el método
-        RequiereModule ann = ms.getMethod().getAnnotation(RequiereModule.class);
+        RequireModule ann = AnnotationUtils.findAnnotation(ms.getMethod(), RequireModule.class);
+        //RequiereModule ann = ms.getMethod().getAnnotation(RequiereModule.class);
+        
         // si está vacío, busca la anotación a nivel de clase
         if (ann == null) {
-            ann = pjp.getTarget().getClass().getAnnotation(RequiereModule.class);
+            ann = AnnotationUtils.findAnnotation(pjp.getTarget().getClass(), RequireModule.class);
+            //ann = pjp.getTarget().getClass().getAnnotation(RequiereModule.class);
+        }
+        if (ann == null) {
+            return pjp.proceed();
         }
         long[] required = ann.value();
 

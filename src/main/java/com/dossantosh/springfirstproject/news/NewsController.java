@@ -1,21 +1,22 @@
 package com.dossantosh.springfirstproject.news;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-import com.dossantosh.springfirstproject.common.security.module.RequiereModule;
+import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequiereModule({ 1L })
+@RequireModule({ 1L })
 public class NewsController extends GenericController {
 
         private final PreferencesService preferencesService;
@@ -29,20 +30,20 @@ public class NewsController extends GenericController {
         @GetMapping("/objects/news")
         public String showPrincipal(Model model, HttpSession session, News news) {
 
-                Set<Long> readAll = Set.of(1L);
-                Set<Long> writeAll = Set.of(2L);
+                List<Long> readAll = List.of(1L);
+                List<Long> writeAll = List.of(2L);
 
-                Set<Long> readUsers = Set.of(3L);
-                Set<Long> writeUsers = Set.of(4L);
+                List<Long> readUsers = List.of(3L);
+                List<Long> writeUsers = List.of(4L);
 
-                Set<Long> readPerfumes = Set.of(5L);
-                Set<Long> writePerfumes = Set.of(6L);
+                List<Long> readPerfumes = List.of(5L);
+                List<Long> writePerfumes = List.of(6L);
 
                 addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
                 model.addAttribute("activeNavLink", "news");
 
-                LinkedHashSet<News> setNoticias = new LinkedHashSet<>();
+                List<News> setNoticias = new ArrayList<>();
 
                 News salida;
                 News fechaSalida;

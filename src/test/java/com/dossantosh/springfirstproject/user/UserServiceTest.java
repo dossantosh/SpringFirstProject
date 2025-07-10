@@ -16,15 +16,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 class UserServiceTest {
 
     @Mock
@@ -77,14 +79,14 @@ class UserServiceTest {
         user.setEmail("dto@domain.com");
         user.setEnabled(true);
 
-        Set<Roles> roles = new LinkedHashSet<>();
+        List<Roles> roles = new ArrayList<>();
         Roles role = new Roles();
         role.setId(1L);
         role.setName("ADMIN");
         roles.add(role);
         user.setRoles(roles);
 
-        UserDTO dto = userService.convertirUsuariosADTO(Set.of(user)).iterator().next();
+        UserDTO dto = userService.convertirUsuariosADTO(List.of(user)).iterator().next();
         assertThat(dto.getId()).isEqualTo(2L);
         assertThat(dto.getUsername()).isEqualTo("dtoUser");
     }

@@ -1,7 +1,7 @@
 package com.dossantosh.springfirstproject.perfume.service;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class TypesService {
         return typeRepository.save(tipos);
     }
 
-    public Set<Types> findAll() {
-        return new LinkedHashSet<>(typeRepository.findAll());
+    public List<Types> findAll() {
+        return new ArrayList<>(typeRepository.findAll());
     }
 }

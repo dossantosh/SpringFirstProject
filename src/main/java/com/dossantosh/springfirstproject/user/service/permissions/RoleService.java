@@ -1,7 +1,8 @@
 package com.dossantosh.springfirstproject.user.service.permissions;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,13 @@ public class RoleService {
                 .orElseThrow(() -> new EntityNotFoundException("Rol con ID " + id + " no encontrado"));
     }
 
-    public Set<Roles> findAllById(Set<Long> listaId) {
-        return new HashSet<>(roleRepository.findAllById(listaId));
+    public List<Roles> findAllById(List<Long> listaId) {
+        return new ArrayList<>(roleRepository.findAllById(listaId));
 
     }
 
-    public Set<Roles> findAll() {
-        return new HashSet<>(roleRepository.findAll());
+    public List<Roles> findAll() {
+        return new ArrayList<>(roleRepository.findAll());
 
     }
 

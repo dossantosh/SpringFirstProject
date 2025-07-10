@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -24,8 +23,8 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
+import com.dossantosh.springfirstproject.common.security.captcha.CaptchaValidationFilter;
 import com.dossantosh.springfirstproject.common.security.custom.auth.CustomUserDetailsService;
-import com.dossantosh.springfirstproject.common.security.custom.captcha.CaptchaValidationFilter;
 import com.dossantosh.springfirstproject.common.security.custom.login.CustomAuthenticationFailureHandler;
 
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.dossantosh.springfirstproject.user.service.permissions;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 import org.springframework.stereotype.Service;
 
@@ -23,15 +23,15 @@ public class ModuleService {
                 .orElseThrow(() -> new EntityNotFoundException("Módulo con ID " + id + " no encontrado"));
     }
 
-    public Set<Modules> findAllById(List<Long> lista) {
-        return new HashSet<>(moduleRepository.findAllById(lista));
+    public List<Modules> findAllById(List<Long> lista) {
+        return new ArrayList<>(moduleRepository.findAllById(lista));
     }
 
-    public Set<Modules> findAll() {
-        return new HashSet<>(moduleRepository.findAll());
+    public List<Modules> findAll() {
+        return new ArrayList<>(moduleRepository.findAll());
     }
 
-    public boolean existById(Long id){
+    public boolean existById(Long id) {
         return moduleRepository.existsById(id);
     }
 }

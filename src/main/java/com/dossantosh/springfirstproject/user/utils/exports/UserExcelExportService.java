@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserExcelExportService {
 
     // Users
     public void exportUsuarios(HttpServletResponse response) throws IOException {
-        Set<User> usuarios = userService.findAll();
+        List<User> usuarios = userService.findAll();
         String[] columnas = { "ID", "Username", "Email", "Habilitado", "Roles", "Módulos", "Submódulos" };
 
         response.setContentType(CONTENTTYPEOPENXMLOFFICEDOCUMENTS);
@@ -183,6 +183,7 @@ public class UserExcelExportService {
 
         return style;
     }
+
     private void autoSizeColumns(Sheet sheet, int cantidad) {
         for (int i = 0; i < cantidad; i++) {
             sheet.autoSizeColumn(i);

@@ -1,9 +1,10 @@
 package com.dossantosh.springfirstproject.user.models.permissions;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
 
 import com.dossantosh.springfirstproject.user.models.User;
 
@@ -19,7 +20,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name="modules")
+@Table(name = "modules")
 public class Modules implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Compatible con SERIAL de PostgreSQL
@@ -33,12 +34,14 @@ public class Modules implements Serializable {
     private String image;
 
     @ManyToMany(mappedBy = "modules")
-    private Set <User> users = new LinkedHashSet <>();
+    private List<User> users = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Modules modules = (Modules) o;
         return Objects.equals(id, modules.id);
     }
