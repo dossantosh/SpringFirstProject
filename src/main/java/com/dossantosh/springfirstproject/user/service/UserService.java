@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import java.util.stream.Collectors;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -22,12 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuthProjection;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
-
-import com.dossantosh.springfirstproject.pref.Preferences;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserAuthProjection;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
-
+import com.dossantosh.springfirstproject.pref.models.Preferences;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
@@ -107,20 +105,29 @@ public class UserService {
         if (!existsById(id)) {
             throw new EntityNotFoundException("Usuario con ID " + id + " no encontrado");
         }
-        userRepository.deleteById(id);
 
         User user = findById(id);
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "USER_DELETED",
                 Map.of("id", user.getId(),
-                        "username", user.getUsername(),
-                        "email", user.getEmail(),
-                        "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
-                        "modules", user.getModules().stream().map(Modules::getName).toList(),
+                        "username", user.getUsername() != null ? user.getUsername() : "Sin nombre",
+                        "email", user.getEmail() != null ? user.getEmail() : "Sin email",
+                        "enabled", user.getEnabled() != null ? user.getEnabled() : "Sin estado",
+                        "roles",
+                        user.getRoles().stream().map(Roles::getName).toList() != null
+                                ? user.getRoles().stream().map(Roles::getName).toList()
+                                : "Sin roles",
+                        "modules",
+                        user.getModules().stream().map(Modules::getName).toList() != null
+                                ? user.getModules().stream().map(Modules::getName).toList()
+                                : "Sin módulos",
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).toList()));
+                        user.getSubmodules().stream().map(Submodules::getName).toList() != null
+                                ? user.getSubmodules().stream().map(Submodules::getName).toList()
+                                : "Sin submódulos"));
+
+        userRepository.deleteById(id);
     }
 
     public Page<User> findByFiltersAdmin(Long id, String username, String email, int page, int size, String sortby,
@@ -195,16 +202,24 @@ public class UserService {
         saveUser(user);
 
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "USER_MODIFIED",
-                Map.of("id", user.getId(),
-                        "username", user.getUsername(),
-                        "email", user.getEmail(),
-                        "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
-                        "modules", user.getModules().stream().map(Modules::getName).toList(),
+                Map.of("id", user.getId() != null ? user.getId() : "Sin ID",
+                        "username", user.getUsername() != null ? user.getUsername() : "Sin nombre",
+                        "email", user.getEmail() != null ? user.getEmail() : "Sin email",
+                        "enabled", user.getEnabled() != null ? user.getEnabled() : "Sin estado",
+                        "roles",
+                        user.getRoles().stream().map(Roles::getName).toList() != null
+                                ? user.getRoles().stream().map(Roles::getName).toList()
+                                : "Sin roles",
+                        "modules",
+                        user.getModules().stream().map(Modules::getName).toList() != null
+                                ? user.getModules().stream().map(Modules::getName).toList()
+                                : "Sin módulos",
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).toList()));
+                        user.getSubmodules().stream().map(Submodules::getName).toList() != null
+                                ? user.getSubmodules().stream().map(Submodules::getName).toList()
+                                : "Sin submódulos"));
     }
 
     // register
@@ -309,13 +324,21 @@ public class UserService {
                 userContextService.getUsername(),
                 "USER_CREATED",
                 Map.of("id", user.getId(),
-                        "username", user.getUsername(),
-                        "email", user.getEmail(),
-                        "enabled", user.getEnabled(),
-                        "roles", user.getRoles().stream().map(Roles::getName).toList(),
-                        "modules", user.getModules().stream().map(Modules::getName).toList(),
+                        "username", user.getUsername() != null ? user.getUsername() : "Sin nombre",
+                        "email", user.getEmail() != null ? user.getEmail() : "Sin email",
+                        "enabled", user.getEnabled() != null ? user.getEnabled() : "Sin estado",
+                        "roles",
+                        user.getRoles().stream().map(Roles::getName).toList() != null
+                                ? user.getRoles().stream().map(Roles::getName).toList()
+                                : "Sin roles",
+                        "modules",
+                        user.getModules().stream().map(Modules::getName).toList() != null
+                                ? user.getModules().stream().map(Modules::getName).toList()
+                                : "Sin módulos",
                         "submodules",
-                        user.getSubmodules().stream().map(Submodules::getName).toList()));
+                        user.getSubmodules().stream().map(Submodules::getName).toList() != null
+                                ? user.getSubmodules().stream().map(Submodules::getName).toList()
+                                : "Sin submódulos"));
     }
 
     @Transactional(readOnly = true)
@@ -352,10 +375,18 @@ public class UserService {
         userAuth.setPassword(user.getPassword());
         userAuth.setEnabled(user.getEnabled());
         userAuth.setPreferences(preferencesService.findByUserId(user.getId()));
-        userAuth.setRoles(
-                user.getRoles().stream().map(Roles::getName).toList());
-        userAuth.setModules(user.getModules().stream().map(Modules::getId).toList());
-        userAuth.setSubmodules(user.getSubmodules().stream().map(Submodules::getId).toList());
+
+        LinkedHashSet<String> hashRoles = new LinkedHashSet<>(user.getRoles().stream()
+                .map(Roles::getName).toList());
+        userAuth.setRoles(hashRoles);
+
+        LinkedHashSet<Long> hashModules = new LinkedHashSet<>(user.getModules().stream()
+                .map(Modules::getId).toList());
+        userAuth.setModules(hashModules);
+
+        LinkedHashSet<Long> hashSubmodules = new LinkedHashSet<>(user.getSubmodules().stream()
+                .map(Submodules::getId).toList());
+        userAuth.setSubmodules(hashSubmodules);
 
         return userAuth;
     }
@@ -371,10 +402,17 @@ public class UserService {
         userAuth.setUsername(projection.getUsername());
         userAuth.setPassword(projection.getPassword());
         userAuth.setEnabled(projection.getEnabled());
-        userAuth.setRoles(projection.getRoles());
-        userAuth.setModules(projection.getModules());
-        userAuth.setSubmodules(projection.getSubmodules());
-        userAuth.setPreferences(preferencesService.findByUserId(projection.getId())); // si quieres cargar preferencias
+
+        LinkedHashSet<String> hashRoles = new LinkedHashSet<>(projection.getRoles());
+        userAuth.setRoles(hashRoles);
+
+        LinkedHashSet<Long> hashModules = new LinkedHashSet<>(projection.getModules());
+        userAuth.setModules(hashModules);
+
+        LinkedHashSet<Long> hashSubmodules = new LinkedHashSet<>(projection.getSubmodules());
+        userAuth.setSubmodules(hashSubmodules);
+
+        userAuth.setPreferences((Preferences) projection.getPreferences());
 
         return userAuth;
     }

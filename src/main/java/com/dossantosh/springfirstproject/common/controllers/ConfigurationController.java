@@ -1,12 +1,13 @@
 package com.dossantosh.springfirstproject.common.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 
@@ -23,14 +24,14 @@ public class ConfigurationController extends GenericController {
     @GetMapping("/common/configuration")
     public String showAdminPanel(Model model, HttpSession session) {
 
-        List<Long> readAll = List.of(1L);
-        List<Long> writeAll = List.of(2L);
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
+        
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        List<Long> readUsers = List.of(3L);
-        List<Long> writeUsers = List.of(4L);
-
-        List<Long> readPerfumes = List.of(5L);
-        List<Long> writePerfumes = List.of(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 

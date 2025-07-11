@@ -1,6 +1,8 @@
-package com.dossantosh.springfirstproject.common.security.custom.auth;
+package com.dossantosh.springfirstproject.common.security.custom.auth.models;
 
 import java.util.List;
+
+import com.dossantosh.springfirstproject.pref.models.PreferencesProjection;
 
 public interface UserAuthProjection {
     Long getId();
@@ -10,6 +12,8 @@ public interface UserAuthProjection {
     String getPassword();
 
     Boolean getEnabled();
+
+    PreferencesProjection getPreferences();
 
     List<String> getRoles();
 

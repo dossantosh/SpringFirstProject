@@ -14,7 +14,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

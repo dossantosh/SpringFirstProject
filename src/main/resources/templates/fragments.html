@@ -48,7 +48,7 @@
     <!-- Navigation Bar -->
     <nav th:fragment="navbar(activeLink)" class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/objects/news}">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <img th:src="@{/images/logo.png}" alt="Logo" height="30" class="me-2" />
                 <span class="fw-bold">Seb's Fragances</span>
             </a>
@@ -62,7 +62,7 @@
                     <!-- News Link -->
                     <li class="nav-item">
                         <a class="nav-link" th:classappend="${activeLink == 'news'} ? 'active' : ''"
-                            th:href="@{/objects/news}">
+                            th:href="@{/}">
                             <i class="bi bi-speedometer2 me-1"></i>
                             <span th:text="#{news.tittle}">News</span>
                         </a>
@@ -137,7 +137,7 @@
                     <h5 class="mb-3" th:text="#{enlaces}">Enlaces</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a th:href="@{/objects/news}" class="text-white-50 text-decoration-none"
+                            <a th:href="@{/}" class="text-white-50 text-decoration-none"
                                 th:text="#{news.tittle}">News</a>
                         </li>
                         <li class="mb-2" th:if="${readPerfumes}">

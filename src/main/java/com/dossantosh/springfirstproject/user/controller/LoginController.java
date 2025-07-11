@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.context.ApplicationEventPublisher;
 
+import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
 import com.dossantosh.springfirstproject.common.security.captcha.ReCaptchaValidationService;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
+
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
+import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.objects.Token;
 
@@ -30,11 +33,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Controller
-public class LoginController {
+public class LoginController extends GenericController {
 
     private final UserService userService;
 
@@ -57,6 +58,17 @@ public class LoginController {
     private static final String FORGOTPASSWORD = "forgotPassword";
 
     private static final String ERROR = "error";
+
+    public LoginController(UserContextService userContextService, PermisosUtils permisosUtils, UserService userService,
+            TokenService tokenService, ReCaptchaValidationService reCaptchaValidationService,
+            PasswordEncoder passwordEncoder, ApplicationEventPublisher eventPublisher) {
+        super(userContextService, permisosUtils);
+        this.userService = userService;
+        this.tokenService = tokenService;
+        this.reCaptchaValidationService = reCaptchaValidationService;
+        this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = eventPublisher;
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -120,7 +132,7 @@ public class LoginController {
         userService.saveUser(user);
         tokenService.deleteByToken(token.getToken());
 
-        return "redirect:/objects/news";
+        return "redirect:/";
     }
 
     @GetMapping("/login")
@@ -226,11 +238,10 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<Void> logoutPorInactividad(HttpSession session) {
 
-        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userContextService.getUsername() != null) {
 
-        if (userAuth != null) {
-
-            eventPublisher.publishEvent(new UserLoggedOutEvent(userAuth.getId(), userAuth.getUsername()));
+            eventPublisher
+                    .publishEvent(new UserLoggedOutEvent(userContextService.getId(), userContextService.getUsername()));
 
         }
 

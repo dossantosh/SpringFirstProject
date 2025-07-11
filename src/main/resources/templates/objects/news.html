@@ -126,7 +126,7 @@
                                 <div th:each="noticia : ${news}" class="col-md-4 mb-4">
                                     <div class="card h-100 border-0 shadow-sm"
                                         th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                        <img th:src="${noticia.image}" class="card-img-top" alt="Noticia" />
+                                        <img th:if="${noticia.image}" th:src="${noticia.image}" class="card-img-top" alt="Noticia" />
 
                                         <div class="card-body">
                                             <h3 class="h5 card-title" th:text="${noticia.tittle}">Título aquí</h3>

@@ -21,7 +21,6 @@ import org.springframework.util.SerializationUtils;
 
 import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
-
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 @Service
@@ -66,8 +65,7 @@ public class SessionService {
         return jdbcTemplate.queryForList(sql, String.class, principalName);
     }
 
-    // add userAuth to an differente user (same as customauthsucceshandler but to
-    // another user)
+    // add userAuth attribute
     public void addUserAuthAttributeToSession(String primaryId, String attributeName, UserAuth userAuth)
             throws IOException {
         // Serializar el objeto UserAuth a byte[]
@@ -84,8 +82,8 @@ public class SessionService {
     }
 
     public void updateSecurityContextForUser(UserAuth newUserAuth) {
-        String username = newUserAuth.getUsername();
-        List<String> primaryIds = findPrimaryIdsByPrincipalName(username);
+
+        List<String> primaryIds = findPrimaryIdsByPrincipalName(newUserAuth.getUsername());
 
         if (primaryIds.isEmpty()) {
             return;

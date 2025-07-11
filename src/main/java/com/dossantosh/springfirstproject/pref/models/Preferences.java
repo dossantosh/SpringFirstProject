@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.pref;
+package com.dossantosh.springfirstproject.pref.models;
 
 import java.io.Serializable;
 
@@ -24,10 +24,10 @@ public class Preferences implements Serializable{
     @Column(name = "userId", nullable = false, unique = true)
     private Long userId;
 
-    @Column(name = "Email Notifications")
+    @Column(name = "Email_Notifications")
     private boolean emailNotifications;
 
-    @Column(name = "SMS Notifications")
+    @Column(name = "SMS_Notifications")
     private boolean smsNotifications;
 
     @Column(length = 50)

@@ -1,13 +1,11 @@
 package com.dossantosh.springfirstproject.common.global;
 
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
-
-import com.dossantosh.springfirstproject.pref.Preferences;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
+import com.dossantosh.springfirstproject.pref.models.Preferences;
 
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,12 +19,14 @@ public class GlobalPreferencesControllerAdvice {
 
     private final PreferencesService preferencesService;
 
+    private final UserContextService userContextService;
+
     @ModelAttribute("preferences")
     public Preferences getUserPreferences(HttpSession session) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         // Si el usuario no está autenticado, devuelve preferences por defecto
-        if (auth == null || !auth.isAuthenticated() || auth.getName().equals("anonymousUser")) {
+        if (userContextService.getId() == null) {
+
             Preferences defaultPreferences = new Preferences();
             defaultPreferences.setTema("auto");
             defaultPreferences.setIdioma("es");
@@ -35,15 +35,12 @@ public class GlobalPreferencesControllerAdvice {
             return defaultPreferences;
         }
 
-        // Cargar preferences del usuario autenticado
-        UserAuth userAuth = (UserAuth) auth.getPrincipal();
-
-        Preferences preferences = userAuth.getPreferences();
+        Preferences preferences = userContextService.getPreferences();
 
         // Si no existen preferences, crearlas
         if (preferences == null) {
             preferences = new Preferences();
-            preferences.setUserId(userAuth.getId());
+            preferences.setUserId(userContextService.getId());
             preferences.setTema("auto");
             preferences.setIdioma("es");
             preferences.setEmailNotifications(false);

@@ -1,10 +1,10 @@
 package com.dossantosh.springfirstproject.common.controllers;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.ui.Model;
 
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ public abstract class GenericController {
     protected final PermisosUtils permisosUtils;
 
     protected void addPrincipalAttributes(Model model,
-            List<Long> readAll, List<Long> writeAll, List<Long> readUsers, List<Long> writeUsers,
-            List<Long> readPerfumes,
-            List<Long> writePerfumes) {
+            Set<Long> readAll, Set<Long> writeAll, Set<Long> readUsers, Set<Long> writeUsers,
+            Set<Long> readPerfumes,
+            Set<Long> writePerfumes) {
 
         model.addAttribute("userAuth", userContextService);
 

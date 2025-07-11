@@ -1,10 +1,7 @@
 package com.dossantosh.springfirstproject.user.controller;
 
-import java.io.IOException;
+import java.util.Set;
 
-import java.util.List;
-
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,15 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
-import com.dossantosh.springfirstproject.user.models.permissions.Modules;
-import com.dossantosh.springfirstproject.user.models.permissions.Roles;
-import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
+
 import com.dossantosh.springfirstproject.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,61 +44,44 @@ public class ProfileController extends GenericController {
     @GetMapping("/user/profile")
     public String showPerfilPanel(Model model, HttpSession session) {
 
-        List<Long> readAll = List.of(1L);
-        List<Long> writeAll = List.of(2L);
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
 
-        List<Long> readUsers = List.of(3L);
-        List<Long> writeUsers = List.of(4L);
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        List<Long> readPerfumes = List.of(5L);
-        List<Long> writePerfumes = List.of(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
         model.addAttribute("activeNavLink", "profile");
 
-        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        User user = userService.findById(userAuth.getId());
+        User user = userService.findById(userContextService.getId());
 
         model.addAttribute("user", user);
 
-        StringBuilder sbRol = new StringBuilder();
-        for (Roles rol : user.getRoles()) {
-            sbRol.append(rol.getName() + " \n");
-        }
-        StringBuilder sbMod = new StringBuilder();
-        for (Modules mod : user.getModules()) {
-            sbMod.append(mod.getName() + " \n");
-        }
-        StringBuilder sbSub = new StringBuilder();
-        for (Submodules sub : user.getSubmodules()) {
-            sbSub.append(sub.getName() + " \n");
-        }
-
-        model.addAttribute("listaRol", sbRol);
-        model.addAttribute("listaMod", sbMod);
-        model.addAttribute("listaSub", sbSub);
+        model.addAttribute("listaRol", userContextService.getRoles());
+        model.addAttribute("listaMod", userContextService.getModules());
+        model.addAttribute("listaSub", userContextService.getSubmodules());
         return "user/profile";
     }
 
     @GetMapping("/user/editar") // /user/editar
     public String mostrarFormularioEdicion(Model model, HttpSession session) {
 
-        List<Long> readAll = List.of(1L);
-        List<Long> writeAll = List.of(2L);
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
 
-        List<Long> readUsers = List.of(3L);
-        List<Long> writeUsers = List.of(4L);
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        List<Long> readPerfumes = List.of(5L);
-        List<Long> writePerfumes = List.of(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
-        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        model.addAttribute("user", userService.findById(userAuth.getId()));
+        model.addAttribute("user", userService.findById(userContextService.getId()));
 
         userService.cargarListasFormulario().forEach(model::addAttribute);
         return "user/editar";
@@ -116,7 +94,7 @@ public class ProfileController extends GenericController {
             RedirectAttributes redirectAttrs,
             RedirectAttributes flash,
             HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response) {
 
         userService.modifyUser(user, userService.findById(user.getId()));
 

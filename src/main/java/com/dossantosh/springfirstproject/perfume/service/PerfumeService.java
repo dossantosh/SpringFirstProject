@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -14,10 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
+import com.dossantosh.springfirstproject.perfume.models.Brands;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
 import com.dossantosh.springfirstproject.perfume.utils.PerfumeDTO;
@@ -38,6 +41,8 @@ public class PerfumeService {
     private final TypesService tipoService;
 
     private final AuditService auditService;
+
+    private final UserContextService userContextService;
 
     @PersistenceContext
     private EntityManager em;
@@ -78,14 +83,18 @@ public class PerfumeService {
         save(newPerfume);
 
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "PERFUME_CREATE",
-                Map.of("id", newPerfume.getId(),
-                        "name", newPerfume.getName(),
-                        "season", newPerfume.getSeason(),
-                        "description", newPerfume.getDescription(),
-                        "fecha", newPerfume.getFecha(),
-                        "tipo", newPerfume.getTipo().getName(),
+                Map.of("id", newPerfume.getId() != null ? newPerfume.getId() : "Sin ID",
+                        "name", newPerfume.getName() != null ? newPerfume.getName() : "Sin nombre",
+                        "season", newPerfume.getSeason() != null ? newPerfume.getSeason() : "Sin temporada",
+                        "description",
+                        newPerfume.getDescription() != null ? newPerfume.getDescription() : "Sin descripción",
+                        "fecha", newPerfume.getFecha() != null ? newPerfume.getFecha().toString() : "Sin fecha",
+                        "tipo",
+                        newPerfume.getTipo() != null && newPerfume.getTipo().getName() != null
+                                ? newPerfume.getTipo().getName()
+                                : "Sin tipo",
                         "brandName", newPerfume.getBrand() != null ? newPerfume.getBrand().getName() : "Sin marca"));
     }
 
@@ -93,36 +102,52 @@ public class PerfumeService {
 
         save(updatedPerfume);
 
+        if (userContextService.getUsername().isBlank() || userContextService.getUsername() == null
+                || userContextService.getUsername().isEmpty()) {
+            throw new IllegalStateException("DIOOOOOOOOOOOOOOOOOOOOOOOOOOS");
+        }
+
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "PERFUME_MODIFY",
-                Map.of("id", updatedPerfume.getId(),
-                        "name", updatedPerfume.getName(),
-                        "season", updatedPerfume.getSeason(),
-                        "description", updatedPerfume.getDescription(),
-                        "fecha", updatedPerfume.getFecha(),
-                        "tipo", updatedPerfume.getTipo().getName(),
+                Map.of("id", updatedPerfume.getId() != null ? updatedPerfume.getId() : "Sin ID",
+                        "name", updatedPerfume.getName() != null ? updatedPerfume.getName() : "Sin nombre",
+                        "season", updatedPerfume.getSeason() != null ? updatedPerfume.getSeason() : "Sin temporada",
+                        "description",
+                        updatedPerfume.getDescription() != null ? updatedPerfume.getDescription() : "Sin descripción",
+                        "fecha", updatedPerfume.getFecha() != null ? updatedPerfume.getFecha().toString() : "Sin fecha",
+                        "tipo",
+                        updatedPerfume.getTipo().getName() != null ? updatedPerfume.getTipo().getName() : "Sin tipo",
                         "brandName",
                         updatedPerfume.getBrand() != null ? updatedPerfume.getBrand().getName() : "Sin marca"));
     }
 
+    @Transactional
     public void deleteById(Long id) {
         if (!existsById(id)) {
             throw new EntityNotFoundException("Perfume con ID " + id + " no encontrado");
         }
-        perfumeRepository.deleteById(id);
-
         Perfumes perfume = findById(id);
+
         auditService.logCustomEvent(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                userContextService.getUsername(),
                 "PERFUME_DELETE",
-                Map.of("id", perfume.getId(),
-                        "name", perfume.getName(),
-                        "season", perfume.getSeason(),
-                        "description", perfume.getDescription(),
-                        "fecha", perfume.getFecha(),
-                        "tipo", perfume.getTipo().getName(),
+                Map.of("id", perfume.getId() != null ? perfume.getId() : "Sin ID",
+                        "name", perfume.getName() != null ? perfume.getName() : "Sin nombre",
+                        "season", perfume.getSeason() != null ? perfume.getSeason() : "Sin temporada",
+                        "description", perfume.getDescription() != null ? perfume.getDescription() : "Sin descripción",
+                        "fecha", perfume.getFecha() != null ? perfume.getFecha().toString() : "Sin fecha",
+                        "tipo", perfume.getTipo().getName() != null ? perfume.getTipo().getName() : "Sin tipo",
                         "brandName", perfume.getBrand() != null ? perfume.getBrand().getName() : "Sin marca"));
+
+        // Quitar el perfume de la lista de la marca para limpiar la relación
+        Brands brand = perfume.getBrand();
+        if (brand != null) {
+            brand.getPerfumes().remove(perfume);
+            perfume.setBrand(null);
+        }
+        
+        perfumeRepository.delete(perfume);
     }
 
     public long count() {
@@ -144,12 +169,12 @@ public class PerfumeService {
     public List<PerfumeDTO> conversorPerfumeDTO(Collection<Perfumes> perfumes) {
         return perfumes.stream().map(p -> {
             PerfumeDTO dto = new PerfumeDTO();
-            dto.setId(p.getId());
-            dto.setName(p.getName());
-            dto.setSeason(p.getSeason());
-            dto.setDescription(p.getDescription());
+            dto.setId(p.getId() != null ? p.getId() : -1L);
+            dto.setName(p.getName() != null ? p.getName() : "Sin nombre");
+            dto.setSeason(p.getSeason() != null ? p.getSeason() : "Sin temporada");
+            dto.setDescription(p.getDescription() != null ? p.getDescription() : "Sin descripción");
             dto.setFecha(p.getFecha());
-            dto.setTipo(p.getTipo().getName());
+            dto.setTipo(p.getTipo().getName() != null ? p.getTipo().getName() : "Sin tipo");
             dto.setBrandName(p.getBrand() != null ? p.getBrand().getName() : "Sin marca");
             return dto;
         }).collect(Collectors.toCollection(ArrayList::new));

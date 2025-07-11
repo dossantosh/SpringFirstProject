@@ -2,6 +2,7 @@ package com.dossantosh.springfirstproject.perfume.models;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 

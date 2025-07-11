@@ -5,11 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.dossantosh.springfirstproject.pref.Preferences;
+import com.dossantosh.springfirstproject.pref.models.Preferences;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 @Getter
@@ -28,11 +27,11 @@ public class UserAuth implements UserDetails {
 
     private Preferences preferences;
 
-    private List<String> roles = new ArrayList<>();
+    private LinkedHashSet<String> roles = new LinkedHashSet<>();
 
-    private List<Long> modules = new ArrayList<>();
-    
-    private List<Long> submodules = new ArrayList<>();
+    private LinkedHashSet<Long> modules = new LinkedHashSet<>();
+
+    private LinkedHashSet<Long> submodules = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

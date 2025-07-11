@@ -5,21 +5,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserService;
 
-import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -31,19 +30,12 @@ public class UsuariosController extends GenericController {
 
     private final SessionService sessionService;
 
-    private final List<Long> writeUsers;
-
     public UsuariosController(UserContextService userContextService, PermisosUtils permisosUtils,
             UserService userService,
             SessionService sessionService) {
         super(userContextService, permisosUtils);
         this.userService = userService;
         this.sessionService = sessionService;
-
-        List<Long> writeUsersTemp = new ArrayList<>();
-        writeUsersTemp.add(4L);
-
-        this.writeUsers = writeUsersTemp;
     }
 
     @GetMapping
@@ -56,14 +48,14 @@ public class UsuariosController extends GenericController {
             Model model,
             HttpSession session) {
 
-        List<Long> readAll = List.of(1L);
-        List<Long> writeAll = List.of(2L);
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
 
-        List<Long> readUsers = List.of(3L);
-        List<Long> writeUsers = List.of(4L);
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        List<Long> readPerfumes = List.of(5L);
-        List<Long> writePerfumes = List.of(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
@@ -80,7 +72,7 @@ public class UsuariosController extends GenericController {
         // Obtener página de usuarios filtrados
         Page<User> pageResult;
 
-        if (permisosUtils.isAdmin(SecurityContextHolder.getContext().getAuthentication())) {
+        if (userContextService.isAdmin()) {
 
             pageResult = userService.findByFiltersAdmin(id, username, email, page, size, "id", "ASC");
 
@@ -123,7 +115,7 @@ public class UsuariosController extends GenericController {
 
     @PostMapping("/guardar")
     public String guardarUsuario(@ModelAttribute User user, HttpSession session, HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response) {
 
         userService.modifyUser(user, userService.findById(user.getId()));
 
@@ -144,10 +136,12 @@ public class UsuariosController extends GenericController {
         return "redirect:/user/users";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String borrarUsuario(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
-        if (!permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writeUsers)) {
+        List<Long> writeUsersPermission = List.of(4L);
+
+        if (!permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writeUsersPermission)) {
             redirectAttrs.addFlashAttribute("error", "No tienes permisos para borrar usuarios.");
             return "redirect:/user/users";
         }
@@ -157,9 +151,18 @@ public class UsuariosController extends GenericController {
             return "redirect:/user/users";
         }
 
-        userService.deleteById(id);
-
         session.setAttribute("selectedUser", null);
+
+        User user = userService.findById(id);
+
+        List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
+
+        if (!primaryIdList.isEmpty()) {
+
+           sessionService.invalidateSessionsById(id);
+        }
+
+        userService.deleteById(id);
 
         return "redirect:/user/users";
     }

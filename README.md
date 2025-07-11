@@ -151,7 +151,10 @@ Key settings in `src/main/resources/application.properties`:
 3. **Configure PostgreSQL:**
    - Create a database and user matching your `.env` or environment variables.
 4. **(Optional) Demo Data:**
-   - The app can load demo data from `src/main/resources/data.sql` if present.
+   - The app can load demo data from `src/main/resources/data-postgres.sql` if present.
+4. **Test Data:**
+   - The app can create test database from `src/test/resources/schema-h2.sql` if present.
+   - The app can load test data from `src/test/resources/data-h2.sql` if present.
 
 ### Build and Run
 

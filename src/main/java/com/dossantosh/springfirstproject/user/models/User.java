@@ -7,10 +7,12 @@ import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
 
+import com.dossantosh.springfirstproject.pref.models.Preferences;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -53,6 +56,9 @@ public class User implements Serializable {
 
     @Column(length = 100)
     private String password;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Preferences preferences;
 
     @BatchSize(size = 10)
     @ManyToMany(fetch = FetchType.EAGER)

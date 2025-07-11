@@ -2,6 +2,8 @@ package com.dossantosh.springfirstproject.pref;
 
 import org.springframework.stereotype.Service;
 
+import com.dossantosh.springfirstproject.pref.models.Preferences;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
-import com.dossantosh.springfirstproject.common.security.custom.auth.UserContextService;
+import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.perfume.models.Brands;
@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,14 +66,14 @@ public class PerfumeController extends GenericController {
 
         session.setAttribute("isLockedByAnother", isLockedByAnother);
 
-        List<Long> readAll = List.of(1L);
-        List<Long> writeAll = List.of(2L);
+        Set<Long> readAll = Set.of(1L);
+        Set<Long> writeAll = Set.of(2L);
 
-        List<Long> readUsers = List.of(3L);
-        List<Long> writeUsers = List.of(4L);
+        Set<Long> readUsers = Set.of(3L);
+        Set<Long> writeUsers = Set.of(4L);
 
-        List<Long> readPerfumes = List.of(5L);
-        List<Long> writePerfumes = List.of(6L);
+        Set<Long> readPerfumes = Set.of(5L);
+        Set<Long> writePerfumes = Set.of(6L);
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
@@ -256,8 +257,8 @@ public class PerfumeController extends GenericController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String borrarPerfume(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
 
         if (!permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writePerfume)) {
             redirectAttrs.addFlashAttribute("error", "No tienes permisos para borrar perfumes.");
@@ -270,18 +271,16 @@ public class PerfumeController extends GenericController {
         }
 
         perfumeLockManager.releaseLock(id, userContextService.getUsername());
-
         perfumeService.deleteById(id);
 
         session.setAttribute("selectedPerfume", null);
-
         session.setAttribute("isLockedByAnother", null);
 
         return "redirect:/objects/perfume";
     }
 
     @GetMapping("/cancelar/{id}")
-    public String cancelar(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttrs) {
+    public String cancelar(@PathVariable Long id, HttpSession session) {
 
         if (permisosUtils.contieneAlgunSubmodulo(userContextService.getSubmodules(), writePerfume)) {
 

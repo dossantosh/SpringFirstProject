@@ -1,22 +1,21 @@
 package com.dossantosh.springfirstproject.common.security;
 
-import java.util.Optional;
-
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
+
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+
 import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
@@ -44,18 +43,18 @@ public class SecurityConfig {
                                                 .sessionFixation(SessionFixationConfigurer::migrateSession))
                                 .addFilterBefore(captchaValidationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/login", "forgotPasswordEmail", "/forgotPassword",
+                                                .requestMatchers("/login", "/forgotPasswordEmail", "/forgotPassword",
                                                                 "/confirm/**", "/token-invalid",
                                                                 "/register", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
-                                                .requestMatchers("/common/**", "/objects/**", "/user/**")
+                                                .requestMatchers("/","/common/**", "/objects/**", "/user/**")
                                                 .authenticated()
                                                 .requestMatchers("/actuator/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/objects/news")
+                                                .defaultSuccessUrl("/")
                                                 .failureHandler(customAuthenticationFailureHandler))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
@@ -119,12 +118,5 @@ public class SecurityConfig {
         @Bean
         public JdbcTemplate jdbcTemplate(DataSource dataSource) {
                 return new JdbcTemplate(dataSource);
-        }
-
-        @Bean
-        public AuditorAware<String> auditorProvider() {
-                return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                                .filter(Authentication::isAuthenticated)
-                                .map(Authentication::getName);
         }
 }
