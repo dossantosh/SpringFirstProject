@@ -199,7 +199,7 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 ## 📬 Contact
 
 - Email: sebastiandossantosh@gmail.com
-- LinkedIn: [dossantosh](linkedin.com/in/dossantosh)
+- LinkedIn: [dossantosh](https://www.linkedin.com/in/dossantosh/)
 - GitHub: [dossantosh](https://github.com/dossantosh)
 
 ---
