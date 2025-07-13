@@ -1,46 +1,27 @@
 # SpringFirstProject
 
-📖 Table of Contents
+## 📖 Table of Contents
 
-    📌 Project Overview
-
-    ✨ Features
-
-        👥 User & Security
-
-        🌐 Web & API
-
-        📦 Architecture
-
-        📊 Reports & Exports
-
-        ⚙️ Dev & Ops
-
-    🗂️ Project Structure
-
-    🛠️ Tech Stack
-
-    🧾 Environment Configuration (.env)
-
-    ⚙️ Application Properties
-
-    🚀 Getting Started
-
-        Prerequisites
-
-        Setup
-
-        Build and Run
-
-    🔒 Security
-
-    🧪 Testing
-
-    👤 Author
-
-    📬 Contact
-
-    🙏 Acknowledgements
+- [📌 Project Overview](#-project-overview)  
+- [✨ Features](#-features)  
+  - [👥 User & Security](#-user--security)  
+  - [🌐 Web & API](#-web--api)  
+  - [📦 Architecture](#-architecture)  
+  - [📊 Reports & Exports](#-reports--exports)  
+  - [⚙️ Dev & Ops](#️-dev--ops)  
+- [🗂️ Project Structure](#️-project-structure)  
+- [🛠️ Tech Stack](#️-tech-stack)  
+- [🧾 Environment Configuration (.env)](#-environment-configuration-env)  
+- [⚙️ Application Properties](#️-application-properties)  
+- [🚀 Getting Started](#-getting-started)  
+  - [Prerequisites](#prerequisites)  
+  - [Setup](#setup)  
+  - [Build and Run](#build-and-run)  
+- [🔒 Security](#-security)  
+- [🧪 Testing](#-testing)  
+- [👤 Author](#-author)  
+- [📬 Contact](#-contact)  
+- [🙏 Acknowledgements](#-acknowledgements)  
 
 ## 📌 Project Overview
 
