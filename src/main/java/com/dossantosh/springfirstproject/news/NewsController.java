@@ -12,7 +12,7 @@ import com.dossantosh.springfirstproject.common.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
-import com.dossantosh.springfirstproject.pref.PreferencesService;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,12 +20,8 @@ import jakarta.servlet.http.HttpSession;
 @RequireModule({ 1L })
 public class NewsController extends GenericController {
 
-        private final PreferencesService preferencesService;
-
-        public NewsController(UserContextService userContextService, PermisosUtils permisosUtils,
-                        PreferencesService preferencesService) {
+        public NewsController(UserContextService userContextService, PermisosUtils permisosUtils) {
                 super(userContextService, permisosUtils);
-                this.preferencesService = preferencesService;
         }
 
         @GetMapping("/")
@@ -50,7 +46,7 @@ public class NewsController extends GenericController {
                 News fechaSalida;
                 News prueba;
 
-                if (preferencesService.findByUserId(userContextService.getId()).getIdioma().equals("es")) {
+                if (userContextService.getPreferences().getIdioma().equals("es")) {
                         salida = new News(1L, "Seb's Fragances: disponible en...",
                                         "Ya se puede comprar Seb's Fragances en las plataformas oficiales...",
                                         "13/05/2025", null);

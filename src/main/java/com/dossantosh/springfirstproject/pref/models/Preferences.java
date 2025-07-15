@@ -25,10 +25,10 @@ public class Preferences implements Serializable{
     private Long userId;
 
     @Column(name = "Email_Notifications")
-    private boolean emailNotifications;
+    private Boolean emailNotifications;
 
     @Column(name = "SMS_Notifications")
-    private boolean smsNotifications;
+    private Boolean smsNotifications;
 
     @Column(length = 50)
     private String tema;

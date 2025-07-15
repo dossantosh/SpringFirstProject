@@ -63,121 +63,8 @@
             </div>
         </div>
 
-        <!-- Card: Lista de Usuarios -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div
-                        th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
-                        <h2 class="h5 mb-0">
-                            <i class="bi bi-people-fill me-2 text-primary"></i>
-                            <span th:text="#{usuarios.lista}">Lista de Usuarios</span>
-                        </h2>
-                    </div>
-                    <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                        <div th:if="${users.empty}" class="text-center py-5">
-                            <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
-                            <h5 th:text="#{usuarios.noUsuarios}">No se encontraron usuarios.</h5>
-                        </div>
-                        <div th:unless="${users.empty}">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead th:class="${preferences.tema == 'dark' ? 'table-dark' : ''}">
-                                        <tr>
-                                            <th th:if="${writeUsers}" th:text="#{usuarios.id}">ID</th>
-                                            <th th:text="#{usuarios.nombre}">Usuario</th>
-                                            <th th:text="#{usuarios.email}">Email</th>
-                                            <th th:text="#{usuarios.enabled}">Activo</th>
-                                            <th th:if="${writeUsers}" th:text="#{usuarios.seleccionar}">Seleccionar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="u : ${users}">
-                                            <td th:if="${writeUsers}" th:text="${u.id}"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                            </td>
-                                            <td th:text="${u.username}"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                            </td>
-                                            <td th:text="${u.email}"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                            </td>
-                                            <td th:if="${preferences.idioma == 'es'}"
-                                                th:text="${u.enabled} ? 'Sí' : 'No'"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                            </td>
-                                            <td th:if="${preferences.idioma == 'en'}"
-                                                th:text="${u.enabled} ? 'Yes' : 'No'"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                            </td>
-                                            <td th:if="${writeUsers}"
-                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
-                                                <a th:href="@{/user/users/seleccionar/{id}(id=${u.id})}"
-                                                    class="btn btn-primary w-100"
-                                                    th:classappend="${preferences.tema == 'dark'} ? 'btn-outline-light' : ''">
-                                                    <i class="bi bi-pencil-square me-1"></i><span
-                                                        th:text="#{usuarios.seleccionar}">Seleccionar</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- Paginación -->
-                            <div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
-                                <ul class="pagination">
-                                    <!-- Previous Button -->
-                                    <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
-                                        <a class="page-link"
-                                            th:href="@{/user/users(page=${currentPage - 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
-                                            <span th:text="#{usuarios.anterior}">Anterior</span>
-                                        </a>
-                                    </li>
-
-                                    <!-- Page Numbers -->
-                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
-                                        th:classappend="${i == currentPage} ? 'active'">
-                                        <a class="page-link" th:text="${i + 1}"
-                                            th:href="@{/user/users(page=${i}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
-                                        </a>
-                                    </li>
-
-                                    <!-- Next Button -->
-                                    <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-                                        <a class="page-link"
-                                            th:href="@{/user/users(page=${currentPage + 1}, id=${filters.id}, username=${filters.username}, email=${filters.email})}">
-                                            <span th:text="#{usuarios.siguiente}">Siguiente</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Exportar -->
-        <div class="mb-4" th:if="${writeUsers}">
-            <div class="col-12 text-end">
-
-                <a th:href="@{/user/users/export/pdf}" class="btn btn-danger  px-4 me-2" data-bs-toggle="tooltip"
-                    data-bs-placement="top" title="Exportar a PDF">
-                    <i class="bi bi-file-earmark-pdf-fill me-1"></i>
-                    <span th:text="#{export.allpdf}">Exportar todos a PDF</span>
-                </a>
-
-                <a th:href="@{/user/users/export/excel}" class="btn btn-success  px-4 me-2" data-bs-toggle="tooltip"
-                    data-bs-placement="top" title="Exportar a Excel">
-                    <i class="bi bi-file-earmark-excel-fill me-1"></i>
-                    <span th:text="#{export.allexcel}">Exportar todos a Excel</span>
-                </a>
-            </div>
-        </div>
-
         <!-- Card: Edición de Usuario Seleccionado -->
-        <div class="row" th:unless="${selectedUser == null}">
+        <div class="mb-4 row" th:unless="${selectedUser == null}">
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div
@@ -302,18 +189,18 @@
 
                                         <!-- Derecha: Exportar y Guardar -->
                                         <div class="text-end">
-                                            <a th:href="@{/user/users/export/pdf/{id}(id=${selectedUser.id})}"
-                                                class="btn btn-danger  px-4 me-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Exportar a PDF">
-                                                <i class="bi bi-file-earmark-pdf-fill me-1"></i>
-                                                <span th:text="#{export.pdf}">Exportar a PDF</span>
-                                            </a>
-
                                             <a th:href="@{/user/users/export/excel/{id}(id=${selectedUser.id})}"
                                                 class="btn btn-success  px-4 me-2" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Exportar a Excel">
                                                 <i class="bi bi-file-earmark-excel-fill me-1"></i>
                                                 <span th:text="#{export.excel}">Exportar a Excel</span>
+                                            </a>
+
+                                            <a th:href="@{/user/users/export/pdf/{id}(id=${selectedUser.id})}"
+                                                class="btn btn-danger  px-4 me-2" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Exportar a PDF">
+                                                <i class="bi bi-file-earmark-pdf-fill me-1"></i>
+                                                <span th:text="#{export.pdf}">Exportar a PDF</span>
                                             </a>
 
                                             <button type="submit" class="btn btn-success  px-4">
@@ -330,7 +217,124 @@
             </div>
         </div>
 
+        <!-- Exportar -->
+        <div class="mb-4" th:if="${writeUsers}">
+            <div class="col-12 text-end">
+
+                <a th:href="@{/user/users/export/excel}" class="btn btn-success  px-4 me-2" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Exportar a Excel">
+                    <i class="bi bi-file-earmark-excel-fill me-1"></i>
+                    <span th:text="#{export.allexcel}">Exportar todos a Excel</span>
+                </a>
+
+                <a th:href="@{/user/users/export/pdf}" class="btn btn-danger  px-4 me-2" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Exportar a PDF">
+                    <i class="bi bi-file-earmark-pdf-fill me-1"></i>
+                    <span th:text="#{export.allpdf}">Exportar todos a PDF</span>
+                </a>
+
+            </div>
         </div>
+
+        <!-- Card: Lista de Usuarios -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div
+                        th:class="${preferences.tema == 'dark' ? 'card-header bg-dark text-light' : 'card-header bg-white text-dark'}">
+                        <h2 class="h5 mb-0">
+                            <i class="bi bi-people-fill me-2 text-primary"></i>
+                            <span th:text="#{usuarios.lista}">Lista de Usuarios</span>
+                        </h2>
+                    </div>
+                    <div th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                        <div th:if="${users.empty}" class="text-center py-5">
+                            <i class="bi bi-emoji-frown fs-1 text-muted mb-3"></i>
+                            <h5 th:text="#{usuarios.noUsuarios}">No se encontraron usuarios.</h5>
+                        </div>
+                        <div th:unless="${users.empty}">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead th:class="${preferences.tema == 'dark' ? 'table-dark' : ''}">
+                                        <tr>
+                                            <th th:if="${writeUsers}" th:text="#{usuarios.id}">ID</th>
+                                            <th th:text="#{usuarios.nombre}">Usuario</th>
+                                            <th th:text="#{usuarios.email}">Email</th>
+                                            <th th:text="#{usuarios.enabled}">Activo</th>
+                                            <th th:text="#{usuarios.admin}">Admin</th>
+                                            <th th:if="${writeUsers}" th:text="#{usuarios.seleccionar}">Seleccionar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="u : ${users}">
+                                            <td th:if="${writeUsers}" th:text="${u.id}"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:text="${u.username}"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:text="${u.email}"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:if="${preferences.idioma == 'es'}"
+                                                th:text="${u.enabled} ? 'Sí' : 'No'"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:if="${preferences.idioma == 'en'}"
+                                                th:text="${u.enabled} ? 'Yes' : 'No'"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:text="${u.isAdmin} ? 'Yes' : 'No'"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                            </td>
+                                            <td th:if="${writeUsers}"
+                                                th:class="${preferences.tema == 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'}">
+                                                <a th:href="@{/user/users/seleccionar/{id}(id=${u.id})}"
+                                                    class="btn btn-primary w-100"
+                                                    th:classappend="${preferences.tema == 'dark'} ? 'btn-outline-light' : ''">
+                                                    <i class="bi bi-pencil-square me-1"></i><span
+                                                        th:text="#{usuarios.seleccionar}">Seleccionar</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Paginación -->
+                            <div class="d-flex justify-content-center mt-4">
+                                <ul class="pagination">
+                                    <!-- Botón Anterior -->
+                                    <li class="page-item" th:if="${previousId != null}">
+                                        <a class="page-link" th:href="@{/user/users(
+                                                                lastId=${previousId},
+                                                                direction='PREVIOUS',
+                                                                id=${filters.id},
+                                                                username=${filters.username},
+                                                                email=${filters.email}
+                                                            )}">
+                                            <span th:text="#{usuarios.anterior}">Anterior</span>
+                                        </a>
+                                    </li>
+
+                                    <!-- Botón Siguiente -->
+                                    <li class="page-item" th:if="${hasNext}">
+                                        <a class="page-link" th:href="@{/user/users(
+                                                                lastId=${nextId},
+                                                                direction='NEXT',
+                                                                id=${filters.id},
+                                                                username=${filters.username},
+                                                                email=${filters.email}
+                                                            )}">
+                                            <span th:text="#{usuarios.siguiente}">Siguiente</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -376,6 +380,9 @@
                     buscarBtn.disabled = false;
                 }, 500);
             }
+
+
+
         });
 
         function validateUsername() {

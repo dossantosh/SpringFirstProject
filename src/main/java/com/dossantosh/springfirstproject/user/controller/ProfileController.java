@@ -57,9 +57,7 @@ public class ProfileController extends GenericController {
 
         model.addAttribute("activeNavLink", "profile");
 
-        User user = userService.findById(userContextService.getId());
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findById(userContextService.getId()));
 
         model.addAttribute("listaRol", userContextService.getRoles());
         model.addAttribute("listaMod", userContextService.getModules());
@@ -81,7 +79,7 @@ public class ProfileController extends GenericController {
 
         addPrincipalAttributes(model, readAll, writeAll, readUsers, writeUsers, readPerfumes, writePerfumes);
 
-        model.addAttribute("user", userService.findById(userContextService.getId()));
+        model.addAttribute("user", userService.findFullUserById(userContextService.getId()));
 
         userService.cargarListasFormulario().forEach(model::addAttribute);
         return "user/editar";
@@ -91,19 +89,21 @@ public class ProfileController extends GenericController {
     public String procesarFormularioEdicion(
             @Valid @ModelAttribute("user") User user,
             BindingResult result,
-            RedirectAttributes redirectAttrs,
-            RedirectAttributes flash,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-
-        userService.modifyUser(user, userService.findById(user.getId()));
+            RedirectAttributes redirectAttrs) {
 
         if (result.hasErrors()) {
             redirectAttrs.addFlashAttribute("error", "Revisa los campos del formulario.");
-            return "redirect:/objects/perfume";
+            return "redirect:/user/editar";
         }
 
-        flash.addFlashAttribute("success", "Perfil actualizado correctamente");
+        if(userService.existsByEmail(user.getEmail())) {
+            redirectAttrs.addFlashAttribute("error", "El correo electrónico ya está en uso.");
+            return "redirect:/user/editar";
+        }
+
+        userService.modifyUser(user, userService.findById(user.getId()));
+
+        redirectAttrs.addFlashAttribute("success", "Perfil actualizado correctamente");
 
         sessionService.refreshAuthentication(userService.userToUserAuth(user));
         return "redirect:/user/profile";

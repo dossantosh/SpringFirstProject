@@ -9,22 +9,27 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
+import com.dossantosh.springfirstproject.common.global.page.Direction;
+import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
+
 import com.dossantosh.springfirstproject.perfume.models.Brands;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.repository.PerfumeRepository;
-import com.dossantosh.springfirstproject.perfume.utils.PerfumeDTO;
-import com.dossantosh.springfirstproject.perfume.utils.PerfumeSpecifications;
+import com.dossantosh.springfirstproject.perfume.utils.FullPerfumeDTO;
+import com.dossantosh.springfirstproject.perfume.utils.PerfumeProjection;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -146,7 +151,7 @@ public class PerfumeService {
             brand.getPerfumes().remove(perfume);
             perfume.setBrand(null);
         }
-        
+
         perfumeRepository.delete(perfume);
     }
 
@@ -154,21 +159,33 @@ public class PerfumeService {
         return perfumeRepository.count();
     }
 
-    public Page<Perfumes> findByFilters(Long id, String name, String season, String brandName, int page, int size,
-            String sortBy, String direction) {
+    public KeysetPage<PerfumeProjection> findPerfumesKeyset(Long id, String name, String brandName, String season,
+            Long lastId, int limit, Direction direction) {
+        List<PerfumeProjection> perfumes = perfumeRepository.findByFiltersKeysetWithDirection(
+                id, name, brandName, season, lastId, limit + 1, direction.name());
 
-        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
+        boolean hasNext = perfumes.size() > limit;
+        if (hasNext) {
+            perfumes.remove(perfumes.size() - 1); // Quita el extra
+        }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        Long newLastId = null;
+        if (!perfumes.isEmpty()) {
+            if (direction == Direction.NEXT) {
+                newLastId = perfumes.get(perfumes.size() - 1).getId();
+            } else if (direction == Direction.PREVIOUS) {
+                newLastId = perfumes.get(0).getId();
+            }
+        }
 
-        Specification<Perfumes> spec = PerfumeSpecifications.filter(id, name, season, brandName);
+        Long newPreviousId = perfumes.isEmpty() ? null : perfumes.get(0).getId();
 
-        return perfumeRepository.findAll(spec, pageable);
+        return new KeysetPage<>(perfumes, newLastId, newPreviousId, hasNext);
     }
 
-    public List<PerfumeDTO> conversorPerfumeDTO(Collection<Perfumes> perfumes) {
+    public List<FullPerfumeDTO> conversorPerfumeDTO(Collection<Perfumes> perfumes) {
         return perfumes.stream().map(p -> {
-            PerfumeDTO dto = new PerfumeDTO();
+            FullPerfumeDTO dto = new FullPerfumeDTO();
             dto.setId(p.getId() != null ? p.getId() : -1L);
             dto.setName(p.getName() != null ? p.getName() : "Sin nombre");
             dto.setSeason(p.getSeason() != null ? p.getSeason() : "Sin temporada");

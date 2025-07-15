@@ -50,7 +50,7 @@
                                         <label for="filtersBrand" class="form-label"
                                             th:text="#{perfumes.marca}">Marca</label>
                                         <input type="text" class="form-control" id="filtersBrand" name="brand"
-                                            th:value="${filters.brand}" placeholder="Ej. 'Dior'" maxlength="40" />
+                                            th:value="${filters.brandName}" placeholder="Ej. 'Dior'" maxlength="40" />
                                     </div>
                                     <div class="col-md-2">
                                         <label for="filtersSeason" class="form-label"
@@ -153,26 +153,33 @@
                                 </table>
                             </div>
                             <!-- Paginación -->
-                            <div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
+                            <div class="d-flex justify-content-center mt-4">
                                 <ul class="pagination">
-                                    <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
-                                        <a class="page-link"
-                                            th:href="@{/objects/perfume(page=${currentPage - 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                            <span th:text="#{perfumes.anterior}">Anterior</span>
+                                    <!-- Botón Anterior -->
+                                    <li class="page-item" th:if="${previousId != null}">
+                                        <a class="page-link" th:href="@{/objects/perfume(
+                                                                lastId=${previousId},
+                                                                direction='PREVIOUS',
+                                                                id=${filters.id},
+                                                                name=${filters.name},
+                                                                brandName=${filters.brandName},
+                                                                season=${filters.season},
+                                                            )}">
+                                            <span th:text="#{usuarios.anterior}">Anterior</span>
                                         </a>
                                     </li>
 
-                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
-                                        th:classappend="${i == currentPage} ? 'active'">
-                                        <a class="page-link" th:text="${i + 1}"
-                                            th:href="@{/objects/perfume(page=${i}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                        </a>
-                                    </li>
-
-                                    <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-                                        <a class="page-link"
-                                            th:href="@{/objects/perfume(page=${currentPage + 1}, id=${filters.id}, name=${filters.name}, brand=${filters.brand}, season=${filters.season})}">
-                                            <span th:text="#{perfumes.siguiente}">Siguiente</span>
+                                    <!-- Botón Siguiente -->
+                                    <li class="page-item" th:if="${hasNext}">
+                                        <a class="page-link" th:href="@{/objects/perfume(
+                                                                lastId=${nextId},
+                                                                direction='NEXT',
+                                                                id=${filters.id},
+                                                                name=${filters.name},
+                                                                brandName=${filters.brandName},
+                                                                season=${filters.season}
+                                                            )}">
+                                            <span th:text="#{usuarios.siguiente}">Siguiente</span>
                                         </a>
                                     </li>
                                 </ul>

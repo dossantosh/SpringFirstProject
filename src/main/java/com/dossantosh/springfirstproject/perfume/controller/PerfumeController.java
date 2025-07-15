@@ -1,6 +1,8 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.page.Direction;
+import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
@@ -8,6 +10,7 @@ import com.dossantosh.springfirstproject.perfume.models.Brands;
 import com.dossantosh.springfirstproject.perfume.models.Perfumes;
 import com.dossantosh.springfirstproject.perfume.service.BrandService;
 import com.dossantosh.springfirstproject.perfume.service.PerfumeService;
+import com.dossantosh.springfirstproject.perfume.utils.PerfumeProjection;
 import com.dossantosh.springfirstproject.perfume.utils.lock.PerfumeLockManager;
 
 import java.util.*;
@@ -16,7 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,10 +58,11 @@ public class PerfumeController extends GenericController {
     public String mostrarPerfumes(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String brandName,
             @RequestParam(required = false) String season,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long lastId,
+            @RequestParam(defaultValue = "NEXT") String direction,
+            @RequestParam(defaultValue = "20") int limit,
             Model model,
             HttpSession session) {
 
@@ -82,28 +86,29 @@ public class PerfumeController extends GenericController {
         if (name != null && name.isBlank()) {
             name = null;
         }
-        if (brand != null && brand.isBlank()) {
-            brand = null;
+        if (brandName != null && brandName.isBlank()) {
+            brandName = null;
         }
         if (season != null && season.isBlank()) {
             season = null;
         }
 
-        Page<Perfumes> pageResult = perfumeService.findByFilters(id, name, season, brand, page, size, "id", "ASC");
+        KeysetPage<PerfumeProjection> page = perfumeService.findPerfumesKeyset(
+                id, name, brandName, season, lastId, limit, Direction.valueOf(direction));
 
-        model.addAttribute("perfumes", perfumeService.conversorPerfumeDTO(pageResult.getContent()));
+        model.addAttribute("perfumes", page.getContent());
+        model.addAttribute("hasNext", page.isHasNext());
+        model.addAttribute("nextId", page.getNextId());
+        model.addAttribute("previousId", page.getPreviousId());
+        model.addAttribute("direction", direction);
 
-        model.addAttribute("totalPages", pageResult.getTotalPages());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("hasNext", pageResult.hasNext());
-        model.addAttribute("hasPrevious", pageResult.hasPrevious());
         model.addAttribute("selectedPerfume", session.getAttribute("selectedPerfume"));
         model.addAttribute("isLockedByAnother", session.getAttribute("isLockedByAnother"));
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("id", id);
         filters.put("name", name);
-        filters.put("brand", brand);
+        filters.put("brandName", brandName);
         filters.put("season", season);
         model.addAttribute("filters", filters);
 

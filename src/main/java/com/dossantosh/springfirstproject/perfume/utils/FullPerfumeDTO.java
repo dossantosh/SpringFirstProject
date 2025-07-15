@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class PerfumeDTO implements Serializable{
+public class FullPerfumeDTO implements Serializable {
 
     private Long id;
 

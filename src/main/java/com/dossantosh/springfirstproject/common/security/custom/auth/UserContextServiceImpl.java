@@ -1,84 +1,76 @@
 package com.dossantosh.springfirstproject.common.security.custom.auth;
 
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.stereotype.Service;
 
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.pref.models.Preferences;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 
 @Service
-public class UserContextServiceImpl implements UserContextService {
+public final class UserContextServiceImpl implements UserContextService {
 
     @Override
     public Long getId() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) ? userAuth.getId() : null;
+        return getUserAuth().map(UserAuth::getId).orElse(null);
     }
 
     @Override
     public String getUsername() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) ? userAuth.getUsername() : null;
+        return getUserAuth().map(UserAuth::getUsername).orElse(null);
     }
 
     @Override
     public boolean getEnabled() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) && Boolean.TRUE.equals(userAuth.getEnabled());
+        return getUserAuth().map(UserAuth::getEnabled).orElse(Boolean.FALSE);
     }
 
     @Override
     public Preferences getPreferences() {
-        UserAuth userAuth = getUserAuth();
-        if (userAuth == null) {
-            return null; // o new Preferences() si quieres valor por defecto
-        }
-        Preferences preferences = userAuth.getPreferences();
-        if (preferences == null) {
-            return null;
-        }
-        return preferences;
+        return getUserAuth()
+                .map(UserAuth::getPreferences)
+                .orElseGet(Preferences::new); // devuelve instancia vacía en vez de null
     }
 
     @Override
     public LinkedHashSet<String> getRoles() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) ? userAuth.getRoles() : new LinkedHashSet<>();
+        return new LinkedHashSet<>(
+                getUserAuth().map(UserAuth::getRoles).orElse(new LinkedHashSet<>()));
     }
 
     @Override
     public LinkedHashSet<Long> getModules() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) ? userAuth.getModules() : new LinkedHashSet<>();
+        return new LinkedHashSet<>(
+                getUserAuth().map(UserAuth::getModules).orElse(new LinkedHashSet<>()));
     }
 
     @Override
     public LinkedHashSet<Long> getSubmodules() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) ? userAuth.getSubmodules() : new LinkedHashSet<>();
+        return new LinkedHashSet<>(
+                getUserAuth().map(UserAuth::getSubmodules).orElse(new LinkedHashSet<>()));
     }
 
     @Override
     public boolean isAdmin() {
-        UserAuth userAuth = getUserAuth();
-        return (userAuth != null) && userAuth.getRoles().contains("ROLE_ADMIN");
+        return getUserAuth()
+                .map(UserAuth::getRoles)
+                .orElse(new LinkedHashSet<>())
+                .contains("ROLE_ADMIN");
     }
 
     @Override
     public UserAuth getCurrentUserAuth() {
-        return getUserAuth();
+        return getUserAuth().orElse(null);
     }
 
-    private UserAuth getUserAuth() {
+    private static Optional<UserAuth> getUserAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserAuth userAuth) {
-            return userAuth;
+            return Optional.of(userAuth);
         }
-        return null;
+        return Optional.empty();
     }
 }

@@ -4,20 +4,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.data.domain.Page;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.page.Direction;
+import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;
 import com.dossantosh.springfirstproject.common.security.others.PermisosUtils;
 import com.dossantosh.springfirstproject.common.security.others.SessionService;
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.service.UserService;
+import com.dossantosh.springfirstproject.user.utils.projections.UserDTO;
 
 import java.util.*;
 
@@ -43,8 +44,9 @@ public class UsuariosController extends GenericController {
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) Long lastId,
+            @RequestParam(defaultValue = "NEXT") String direction,
             Model model,
             HttpSession session) {
 
@@ -69,28 +71,24 @@ public class UsuariosController extends GenericController {
             email = null;
         }
 
-        // Obtener página de usuarios filtrados
-        Page<User> pageResult;
-
-        if (userContextService.isAdmin()) {
-
-            pageResult = userService.findByFiltersAdmin(id, username, email, page, size, "id", "ASC");
-
-        } else {
-
-            pageResult = userService.findByFiltersUser(id, username, email, page, size, "id", "ASC");
+        if (lastId == null || lastId < 0) {
+            lastId = 0L; // Asegurarse de que lastId sea un valor válido
         }
 
-        if (pageResult == null || pageResult.isEmpty() && page > 0) {
+        Direction dir = Direction.valueOf(direction.toUpperCase());
+
+        KeysetPage<UserDTO> pageResult = userService.findUsersKeyset(id, username, email, lastId, size, dir);
+
+        if (pageResult == null || pageResult.isEmpty() && lastId > 0) {
             return "redirect:/user/users";
         }
 
-        model.addAttribute("users", userService.convertirUsuariosADTO(pageResult.getContent()));
+        model.addAttribute("users", pageResult.getContent());
+        model.addAttribute("nextId", pageResult.getNextId()); // Para botón "Siguiente"
+        model.addAttribute("previousId", pageResult.getPreviousId()); // Opcional: para "Anterior"
+        model.addAttribute("hasNext", pageResult.isHasNext());
+        model.addAttribute("direction", direction);
 
-        model.addAttribute("totalPages", pageResult.getTotalPages());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("hasNext", pageResult.hasNext());
-        model.addAttribute("hasPrevious", pageResult.hasPrevious());
         model.addAttribute("selectedUser", session.getAttribute("selectedUser"));
 
         Map<String, Object> filters = new HashMap<>();
@@ -99,7 +97,10 @@ public class UsuariosController extends GenericController {
         filters.put("email", email);
         model.addAttribute("filters", filters);
 
-        userService.cargarListasFormulario().forEach(model::addAttribute);
+        // Cargar listas solo si hay usuario seleccionado
+  
+            userService.cargarListasFormulario().forEach(model::addAttribute);
+
         return "user/users";
     }
 
@@ -109,7 +110,7 @@ public class UsuariosController extends GenericController {
             return "redirect:/user/users";
         }
 
-        session.setAttribute("selectedUser", userService.findById(id));
+        session.setAttribute("selectedUser", userService.findFullUserById(id));
         return "redirect:/user/users";
     }
 
@@ -117,7 +118,7 @@ public class UsuariosController extends GenericController {
     public String guardarUsuario(@ModelAttribute User user, HttpSession session, HttpServletRequest request,
             HttpServletResponse response) {
 
-        userService.modifyUser(user, userService.findById(user.getId()));
+        userService.modifyUser(user, userService.findFullUserById(user.getId()));
 
         List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
 
@@ -153,13 +154,13 @@ public class UsuariosController extends GenericController {
 
         session.setAttribute("selectedUser", null);
 
-        User user = userService.findById(id);
+        User user = userService.findFullUserById(id);
 
         List<String> primaryIdList = sessionService.findPrimaryIdsByPrincipalName(user.getUsername());
 
         if (!primaryIdList.isEmpty()) {
 
-           sessionService.invalidateSessionsById(id);
+            sessionService.invalidateSessionsById(id);
         }
 
         userService.deleteById(id);

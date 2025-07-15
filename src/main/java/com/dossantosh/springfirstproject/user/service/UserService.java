@@ -2,18 +2,13 @@ package com.dossantosh.springfirstproject.user.service;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
-
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.Set;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -21,22 +16,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dossantosh.springfirstproject.common.global.events.Audit.AuditService;
+import com.dossantosh.springfirstproject.common.global.page.Direction;
+import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserAuthProjection;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
+
 import com.dossantosh.springfirstproject.pref.PreferencesService;
 import com.dossantosh.springfirstproject.pref.models.Preferences;
+
 import com.dossantosh.springfirstproject.user.models.User;
 import com.dossantosh.springfirstproject.user.models.permissions.Modules;
 import com.dossantosh.springfirstproject.user.models.permissions.Roles;
 import com.dossantosh.springfirstproject.user.models.permissions.Submodules;
+
 import com.dossantosh.springfirstproject.user.repository.UserRepository;
+
 import com.dossantosh.springfirstproject.user.service.objects.TokenService;
 import com.dossantosh.springfirstproject.user.service.permissions.ModuleService;
 import com.dossantosh.springfirstproject.user.service.permissions.RoleService;
 import com.dossantosh.springfirstproject.user.service.permissions.SubmoduleService;
-import com.dossantosh.springfirstproject.user.utils.UserDTO;
-import com.dossantosh.springfirstproject.user.utils.UserSpecifications;
+
+import com.dossantosh.springfirstproject.user.utils.projections.UserDTO;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -62,8 +63,8 @@ public class UserService {
 
     private final UserContextService userContextService;
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     public User findById(Long id) {
@@ -72,7 +73,11 @@ public class UserService {
     }
 
     public UserAuthProjection findUserAuthByUsername(String username) {
-        return userRepository.findUserAuthByUsername(username);
+        return userRepository.findUserAuthByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
+    public User findFullUserById(Long id) {
+        return userRepository.findFullUserById(id).orElseThrow(() -> new EntityNotFoundException("Usuario con ID " + id + " no encontrado"));
     }
 
     public User findByUsername(String username) {
@@ -85,8 +90,35 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
 
-    public List<User> findAll() {
-        return new ArrayList<>(userRepository.findAll());
+    public KeysetPage<UserDTO> findUsersKeyset(Long id, String username, String email, Long lastId, int limit,
+            Direction direction) {
+        // Añadimos un extra para saber si hay más resultados
+        List<UserDTO> users = userRepository.findByFiltersKeysetWithDirection(id, username, email, lastId, limit + 1,
+                direction.name());
+
+        boolean hasNext = users.size() > limit;
+        if (hasNext) {
+            users.remove(users.size() - 1); // Quitar extra
+        }
+
+        // Si es PREVIOUS, los resultados vienen invertidos (DESC), invertimos para
+        // mostrar ASC en la UI
+        if (direction == Direction.PREVIOUS) {
+            Collections.reverse(users);
+        }
+
+        Long newLastId = null;
+        if (!users.isEmpty()) {
+            if (direction == Direction.NEXT) {
+                newLastId = users.get(users.size() - 1).getId();
+            } else if (direction == Direction.PREVIOUS) {
+                newLastId = users.get(0).getId();
+            }
+        }
+
+        Long newPreviousId = users.isEmpty() ? null : users.get(0).getId();
+
+        return new KeysetPage<>(users, newLastId, newPreviousId, hasNext);
     }
 
     public boolean existsById(Long id) {
@@ -99,6 +131,10 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     public void deleteById(Long id) {
@@ -128,50 +164,6 @@ public class UserService {
                                 : "Sin submódulos"));
 
         userRepository.deleteById(id);
-    }
-
-    public Page<User> findByFiltersAdmin(Long id, String username, String email, int page, int size, String sortby,
-            String direction) {
-
-        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortby));
-
-        Specification<User> spec = UserSpecifications.filterAdmin(id, username, email);
-
-        return userRepository.findAll(spec, pageable);
-    }
-
-    public Page<User> findByFiltersUser(Long id, String username, String email, int page, int size, String sortby,
-            String direction) {
-
-        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortby));
-
-        Specification<User> spec = UserSpecifications.filterUser(id, username, email);
-
-        return userRepository.findAll(spec, pageable);
-    }
-
-    // Usuarios controller
-    public List<UserDTO> convertirUsuariosADTO(Collection<User> users) {
-        return users.stream().map(u -> {
-            UserDTO dto = new UserDTO();
-            dto.setId(u.getId());
-            dto.setUsername(u.getUsername());
-            dto.setEmail(u.getEmail());
-            dto.setEnabled(u.getEnabled());
-            return dto;
-        }).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public Map<String, List<?>> cargarListasFormulario() {
-        Map<String, List<?>> map = new HashMap<>();
-        map.put("allRoles", new ArrayList<>(roleService.findAll()));
-        map.put("allModules", new ArrayList<>(moduleService.findAll()));
-        map.put("allSubmodules", new ArrayList<>(submoduleService.findAll()));
-        return map;
     }
 
     public void modifyUser(User user, User existingUser) {
@@ -225,13 +217,13 @@ public class UserService {
     // register
     public void createUser(User user) {
 
-        List<Roles> roles = new ArrayList<>();
-        List<Modules> modules = new ArrayList<>();
-        List<Submodules> submodules = new ArrayList<>();
+        Set<Roles> roles = new HashSet<>();
+        Set<Modules> modules = new HashSet<>();
+        Set<Submodules> submodules = new HashSet<>();
 
-        List<Long> rolesId = new ArrayList<>();
-        List<Long> modulesId = new ArrayList<>();
-        List<Long> submodulesId = new ArrayList<>();
+        Set<Long> rolesId = new HashSet<>();
+        Set<Long> modulesId = new HashSet<>();
+        Set<Long> submodulesId = new HashSet<>();
 
         if (user.getUsername().equals("sevas")) {
 
@@ -341,6 +333,14 @@ public class UserService {
                                 : "Sin submódulos"));
     }
 
+    public Map<String, List<?>> cargarListasFormulario() {
+        Map<String, List<?>> map = new HashMap<>();
+        map.put("allRoles", new ArrayList<>(roleService.findAll()));
+        map.put("allModules", new ArrayList<>(moduleService.findAll()));
+        map.put("allSubmodules", new ArrayList<>(submoduleService.findAll()));
+        return map;
+    }
+
     @Transactional(readOnly = true)
     public UserAuth userToUserAuth(User user) {
 
@@ -368,7 +368,6 @@ public class UserService {
             return null;
         }
 
-        // Convertir User → UserAuth
         UserAuth userAuth = new UserAuth();
         userAuth.setId(user.getId());
         userAuth.setUsername(user.getUsername());
@@ -412,7 +411,20 @@ public class UserService {
         LinkedHashSet<Long> hashSubmodules = new LinkedHashSet<>(projection.getSubmodules());
         userAuth.setSubmodules(hashSubmodules);
 
-        userAuth.setPreferences((Preferences) projection.getPreferences());
+        Preferences prefs = new Preferences();
+        prefs.setUserId(projection.getPreferencesUserId());
+
+        Boolean emailNotif = projection.getPreferencesEmailNotifications();
+        prefs.setEmailNotifications(emailNotif != null ? emailNotif : Boolean.FALSE);
+
+        Boolean smsNotif = projection.getPreferencesSmsNotifications();
+        prefs.setSmsNotifications(smsNotif != null ? smsNotif : Boolean.FALSE);
+
+        prefs.setTema(projection.getPreferencesTema() != null ? projection.getPreferencesTema() : "defaultTema");
+        prefs.setIdioma(
+                projection.getPreferencesIdioma() != null ? projection.getPreferencesIdioma() : "defaultIdioma");
+
+        userAuth.setPreferences(prefs);
 
         return userAuth;
     }

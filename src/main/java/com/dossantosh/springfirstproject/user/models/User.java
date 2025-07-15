@@ -2,8 +2,9 @@ package com.dossantosh.springfirstproject.user.models;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+
+import java.util.Set;
 
 import org.hibernate.annotations.BatchSize;
 
@@ -57,21 +58,22 @@ public class User implements Serializable {
     @Column(length = 100)
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private Preferences preferences;
 
     @BatchSize(size = 10)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id_role"))
-    private List<Roles> roles = new ArrayList<>();
+    private Set<Roles> roles = new HashSet<>();
 
     @BatchSize(size = 10)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_modules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_module", referencedColumnName = "id_module"))
-    private List<Modules> modules = new ArrayList<>();
+    private Set<Modules> modules = new HashSet<>();
 
     @BatchSize(size = 10)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_submodules", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_submodule", referencedColumnName = "id_submodule"))
-    private List<Submodules> submodules = new ArrayList<>();
+    private Set<Submodules> submodules = new HashSet<>();
 }

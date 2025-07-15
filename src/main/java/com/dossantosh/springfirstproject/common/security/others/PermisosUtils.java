@@ -1,7 +1,5 @@
 package com.dossantosh.springfirstproject.common.security.others;
 
-import org.springframework.security.core.Authentication;
-
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -22,12 +20,6 @@ public class PermisosUtils {
             }
         }
         return false;
-    }
-
-    public boolean isAdmin(Authentication auth) {
-
-        return auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
 }
