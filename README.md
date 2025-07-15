@@ -1,12 +1,33 @@
 # SpringFirstProject
 
+## 📖 Table of Contents
+
+- [📌 Project Overview](#-project-overview)  
+- [✨ Features](#-features)  
+  - [👥 User & Security](#-user--security)  
+  - [🌐 Web & API](#-web--api)  
+  - [📦 Architecture](#-architecture)  
+  - [📊 Reports & Exports](#-reports--exports)  
+  - [⚙️ Dev & Ops](#️-dev--ops)  
+- [🗂️ Project Structure](#️-project-structure)  
+- [🛠️ Tech Stack](#️-tech-stack)  
+- [🧾 Environment Configuration (.env)](#-environment-configuration-env)  
+- [⚙️ Application Properties](#️-application-properties)  
+- [🚀 Getting Started](#-getting-started)  
+  - [Prerequisites](#prerequisites)  
+  - [Setup](#setup)  
+  - [Build and Run](#build-and-run)  
+- [🔒 Security](#-security)  
+- [🧪 Testing](#-testing)  
+- [👤 Author](#-author)  
+- [📬 Contact](#-contact)  
+- [🙏 Acknowledgements](#-acknowledgements)  
+
 ## 📌 Project Overview
 
 A web application for user management, news, and a perfume catalog, built with Spring Boot, Thymeleaf, and PostgreSQL. It demonstrates secure authentication, session management, and a modular architecture, supporting both server-side rendering and RESTful APIs.
 
 Designed as a foundation for enterprise-grade web applications, it emphasizes security with fine-grained user role and permission separation managed via custom annotations, AOP, and JDBC session handling. The system ensures real-time data consistency and concurrency to prevent reader-writer conflicts, while providing comprehensive user monitoring and auditing capabilities.
-
----
 
 ## ✨ Features
 
@@ -36,8 +57,6 @@ Designed as a foundation for enterprise-grade web applications, it emphasizes se
 - OpenAPI documentation with SpringDoc
 - Admin-only Actuator monitoring endpoints
 
----
-
 ## 🗂️ Project Structure
 
 ```
@@ -63,8 +82,6 @@ com.dossantosh.springfirstproject
 │   └── utils            # Utility classes: pessimistic locking, JPA specifications, Excel/PDF exports
 ```
 
----
-
 ## 🛠️ Tech Stack
 
 | Stack                     | Description                   |
@@ -88,8 +105,6 @@ com.dossantosh.springfirstproject
 | **OpenPDF**               | PDF export                    |
 | **JUnit / Mockito**       | Testing                       |
 | **H2**                    | In memory database to tests   |
-
----
 
 ## 🧾 Environment Configuration (.env)
 
@@ -117,8 +132,6 @@ RECAPTCHA_SCORE=0.5
 RECAPTCHA_ENABLED=true
 ```
 
----
-
 ## ⚙️ Application Properties
 
 Key settings in `src/main/resources/application.properties`:
@@ -130,8 +143,6 @@ Key settings in `src/main/resources/application.properties`:
 - Actuator and management endpoints
 - Email and i18n
 - Captcha and security
-
----
 
 ## 🚀 Getting Started
 
@@ -165,8 +176,6 @@ mvn spring-boot:run
 
 The app will be available at [http://localhost:8083](http://localhost:8083) (or your configured port).
 
----
-
 ## 🔒 Security
 
 - UserAuth as UserDetails to improve efficiency
@@ -181,28 +190,19 @@ The app will be available at [http://localhost:8083](http://localhost:8083) (or 
 - Strict Https
 - Referrer protection
 
----
-
 ## 🧪 Testing
 
 - Unit and integration tests with JUnit and Mockito
-
----
-
 
 ## 👤 Author
 
 - Sebastián Dos Santos
 
----
-
 ## 📬 Contact
 
 - Email: sebastiandossantosh@gmail.com
-- LinkedIn: [dossantosh](linkedin.com/in/dossantosh)
+- LinkedIn: [dossantosh](https://www.linkedin.com/in/dossantosh/)
 - GitHub: [dossantosh](https://github.com/dossantosh)
-
----
 
 ## 🙏 Acknowledgements
 
