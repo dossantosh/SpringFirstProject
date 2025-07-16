@@ -1,6 +1,6 @@
 package com.dossantosh.springfirstproject.perfume.controller;
 
-import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.global.page.Direction;
 import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;

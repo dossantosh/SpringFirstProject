@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.context.ApplicationEventPublisher;
 
-import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.global.events.UserLoggedOutEvent;
 import com.dossantosh.springfirstproject.common.security.captcha.ReCaptchaValidationService;
 

@@ -1,6 +1,6 @@
 package com.dossantosh.springfirstproject.pref;
 
-import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.security.custom.auth.UserAuth;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.common.security.module.RequireModule;

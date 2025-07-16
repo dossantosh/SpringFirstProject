@@ -55,6 +55,7 @@ public final class UserContextServiceImpl implements UserContextService {
 
     @Override
     public boolean isAdmin() {
+
         return getUserAuth()
                 .map(UserAuth::getRoles)
                 .orElse(new LinkedHashSet<>())

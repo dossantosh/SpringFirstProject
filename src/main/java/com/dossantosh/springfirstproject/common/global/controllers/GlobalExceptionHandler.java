@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.global;
+package com.dossantosh.springfirstproject.common.global.controllers;
 
 import java.util.Map;
 import java.util.stream.Collectors;

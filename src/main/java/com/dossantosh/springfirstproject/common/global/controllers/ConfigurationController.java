@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.controllers;
+package com.dossantosh.springfirstproject.common.global.controllers;
 
 import java.util.List;
 import java.util.Set;

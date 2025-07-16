@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dossantosh.springfirstproject.common.controllers.GenericController;
+import com.dossantosh.springfirstproject.common.global.controllers.GenericController;
 import com.dossantosh.springfirstproject.common.global.page.Direction;
 import com.dossantosh.springfirstproject.common.global.page.KeysetPage;
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;

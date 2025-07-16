@@ -1,4 +1,4 @@
-package com.dossantosh.springfirstproject.common.global;
+package com.dossantosh.springfirstproject.common.global.controllers;
 
 import com.dossantosh.springfirstproject.common.security.custom.auth.models.UserContextService;
 import com.dossantosh.springfirstproject.pref.PreferencesService;
