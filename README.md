@@ -1,6 +1,6 @@
 # SpringFirstProject
 
-//deepwiki.com/badge.svg)](https://deepwiki.com/dossantosh/SpringFirstProject)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/dossantosh/SpringFirstProject)
 
 ## 📖 Table of Contents
 
